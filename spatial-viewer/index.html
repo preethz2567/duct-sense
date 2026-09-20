@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DuctSense — Spatial 3D Viewer</title>
+
+  <!-- Google model-viewer web component (no npm install needed) -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #f4f6f9;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Header bar ── */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: #0000B3;
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 0.75rem;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    #header span.logo { font-size: 1.3rem; }
+
+    #header h1 {
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    #header p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.75rem;
+      margin-left: auto;
+    }
+
+    /* ── model-viewer fills the page below the header ── */
+    model-viewer {
+      width: 100%;
+      height: calc(100vh - 52px);
+      margin-top: 52px;
+      background: #eef1f6;
+      --progress-bar-color: #0000B3;
+    }
+
+    /* ── Hotspot pin button ── */
+    .hotspot-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2.5px solid #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      transition: transform 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .hotspot-btn:hover { transform: scale(1.2); }
+
+    /* Orange for leak, teal for clear */
+    .hotspot-btn.leak  { background: #FF9C00; }
+    .hotspot-btn.clear { background: #12C6B3; }
+
+    /* ── Info panel (shown on hotspot click) ── */
+    #info-panel {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      border: 1px solid #EEEEEE;
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      min-width: 260px;
+      max-width: 90vw;
+      z-index: 200;
+    }
+
+    #info-panel.visible { display: block; }
+
+    #info-panel .panel-id {
+      font-size: 0.68rem;
+      color: #888888;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 0.5rem;
+    }
+
+    #info-panel .panel-status {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0000B3;
+      margin-bottom: 0.4rem;
+    }
+
+    #info-panel .panel-confidence {
+      font-size: 0.85rem;
+      color: #333333;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Confidence bar */
+    .bar-track {
+      height: 6px;
+      background: #EEEEEE;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.9rem;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .bar-fill.leak  { background: #FF9C00; }
+    .bar-fill.clear { background: #12C6B3; }
+
+    #info-panel .close-btn {
+      display: block;
+      width: 100%;
+      padding: 0.45rem;
+      background: #0000B3;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #info-panel .close-btn:hover { opacity: 0.85; }
+
+    /* ── Legend ── */
+    #legend {
+      position: fixed;
+      top: 68px;
+      right: 1rem;
+      background: #ffffff;
+      border: 1px solid #EEEEEE;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      color: #333333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 100;
+    }
+
+    #legend p { font-weight: 700; color: #0000B3; margin-bottom: 0.4rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+    }
+
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.leak  { background: #FF9C00; }
+    .legend-dot.clear { background: #12C6B3; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div id="header">
+    <span class="logo">🌡️</span>
+    <h1>DuctSense — Spatial 3D Viewer</h1>
+    <p>Placeholder model · Real scan pending</p>
+  </div>
+
+  <!-- ── Legend ─────────────────────────────────────────────────────────── -->
+  <div id="legend">
+    <p>Hotspot Key</p>
+    <div class="legend-item"><div class="legend-dot leak"></div> Leak detected</div>
+    <div class="legend-item"><div class="legend-dot clear"></div> Clear</div>
+  </div>
+
+  <!--
+    MODEL_PATH — PLACEHOLDER
+    Currently points to the public model-viewer sample astronaut model.
+    Replace this src attribute with the path to the real team 3D scan
+    (GLB format) once it is available from the phone scanning app.
+  -->
+  <model-viewer
+    id="viewer"
+    src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+    alt="DuctSense 3D scan placeholder — astronaut model"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    ar
+  >
+    <!--
+      Hotspot slots are injected here by the script below after
+      hotspots.json is fetched. Each slot name matches the hotspot id.
+    -->
+  </model-viewer>
+
+  <!-- ── Info panel (populated on hotspot click) ──────────────────────── -->
+  <div id="info-panel">
+    <div class="panel-id"   id="panel-id"></div>
+    <div class="panel-status" id="panel-status"></div>
+    <div class="panel-confidence" id="panel-confidence"></div>
+    <div class="bar-track">
+      <div class="bar-fill" id="panel-bar" style="width:0%"></div>
+    </div>
+    <button class="close-btn" onclick="closePanel()">Close</button>
+  </div>
+
+  <script>
+    // ── Info panel helpers ───────────────────────────────────────────────
+    function openPanel(hotspot) {
+      const isLeak = hotspot.status === 'Leak detected';
+
+      document.getElementById('panel-id').textContent         = hotspot.id;
+      document.getElementById('panel-status').textContent     = hotspot.status;
+      document.getElementById('panel-confidence').textContent = `Confidence: ${hotspot.confidence}%`;
+
+      const bar = document.getElementById('panel-bar');
+      bar.style.width = `${hotspot.confidence}%`;
+      bar.className   = `bar-fill ${isLeak ? 'leak' : 'clear'}`;
+
+      document.getElementById('info-panel').classList.add('visible');
+    }
+
+    function closePanel() {
+      document.getElementById('info-panel').classList.remove('visible');
+    }
+
+    // Close panel if user clicks the model background
+    document.getElementById('viewer').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('viewer')) closePanel();
+    });
+
+    // ── Load hotspots from hotspots.json and inject into model-viewer ────
+    //
+    // hotspots.json contains PLACEHOLDER positions and data.
+    // Once the real 3D scan and walkthrough coordinates are confirmed,
+    // update hotspots.json with the real "position" strings and
+    // replace MODEL_PATH in the <model-viewer src> attribute above.
+    //
+    fetch('hotspots.json')
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to load hotspots.json: ${res.status}`);
+        return res.json();
+      })
+      .then(hotspots => {
+        const viewer = document.getElementById('viewer');
+
+        hotspots.forEach(hotspot => {
+          const isLeak = hotspot.status === 'Leak detected';
+
+          // Create the button element that acts as the visible pin
+          const btn = document.createElement('button');
+          btn.className     = `hotspot-btn ${isLeak ? 'leak' : 'clear'}`;
+          btn.title         = `${hotspot.id}: ${hotspot.status} (${hotspot.confidence}%)`;
+          btn.textContent   = isLeak ? '!' : '✓';
+          btn.setAttribute('slot',              hotspot.id);
+          btn.setAttribute('data-position',     hotspot.position);
+          btn.setAttribute('data-visibility-attribute', 'visible');
+
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openPanel(hotspot);
+          });
+
+          viewer.appendChild(btn);
+        });
+      })
+      .catch(err => {
+        console.error('Hotspot load error:', err);
+        // Graceful degradation — viewer still works, just no hotspots
+      });
+  </script>
+</body>
+</html>

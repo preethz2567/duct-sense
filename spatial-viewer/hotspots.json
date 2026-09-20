@@ -1,0 +1,23 @@
+[
+  {
+    "id": "hotspot-1",
+    "position": "0 1 0",
+    "status": "Leak detected",
+    "confidence": 82,
+    "_note": "PLACEHOLDER — replace position with real duct leak coordinates from walkthrough data once 3D scan is available"
+  },
+  {
+    "id": "hotspot-2",
+    "position": "0.5 1.2 0.3",
+    "status": "Clear",
+    "confidence": 12,
+    "_note": "PLACEHOLDER — replace position with real duct coordinates once 3D scan is available"
+  },
+  {
+    "id": "hotspot-3",
+    "position": "-0.5 0.8 -0.2",
+    "status": "Leak detected",
+    "confidence": 67,
+    "_note": "PLACEHOLDER — replace position with real duct leak coordinates from walkthrough data once 3D scan is available"
+  }
+]
