@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Environment
+.env
+
+# Databases
+*.db
+
+# Raw training datasets (too large for git — commit only exported models)
+ml-training/thermal/dataset/
+ml-training/audio/dataset/

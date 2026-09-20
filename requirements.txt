@@ -1,0 +1,7 @@
+numpy
+onnxruntime
+fastapi
+uvicorn
+smbus2
+scikit-learn
+joblib
