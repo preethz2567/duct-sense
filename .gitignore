@@ -16,3 +16,10 @@ node_modules/
 # Raw training datasets (too large for git — commit only exported models)
 ml-training/thermal/dataset/
 ml-training/audio/dataset/
+
+# DuctSense thermal ML training data
+ml-training/thermal/dataset/
+ml-training/thermal/raw_dataset/
+
+# DuctSense thermal training checkpoint
+ml-training/thermal/best_model.pth
