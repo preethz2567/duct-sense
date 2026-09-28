@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" height="100%" style="background-color: white;">
+  <defs>
+    <style>
+      .wall { fill: none; stroke: #2a2a2a; stroke-width: 5; }
+      .wall-thin { fill: none; stroke: #4a4a4a; stroke-width: 3; stroke-dasharray: 5,5; }
+      .door { fill: #ffffff; stroke: #2a2a2a; stroke-width: 2; }
+      .text { font-family: 'JetBrains Mono', monospace; fill: #444444; font-size: 18px; font-weight: bold; }
+      .subtext { font-family: 'Arial', sans-serif; fill: #888888; font-size: 13px; }
+      .duct-main { fill: none; stroke: #176B73; stroke-width: 16; stroke-linecap: butt; opacity: 0.9; }
+      .duct-branch { fill: none; stroke: #176B73; stroke-width: 10; stroke-linecap: square; opacity: 0.9; }
+      .diffuser { fill: #E0F2F1; stroke: #176B73; stroke-width: 2; }
+      .ahu { fill: #d9d9d9; stroke: #333; stroke-width: 3; }
+      .equipment { fill: #f5f5f5; stroke: #666; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <!-- Exterior Walls -->
+  <rect x="50" y="50" width="900" height="700" class="wall" />
+  
+  <!-- Interior Walls -->
+  <line x1="250" y1="50" x2="250" y2="750" class="wall" />
+  <line x1="50" y1="300" x2="250" y2="300" class="wall" />
+  <line x1="50" y1="550" x2="250" y2="550" class="wall" />
+  
+  <line x1="750" y1="50" x2="750" y2="300" class="wall" />
+  <line x1="250" y1="300" x2="1000" y2="300" class="wall" />
+  
+  <line x1="250" y1="600" x2="1000" y2="600" class="wall" />
+  <line x1="600" y1="600" x2="600" y2="750" class="wall" />
+  
+  <!-- Work area partitions -->
+  <line x1="450" y1="300" x2="450" y2="600" class="wall-thin" />
+  <line x1="750" y1="300" x2="750" y2="600" class="wall-thin" />
+  
+  <!-- Doors -->
+  <rect x="248" y="150" width="4" height="60" class="door" />
+  <rect x="248" y="420" width="4" height="60" class="door" />
+  <rect x="248" y="650" width="4" height="60" class="door" />
+  <rect x="500" y="298" width="60" height="4" class="door" />
+  <rect x="748" y="200" width="4" height="40" class="door" />
+  <rect x="598" y="650" width="4" height="40" class="door" />
+  
+  <!-- Rooms / Labels -->
+  <text x="150" y="150" class="text" text-anchor="middle">UTILITY / MECH</text>
+  <text x="150" y="170" class="subtext" text-anchor="middle">PLANT ROOM</text>
+  
+  <text x="150" y="420" class="text" text-anchor="middle">CONTROL RM</text>
+  <text x="150" y="440" class="subtext" text-anchor="middle">SECURE AREA</text>
+  
+  <text x="150" y="650" class="text" text-anchor="middle">MAINTENANCE</text>
+  
+  <text x="500" y="150" class="text" text-anchor="middle">EQUIPMENT / SERVICE AREA</text>
+  <text x="500" y="170" class="subtext" text-anchor="middle">BAY 01</text>
+  
+  <text x="875" y="150" class="text" text-anchor="middle">STORAGE</text>
+  <text x="875" y="170" class="subtext" text-anchor="middle">HAZMAT</text>
+  
+  <text x="350" y="450" class="text" text-anchor="middle">PRODUCTION 1</text>
+  <text x="600" y="450" class="text" text-anchor="middle">PRODUCTION 2</text>
+  <text x="875" y="450" class="text" text-anchor="middle">PRODUCTION 3</text>
+  
+  <text x="425" y="680" class="text" text-anchor="middle">CORRIDOR / LOADING</text>
+  <text x="775" y="680" class="text" text-anchor="middle">DISPATCH</text>
+  
+  <!-- Heavy Equipment Representations -->
+  <rect x="100" y="100" width="100" height="150" class="ahu" />
+  <text x="150" y="180" class="text" text-anchor="middle" font-size="20">RTU-100</text>
+  
+  <circle cx="350" cy="500" r="30" class="equipment" />
+  <circle cx="350" cy="570" r="30" class="equipment" />
+  
+  <rect x="520" y="320" width="160" height="40" class="equipment" />
+  <rect x="520" y="540" width="160" height="40" class="equipment" />
+  
+  <!-- MAIN DUCT ROUTING (Industrial scale) -->
+  <!-- Main run from Utility across Equipment Service Area to Storage -->
+  <polyline points="200,175 200,220 900,220" class="duct-main" />
+  
+  <!-- Branch down into Production areas -->
+  <polyline points="350,220 350,450" class="duct-branch" />
+  <polyline points="600,220 600,450" class="duct-branch" />
+  <polyline points="875,220 875,450" class="duct-branch" />
+  
+  <!-- Branch into Control Room -->
+  <polyline points="350,380 150,380" class="duct-branch" />
+  
+  <!-- Branch down into loading/dispatch -->
+  <polyline points="350,450 350,680 500,680" class="duct-branch" />
+  
+  <!-- INDUSTRIAL DIFFUSERS (Round style) -->
+  <circle cx="350" cy="450" r="20" class="diffuser" />
+  <circle cx="600" cy="450" r="20" class="diffuser" />
+  <circle cx="875" cy="450" r="20" class="diffuser" />
+  <circle cx="150" cy="380" r="20" class="diffuser" />
+  <circle cx="500" cy="680" r="20" class="diffuser" />
+  <circle cx="900" cy="220" r="20" class="diffuser" />
+  <circle cx="600" cy="220" r="20" class="diffuser" />
+  <circle cx="350" cy="220" r="20" class="diffuser" />
+  
+  <circle cx="350" cy="350" r="12" fill="#333" />
+  <circle cx="600" cy="350" r="12" fill="#333" />
+  <circle cx="875" cy="350" r="12" fill="#333" />
+</svg>

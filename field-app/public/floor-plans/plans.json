@@ -1,6 +1,24 @@
 {
-  "files": [
-    "building-a-level-2.png",
-    "floor_plan.svg"
+  "plans": [
+    {
+      "id": "PLAN-001",
+      "filename": "building-a-level-2.png",
+      "label": "HVAC Building Floor Plan · Building A · Level 1"
+    },
+    {
+      "id": "PLAN-002",
+      "filename": "floor_plan.svg",
+      "label": "Supplied SVG Plan · Engineering Area"
+    },
+    {
+      "id": "PLAN-003",
+      "filename": "plan-003.svg",
+      "label": "Office HVAC Floor Plan · Building B · Level 2"
+    },
+    {
+      "id": "PLAN-004",
+      "filename": "plan-004.svg",
+      "label": "Industrial Facility HVAC Floor Plan · Building C · Level 1"
+    }
   ]
 }

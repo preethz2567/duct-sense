@@ -30,9 +30,14 @@ export default function App() {
   // Load floor plans when the app shell mounts, or when returning to inspections
   useEffect(() => {
     if (screen === 'INSPECTIONS' || screen === 'MAP') {
-      loadFloorPlans().then(setFloorPlans);
+      loadFloorPlans().then(plans => {
+        setFloorPlans(plans);
+        if (plans.length > 0 && !activeFloorPlan) {
+          setActiveFloorPlan(plans[0]);
+        }
+      });
     }
-  }, [screen]);
+  }, [screen, activeFloorPlan, setActiveFloorPlan, setFloorPlans]);
 
   // Update pending count on mount
   useEffect(() => {

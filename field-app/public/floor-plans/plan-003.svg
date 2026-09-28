@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" height="100%" style="background-color: white;">
+  <defs>
+    <style>
+      .wall { fill: none; stroke: #333333; stroke-width: 4; }
+      .door { fill: #ffffff; stroke: #333333; stroke-width: 2; }
+      .text { font-family: 'Arial', sans-serif; fill: #666666; font-size: 16px; font-weight: bold; }
+      .subtext { font-family: 'Arial', sans-serif; fill: #999999; font-size: 12px; }
+      .duct-main { fill: none; stroke: #0078D7; stroke-width: 12; stroke-linecap: square; stroke-linejoin: bevel; opacity: 0.8; }
+      .duct-branch { fill: none; stroke: #0078D7; stroke-width: 8; stroke-linecap: square; stroke-linejoin: bevel; opacity: 0.8; }
+      .diffuser { fill: #E5F3FF; stroke: #0078D7; stroke-width: 2; }
+      .return { fill: none; stroke: #D83B01; stroke-width: 8; stroke-dasharray: 10,10; opacity: 0.7; }
+      .return-grille { fill: #FDE7E9; stroke: #D83B01; stroke-width: 2; }
+      .ahu { fill: #f0f0f0; stroke: #333; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <!-- Exterior Walls -->
+  <rect x="50" y="50" width="900" height="700" class="wall" />
+  
+  <!-- Interior Walls -->
+  <line x1="300" y1="50" x2="300" y2="400" class="wall" />
+  <line x1="50" y1="400" x2="300" y2="400" class="wall" />
+  
+  <line x1="300" y1="200" x2="1000" y2="200" class="wall" />
+  <line x1="500" y1="50" x2="500" y2="200" class="wall" />
+  <line x1="750" y1="50" x2="750" y2="200" class="wall" />
+  
+  <line x1="300" y1="400" x2="700" y2="400" class="wall" />
+  <line x1="700" y1="200" x2="700" y2="750" class="wall" />
+  <line x1="300" y1="550" x2="700" y2="550" class="wall" />
+  
+  <!-- Doors -->
+  <!-- Reception to corridor -->
+  <rect x="298" y="250" width="4" height="40" class="door" />
+  <path d="M 300 250 A 40 40 0 0 1 340 290 L 300 290" fill="none" stroke="#333" stroke-width="1" />
+  
+  <!-- Offices -->
+  <rect x="350" y="198" width="40" height="4" class="door" />
+  <rect x="550" y="198" width="40" height="4" class="door" />
+  <rect x="800" y="198" width="40" height="4" class="door" />
+  
+  <!-- Meeting Room -->
+  <rect x="350" y="398" width="60" height="4" class="door" />
+  
+  <!-- Mechanical / AHU -->
+  <rect x="150" y="398" width="50" height="4" class="door" />
+  
+  <!-- Rooms / Labels -->
+  <text x="175" y="225" class="text" text-anchor="middle">RECEPTION</text>
+  <text x="175" y="245" class="subtext" text-anchor="middle">RM 101 - 250 sqm</text>
+  
+  <text x="400" y="125" class="text" text-anchor="middle">OFFICE A</text>
+  <text x="625" y="125" class="text" text-anchor="middle">OFFICE B</text>
+  <text x="875" y="125" class="text" text-anchor="middle">MEETING ROOM</text>
+  
+  <text x="500" y="480" class="text" text-anchor="middle">OPEN WORKSPACE</text>
+  <text x="500" y="500" class="subtext" text-anchor="middle">RM 105 - 1200 sqm</text>
+  
+  <text x="850" y="480" class="text" text-anchor="middle">CORRIDOR / BREAKOUT</text>
+  
+  <text x="175" y="550" class="text" text-anchor="middle">MECHANICAL</text>
+  <text x="175" y="570" class="subtext" text-anchor="middle">AHU-01</text>
+  
+  <text x="500" y="650" class="text" text-anchor="middle">ELECTRICAL / SERVER</text>
+  
+  <!-- HVAC EQUIPMENT -->
+  <rect x="80" y="600" width="120" height="80" class="ahu" />
+  <text x="140" y="645" class="text" text-anchor="middle" font-size="14">AHU-01</text>
+  
+  <!-- MAIN SUPPLY DUCT -->
+  <polyline points="140,600 140,300 800,300 800,100" class="duct-main" />
+  
+  <!-- BRANCHES SUPPLY -->
+  <polyline points="140,300 140,150 250,150" class="duct-branch" />
+  <polyline points="400,300 400,150" class="duct-branch" />
+  <polyline points="625,300 625,150" class="duct-branch" />
+  <polyline points="500,300 500,450" class="duct-branch" />
+  <polyline points="200,300 200,450" class="duct-branch" />
+  <polyline points="800,300 850,300 850,600 700,600" class="duct-branch" />
+  
+  <!-- DIFFUSERS -->
+  <rect x="235" y="135" width="30" height="30" class="diffuser" />
+  <line x1="235" y1="135" x2="265" y2="165" stroke="#0078D7" stroke-width="2" />
+  <line x1="265" y1="135" x2="235" y2="165" stroke="#0078D7" stroke-width="2" />
+  
+  <rect x="385" y="135" width="30" height="30" class="diffuser" />
+  <line x1="385" y1="135" x2="415" y2="165" stroke="#0078D7" stroke-width="2" />
+  <line x1="415" y1="135" x2="385" y2="165" stroke="#0078D7" stroke-width="2" />
+  
+  <rect x="610" y="135" width="30" height="30" class="diffuser" />
+  <line x1="610" y1="135" x2="640" y2="165" stroke="#0078D7" stroke-width="2" />
+  <line x1="640" y1="135" x2="610" y2="165" stroke="#0078D7" stroke-width="2" />
+  
+  <rect x="785" y="85" width="30" height="30" class="diffuser" />
+  <line x1="785" y1="85" x2="815" y2="115" stroke="#0078D7" stroke-width="2" />
+  <line x1="815" y1="85" x2="785" y2="115" stroke="#0078D7" stroke-width="2" />
+  
+  <rect x="485" y="435" width="30" height="30" class="diffuser" />
+  <line x1="485" y1="435" x2="515" y2="465" stroke="#0078D7" stroke-width="2" />
+  <line x1="515" y1="435" x2="485" y2="465" stroke="#0078D7" stroke-width="2" />
+  
+  <rect x="185" y="435" width="30" height="30" class="diffuser" />
+  <line x1="185" y1="435" x2="215" y2="465" stroke="#0078D7" stroke-width="2" />
+  <line x1="215" y1="435" x2="185" y2="465" stroke="#0078D7" stroke-width="2" />
+
+  <rect x="670" y="585" width="30" height="30" class="diffuser" />
+  <line x1="670" y1="585" x2="700" y2="615" stroke="#0078D7" stroke-width="2" />
+  <line x1="700" y1="585" x2="670" y2="615" stroke="#0078D7" stroke-width="2" />
+
+  <!-- MAIN RETURN DUCT -->
+  <polyline points="200,600 200,350 850,350" class="return" />
+  <polyline points="550,350 550,450" class="return" />
+  <polyline points="200,350 200,250" class="return" />
+  
+  <!-- RETURN GRILLES -->
+  <rect x="835" y="335" width="30" height="30" class="return-grille" />
+  <rect x="535" y="435" width="30" height="30" class="return-grille" />
+  <rect x="185" y="235" width="30" height="30" class="return-grille" />
+</svg>

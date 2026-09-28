@@ -35,16 +35,31 @@ export async function loadFloorPlans(): Promise<FloorPlan[]> {
     });
     if (!resp.ok) return [];
 
-    const manifest: { files: string[] } = await resp.json();
-    if (!Array.isArray(manifest.files)) return [];
+    const manifest: any = await resp.json();
+    
+    // Support new object format: { plans: [{ id, filename, label }] }
+    if (manifest.plans && Array.isArray(manifest.plans)) {
+      return manifest.plans.map((p: any) => ({
+        id: p.id,
+        filename: p.filename,
+        type: typeFromFilename(p.filename),
+        url: `${FLOOR_PLANS_BASE}${p.filename}`,
+        label: p.label,
+      }));
+    }
 
-    return manifest.files.map((filename, idx) => ({
-      id: `PLAN-00${idx + 1}`,
-      filename,
-      type: typeFromFilename(filename),
-      url: `${FLOOR_PLANS_BASE}${filename}`,
-      label: idx === 0 ? 'Building A · Level 1' : 'Engineering Area',
-    }));
+    // Fallback for old format: { files: ["file1.png", "file2.svg"] }
+    if (Array.isArray(manifest.files)) {
+      return manifest.files.map((filename: string, idx: number) => ({
+        id: `PLAN-00${idx + 1}`,
+        filename,
+        type: typeFromFilename(filename),
+        url: `${FLOOR_PLANS_BASE}${filename}`,
+        label: idx === 0 ? 'Building A · Level 1' : 'Engineering Area',
+      }));
+    }
+    
+    return [];
   } catch {
     return [];
   }
