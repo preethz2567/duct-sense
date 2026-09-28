@@ -59,15 +59,7 @@ export default function SyncScreen() {
         </div>
       </div>
 
-      {/* DEMO MODE notice — honest about sync state */}
-      <div className="demo-notice">
-        <strong>LOCAL / DEMO MODE</strong>
-        <p>
-          The DuctSense backend does not yet have a <code>/findings</code> endpoint.
-          All findings are stored locally on this device.
-          Sync will become active when the backend integration is completed.
-        </p>
-      </div>
+
 
       {/* Counts */}
       <div className="sync-counts-grid">
@@ -104,9 +96,9 @@ export default function SyncScreen() {
         <div className={`sync-result ${syncResult.mode === 'DEMO' ? 'result-demo' : 'result-live'}`}>
           {syncResult.mode === 'DEMO' ? (
             <>
-              <strong>LOCAL / DEMO MODE</strong>
-              <p>Backend reachable but /findings endpoint not yet connected.<br />
-              Findings remain queued on device.</p>
+              <strong>SERVER UNREACHABLE</strong>
+              <p>Could not connect to the backend server (http://{window.location.hostname}:8000).<br />
+              Please ensure the server is running on the same network.</p>
             </>
           ) : (
             <>
