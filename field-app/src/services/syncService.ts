@@ -18,7 +18,7 @@ import type { Finding, SyncStatus } from '../types';
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 // Set to the DuctSense FastAPI base URL when the /findings endpoint is ready.
-const BACKEND_BASE_URL = 'http://localhost:8000';
+const BACKEND_BASE_URL = `http://${window.location.hostname}:8000`;
 const FINDINGS_ENDPOINT = `${BACKEND_BASE_URL}/findings`;
 
 // ── Online detection ──────────────────────────────────────────────────────────

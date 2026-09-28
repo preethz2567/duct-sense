@@ -25,7 +25,7 @@ export default function InspectionMap({
 
   React.useEffect(() => {
     let interval = setInterval(() => {
-      fetch('http://localhost:8000/findings')
+      fetch(`http://${window.location.hostname}:8000/findings`)
         .then(res => res.json())
         .then(data => setFindings(data))
         .catch(err => console.error(err));
@@ -54,7 +54,7 @@ export default function InspectionMap({
       sync_status: 'SYNCED'
     };
     try {
-      await fetch('http://localhost:8000/findings', {
+      await fetch(`http://${window.location.hostname}:8000/findings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newFinding)
