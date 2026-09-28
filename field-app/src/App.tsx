@@ -8,6 +8,7 @@ import InspectionsScreen from './screens/InspectionsScreen';
 import MapScreen from './screens/MapScreen';
 import FindingsScreen from './screens/FindingsScreen';
 import SyncScreen from './screens/SyncScreen';
+import SplashScreen from './components/SplashScreen';
 import { loadFloorPlans } from './services/floorPlanService';
 import { countLocalFindings, attemptSync } from './services/syncService';
 
@@ -18,6 +19,13 @@ export default function App() {
   const [floorPlans, setFloorPlans]             = useState<FloorPlan[]>([]);
   const [online, setOnline]                     = useState(navigator.onLine);
   const [pendingCount, setPendingCount]         = useState(0);
+  const [showSplash, setShowSplash]             = useState(true);
+
+  // Auto-dismiss splash screen after 2.5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Load floor plans when the app shell mounts, or when returning to inspections
   useEffect(() => {
@@ -55,14 +63,20 @@ export default function App() {
   return (
     <AppContext.Provider value={ctx}>
       <div className="app-shell">
-        <StatusBar />
-        <main className="app-content">
-          {screen === 'INSPECTIONS' && <InspectionsScreen />}
-          {screen === 'MAP'         && <MapScreen />}
-          {screen === 'FINDINGS'    && <FindingsScreen />}
-          {screen === 'SYNC'        && <SyncScreen />}
-        </main>
-        <BottomNav />
+        {showSplash ? (
+          <SplashScreen />
+        ) : (
+          <>
+            <StatusBar />
+            <main className="app-content">
+              {screen === 'INSPECTIONS' && <InspectionsScreen />}
+              {screen === 'MAP'         && <MapScreen />}
+              {screen === 'FINDINGS'    && <FindingsScreen />}
+              {screen === 'SYNC'        && <SyncScreen />}
+            </main>
+            <BottomNav />
+          </>
+        )}
       </div>
     </AppContext.Provider>
   );

@@ -886,3 +886,83 @@ body {
 @media (min-width: 600px) {
   .app-shell { max-width: 520px; }
 }
+
+/* ── Splash Screen ───────────────────────────────────────────────────────────── */
+.splash-screen {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--c-charcoal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.splash-content.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.splash-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 28px;
+  margin-bottom: 32px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.splash-title {
+  font-family: var(--font-brand);
+  font-size: 28px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.splash-subtitle {
+  font-family: var(--font-base);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--c-muted);
+  text-transform: uppercase;
+}
+
+.splash-loader {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.splash-loader span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--c-muted);
+  letter-spacing: 1px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
