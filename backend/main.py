@@ -50,6 +50,25 @@ def _init_db() -> None:
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS findings (
+                finding_id      TEXT PRIMARY KEY,
+                inspection_id   TEXT,
+                floor_plan_id   TEXT,
+                floor_plan_page INTEGER,
+                finding_type    TEXT,
+                x               REAL,
+                y               REAL,
+                created_at      TEXT,
+                updated_at      TEXT,
+                photo           TEXT,
+                notes           TEXT,
+                status          TEXT,
+                sync_status     TEXT
+            )
+            """
+        )
         conn.commit()
     finally:
         conn.close()
@@ -101,6 +120,21 @@ class WalkthroughReport(BaseModel):
     walkthrough_id: str
     date:           str
     events:         List[LeakEvent]
+
+class Finding(BaseModel):
+    finding_id: str
+    inspection_id: str
+    floor_plan_id: str
+    floor_plan_page: int
+    finding_type: str
+    x: float
+    y: float
+    created_at: str
+    updated_at: str
+    photo: Optional[str] = None
+    notes: str
+    status: str
+    sync_status: str
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -171,6 +205,50 @@ def get_walkthroughs() -> List[dict]:
         }
         for row in rows
     ]
+
+
+@app.post(
+    "/findings",
+    status_code=201,
+    summary="Submit a field finding",
+)
+def post_finding(finding: Finding) -> dict:
+    conn = _get_connection()
+    try:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO findings 
+            (finding_id, inspection_id, floor_plan_id, floor_plan_page, finding_type, x, y, created_at, updated_at, photo, notes, status, sync_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                finding.finding_id, finding.inspection_id, finding.floor_plan_id, finding.floor_plan_page,
+                finding.finding_type, finding.x, finding.y, finding.created_at, finding.updated_at,
+                finding.photo, finding.notes, finding.status, finding.sync_status
+            ),
+        )
+        conn.commit()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    finally:
+        conn.close()
+
+    return {"message": "Finding stored successfully", "finding_id": finding.finding_id}
+
+
+@app.get(
+    "/findings",
+    summary="Retrieve all findings",
+)
+def get_findings() -> List[dict]:
+    conn = _get_connection()
+    try:
+        cursor = conn.execute("SELECT * FROM findings")
+        rows = cursor.fetchall()
+    finally:
+        conn.close()
+
+    return [dict(row) for row in rows]
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────

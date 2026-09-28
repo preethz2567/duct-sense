@@ -71,32 +71,44 @@ export async function attemptSync(): Promise<{ synced: number; failed: number; m
   const all = await getLocalFindings();
   const queued = all.filter(f => f.sync_status === 'QUEUED');
 
-  // ── FUTURE: uncomment to push when endpoint is ready ─────────────────────
-  // let synced = 0, failed = 0;
-  // for (const finding of queued) {
-  //   try {
-  //     await upsertFinding({ ...finding, sync_status: 'SYNCING' });
-  //     const resp = await fetch(FINDINGS_ENDPOINT, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(finding),
-  //     });
-  //     if (resp.ok) {
-  //       await upsertFinding({ ...finding, sync_status: 'SYNCED' });
-  //       synced++;
-  //     } else {
-  //       await upsertFinding({ ...finding, sync_status: 'FAILED' });
-  //       failed++;
-  //     }
-  //   } catch {
-  //     await upsertFinding({ ...finding, sync_status: 'FAILED' });
-  //     failed++;
-  //   }
-  // }
-  // return { synced, failed, mode: 'LIVE' };
-  // ─────────────────────────────────────────────────────────────────────────
+  let synced = 0, failed = 0;
+  for (const finding of queued) {
+    try {
+      await upsertFinding({ ...finding, sync_status: 'SYNCING' });
+      const resp = await fetch(FINDINGS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finding),
+      });
+      if (resp.ok) {
+        await upsertFinding({ ...finding, sync_status: 'SYNCED' });
+        synced++;
+      } else {
+        await upsertFinding({ ...finding, sync_status: 'FAILED' });
+        failed++;
+      }
+    } catch {
+      await upsertFinding({ ...finding, sync_status: 'FAILED' });
+      failed++;
+    }
+  }
 
-  // DEMO MODE: backend reachable but /findings not yet wired.
-  // Just ensure QUEUED findings remain clearly marked as pending.
-  return { synced: 0, failed: 0, mode: 'DEMO' };
+  // Also pull findings from server
+  try {
+    const pullResp = await fetch(FINDINGS_ENDPOINT);
+    if (pullResp.ok) {
+      const serverFindings: Finding[] = await pullResp.json();
+      for (const sf of serverFindings) {
+        // If it's already locally queued or syncing, don't overwrite local changes
+        const existing = await getLocalFindings().then(all => all.find(f => f.finding_id === sf.finding_id));
+        if (!existing || existing.sync_status === 'SYNCED') {
+          await upsertFinding({ ...sf, sync_status: 'SYNCED' });
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Failed to pull findings", err);
+  }
+
+  return { synced, failed, mode: 'LIVE' };
 }

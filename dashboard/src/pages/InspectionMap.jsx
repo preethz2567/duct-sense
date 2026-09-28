@@ -20,7 +20,50 @@ export default function InspectionMap({
 }) {
   const [mapMode, setMapMode] = useState('POC_RIG'); // 'POC_RIG' or 'FACILITY_BLUEPRINT'
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [findings, setFindings] = useState([]);
   const activeSection = session.sections.find((s) => s.id === session.activeSectionId) || session.sections[2];
+
+  React.useEffect(() => {
+    let interval = setInterval(() => {
+      fetch('http://localhost:8000/findings')
+        .then(res => res.json())
+        .then(data => setFindings(data))
+        .catch(err => console.error(err));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleMapClick = async (e) => {
+    if (mapMode !== 'FACILITY_BLUEPRINT') return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const newFinding = {
+      finding_id: `f-${Date.now()}`,
+      inspection_id: session.id || 'INS-1042',
+      floor_plan_id: 'floor_plan.svg',
+      floor_plan_page: 1,
+      finding_type: 'OBSERVATION',
+      x: x,
+      y: y,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      photo: null,
+      notes: 'Added from Dashboard',
+      status: 'OPEN',
+      sync_status: 'SYNCED'
+    };
+    try {
+      await fetch('http://localhost:8000/findings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newFinding)
+      });
+      setFindings(prev => [...prev, newFinding]);
+    } catch(err) {
+      console.error(err);
+    }
+  };
 
   const handleZoom = (delta) => {
     setZoomLevel((prev) => Math.min(2.0, Math.max(0.7, prev + delta)));
@@ -147,44 +190,32 @@ export default function InspectionMap({
                   </g>
                 </svg>
               ) : (
-                /* Facility Blueprint View */
-                <svg viewBox="0 0 700 360" className="ds-floorplan-svg">
-                  <rect width="100%" height="100%" fill="#F8FAFC" />
-                  <rect x="20" y="20" width="660" height="320" fill="none" stroke="#20252A" strokeWidth="2" />
-
-                  {floorPlanRooms.map((r) => (
-                    <g key={r.id}>
-                      <rect x={r.x} y={r.y} width={r.width} height={r.height} fill="#E9E8E2" stroke="#CDD0CE" strokeWidth="1" />
-                      <text x={r.x + 8} y={r.y + 18} fill="#20252A" fontSize="9" fontWeight="bold">{r.id}</text>
-                    </g>
-                  ))}
-
-                  {floorPlanDucts.map((d) => {
-                    const isCurrent = d.id === 'D-03';
-                    return (
-                      <g key={d.id}>
-                        <line
-                          x1={d.start[0]}
-                          y1={d.start[1]}
-                          x2={d.end[0]}
-                          y2={d.end[1]}
-                          stroke={isCurrent ? '#D88A19' : '#176B73'}
-                          strokeWidth={isCurrent ? 8 : 5}
-                        />
-                        <text
-                          x={(d.start[0] + d.end[0]) / 2}
-                          y={(d.start[1] + d.end[1]) / 2 - 4}
-                          fill="#20252A"
-                          fontSize="9"
-                          fontWeight="bold"
-                          textAnchor="middle"
-                        >
-                          {d.id}
+                /* Facility Blueprint View with real SVG */
+                <div 
+                  style={{ position: 'relative', width: '100%', height: '100%', cursor: 'crosshair' }}
+                  onClick={handleMapClick}
+                >
+                  <img 
+                    src="/floor_plan.svg" 
+                    alt="Floor Plan" 
+                    style={{ width: '100%', height: 'auto', display: 'block', pointerEvents: 'none' }} 
+                  />
+                  <svg 
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+                    viewBox="0 0 100 100" 
+                    preserveAspectRatio="none"
+                  >
+                    {findings.map(f => (
+                      <g key={f.finding_id} transform={`translate(${f.x * 100}, ${f.y * 100})`}>
+                        <circle cx="0" cy="0" r="3" fill={f.finding_type === 'CONFIRMED_LEAK' ? '#B83A32' : f.finding_type === 'SUSPECTED_LEAK' ? '#D88A19' : '#3F7655'} opacity="0.25" />
+                        <circle cx="0" cy="0" r="1.5" fill={f.finding_type === 'CONFIRMED_LEAK' ? '#B83A32' : f.finding_type === 'SUSPECTED_LEAK' ? '#D88A19' : '#3F7655'} />
+                        <text x="0" y="-2.5" textAnchor="middle" fontSize="3" fill={f.finding_type === 'CONFIRMED_LEAK' ? '#B83A32' : f.finding_type === 'SUSPECTED_LEAK' ? '#D88A19' : '#3F7655'}>
+                          {f.finding_type === 'CONFIRMED_LEAK' ? '●' : f.finding_type === 'SUSPECTED_LEAK' ? '⚠' : '○'}
                         </text>
                       </g>
-                    );
-                  })}
-                </svg>
+                    ))}
+                  </svg>
+                </div>
               )}
             </div>
           </div>
