@@ -28,10 +28,9 @@ function typeFromFilename(filename: string): 'image' | 'pdf' {
   return /\.pdf$/i.test(filename) ? 'pdf' : 'image';
 }
 
-/** Load floor plans from manifest.json; returns empty array if not found. */
 export async function loadFloorPlans(): Promise<FloorPlan[]> {
   try {
-    const resp = await fetch(`${FLOOR_PLANS_BASE}manifest.json`, {
+    const resp = await fetch(`${FLOOR_PLANS_BASE}plans.json?t=${Date.now()}`, {
       cache: 'no-store',
     });
     if (!resp.ok) return [];

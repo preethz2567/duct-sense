@@ -19,10 +19,12 @@ export default function App() {
   const [online, setOnline]                     = useState(navigator.onLine);
   const [pendingCount, setPendingCount]         = useState(0);
 
-  // Load floor plans on mount
+  // Load floor plans when the app shell mounts, or when returning to inspections
   useEffect(() => {
-    loadFloorPlans().then(setFloorPlans);
-  }, []);
+    if (screen === 'INSPECTIONS' || screen === 'MAP') {
+      loadFloorPlans().then(setFloorPlans);
+    }
+  }, [screen]);
 
   // Update pending count on mount
   useEffect(() => {
