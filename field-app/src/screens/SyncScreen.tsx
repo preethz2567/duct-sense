@@ -4,6 +4,7 @@ import { useApp } from '../store/useAppStore';
 import { getLocalFindings } from '../services/db';
 import { attemptSync, countLocalFindings } from '../services/syncService';
 import type { Finding } from '../types';
+import { Wifi, WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
 
 export default function SyncScreen() {
   const { online, setPendingCount } = useApp();
@@ -45,7 +46,7 @@ export default function SyncScreen() {
 
       {/* Connection status card */}
       <div className={`sync-status-card ${online ? 'sync-online' : 'sync-offline'}`}>
-        <div className="sync-status-icon">{online ? '🌐' : '✈️'}</div>
+        <div className="sync-status-icon">{online ? <Wifi size={24} /> : <WifiOff size={24} />}</div>
         <div>
           <div className="sync-status-title">
             {online ? 'ONLINE' : 'OFFLINE'}
@@ -91,10 +92,11 @@ export default function SyncScreen() {
       {/* Sync action */}
       <button
         className="btn btn-primary btn-full"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
         onClick={handleSync}
         disabled={syncing || !online}
       >
-        {syncing ? '⟳ SYNCING...' : online ? '⟳ ATTEMPT SYNC' : 'OFFLINE — SYNC UNAVAILABLE'}
+        {syncing ? <><RefreshCw size={16} className="spin" /> SYNCING...</> : online ? <><RefreshCw size={16} /> ATTEMPT SYNC</> : 'OFFLINE — SYNC UNAVAILABLE'}
       </button>
 
       {/* Sync result feedback */}
@@ -108,7 +110,7 @@ export default function SyncScreen() {
             </>
           ) : (
             <>
-              <strong>✓ SYNC COMPLETE</strong>
+              <strong><CheckCircle2 size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> SYNC COMPLETE</strong>
               <p>{syncResult.synced} synced · {syncResult.failed} failed</p>
             </>
           )}

@@ -5,7 +5,7 @@
    Optimised for 390×844 phone (primary) and tablets.
    ───────────────────────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 /* ── Tokens ─────────────────────────────────────────────────────────────────── */
 :root {
@@ -27,6 +27,7 @@
 
   --font-base:  'Inter', system-ui, sans-serif;
   --font-mono:  'JetBrains Mono', monospace;
+  --font-brand: 'Space Grotesk', system-ui, sans-serif;
 
   --radius-sm:  6px;
   --radius-md:  10px;
@@ -90,11 +91,23 @@ body {
 }
 
 .status-bar-brand {
-  font-size: 13px;
+  font-family: var(--font-brand);
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  letter-spacing: 0px;
   color: var(--c-bg);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-bar-brand .brand-sub {
+  font-family: var(--font-base);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
 }
 
 .status-bar-right {
@@ -192,10 +205,11 @@ body {
 }
 
 .screen-title {
-  font-size: 11px;
+  font-family: var(--font-brand);
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 2.5px;
-  color: var(--c-muted);
+  letter-spacing: 1px;
+  color: var(--c-charcoal);
   text-transform: uppercase;
 }
 
@@ -309,14 +323,14 @@ body {
 }
 
 .insp-meta {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--c-muted);
 }
 
 .insp-date {
   font-family: var(--font-mono);
-  font-size: 11px;
-  margin-bottom: 10px;
+  font-size: 12px;
+  margin-bottom: 12px;
 }
 
 /* ── Map screen ─────────────────────────────────────────────────────────────── */

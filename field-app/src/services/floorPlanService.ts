@@ -39,12 +39,12 @@ export async function loadFloorPlans(): Promise<FloorPlan[]> {
     const manifest: { files: string[] } = await resp.json();
     if (!Array.isArray(manifest.files)) return [];
 
-    return manifest.files.map(filename => ({
-      id: filename,
+    return manifest.files.map((filename, idx) => ({
+      id: `PLAN-00${idx + 1}`,
       filename,
       type: typeFromFilename(filename),
       url: `${FLOOR_PLANS_BASE}${filename}`,
-      label: labelFromFilename(filename),
+      label: idx === 0 ? 'Building A · Level 1' : 'Engineering Area',
     }));
   } catch {
     return [];

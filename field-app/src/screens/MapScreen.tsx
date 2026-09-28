@@ -9,16 +9,12 @@ import { getFindingsByInspection } from '../services/db';
 import type { Finding, FindingType } from '../types';
 import FindingSheet from '../components/FindingSheet';
 
+import { MapPin, Plus, Maximize, Minus } from 'lucide-react';
+
 const MARKER_COLOR: Record<FindingType, string> = {
   SUSPECTED_LEAK: '#D88A19',
   CONFIRMED_LEAK: '#B83A32',
   OBSERVATION:    '#3F7655',
-};
-
-const MARKER_LABEL: Record<FindingType, string> = {
-  SUSPECTED_LEAK: '⚠',
-  CONFIRMED_LEAK: '●',
-  OBSERVATION:    '○',
 };
 
 export default function MapScreen() {
@@ -112,9 +108,9 @@ export default function MapScreen() {
 
       {/* Zoom controls */}
       <div className="zoom-controls">
-        <button className="zoom-btn" onClick={() => setZoom(z => Math.min(3, z + 0.25))}>＋</button>
-        <button className="zoom-btn" onClick={() => setZoom(1)}>⊡</button>
-        <button className="zoom-btn" onClick={() => setZoom(z => Math.max(0.5, z - 0.25))}>－</button>
+        <button className="zoom-btn" onClick={() => setZoom(z => Math.min(3, z + 0.25))}><Plus size={16} /></button>
+        <button className="zoom-btn" onClick={() => setZoom(1)}><Maximize size={16} /></button>
+        <button className="zoom-btn" onClick={() => setZoom(z => Math.max(0.5, z - 0.25))}><Minus size={16} /></button>
       </div>
 
       {/* Plan canvas */}
@@ -164,16 +160,7 @@ export default function MapScreen() {
                     style={{ cursor: 'pointer' }}
                   >
                     <circle cx="0" cy="0" r="3" fill={MARKER_COLOR[f.finding_type]} opacity={0.25} />
-                    <circle cx="0" cy="0" r="1.5" fill={MARKER_COLOR[f.finding_type]} />
-                    <text
-                      x="0" y="-2.5"
-                      textAnchor="middle"
-                      fontSize="3"
-                      fill={MARKER_COLOR[f.finding_type]}
-                      style={{ userSelect: 'none' }}
-                    >
-                      {MARKER_LABEL[f.finding_type]}
-                    </text>
+                    <circle cx="0" cy="0" r="1.5" fill={MARKER_COLOR[f.finding_type]} stroke="#FFFFFF" strokeWidth="0.2" />
                   </g>
                 ))}
 
@@ -195,17 +182,18 @@ export default function MapScreen() {
       {!placing && !sheetOpen && (
         <div className="fab-row">
           {findings.length > 0 && (
-            <div className="finding-legend">
-              <span style={{ color: '#D88A19' }}>⚠ {findings.filter(f => f.finding_type === 'SUSPECTED_LEAK').length}</span>
-              <span style={{ color: '#B83A32' }}>● {findings.filter(f => f.finding_type === 'CONFIRMED_LEAK').length}</span>
-              <span style={{ color: '#3F7655' }}>○ {findings.filter(f => f.finding_type === 'OBSERVATION').length}</span>
+            <div className="finding-legend" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{ color: '#D88A19', display: 'flex', alignItems: 'center', gap: '2px' }}><MapPin size={12} /> {findings.filter(f => f.finding_type === 'SUSPECTED_LEAK').length}</span>
+              <span style={{ color: '#B83A32', display: 'flex', alignItems: 'center', gap: '2px' }}><MapPin size={12} fill="#B83A32" /> {findings.filter(f => f.finding_type === 'CONFIRMED_LEAK').length}</span>
+              <span style={{ color: '#3F7655', display: 'flex', alignItems: 'center', gap: '2px' }}><MapPin size={12} /> {findings.filter(f => f.finding_type === 'OBSERVATION').length}</span>
             </div>
           )}
           <button
             className="btn btn-primary btn-fab"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px' }}
             onClick={() => { setPlacing(true); }}
           >
-            ＋ MARK FINDING
+            <Plus size={18} /> MARK FINDING
           </button>
         </div>
       )}

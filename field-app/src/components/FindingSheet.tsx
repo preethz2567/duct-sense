@@ -4,6 +4,7 @@
 // Handles: finding type, photo capture/upload, notes, save, delete.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useRef, useState } from 'react';
+import { Camera, Image as ImageIcon, MapPin, X, RotateCw } from 'lucide-react';
 import { upsertFinding, deleteFinding } from '../services/db';
 import { queueFinding } from '../services/syncService';
 import type { Finding, FindingType, Inspection, FloorPlan } from '../types';
@@ -22,9 +23,9 @@ function uuid(): string {
 }
 
 const TYPE_OPTIONS: { type: FindingType; label: string; color: string; desc: string }[] = [
-  { type: 'SUSPECTED_LEAK', label: '⚠ SUSPECTED LEAK',  color: '#D88A19', desc: 'Possible leak — needs verification' },
-  { type: 'CONFIRMED_LEAK', label: '● CONFIRMED LEAK',  color: '#B83A32', desc: 'Leak positively identified'           },
-  { type: 'OBSERVATION',    label: '○ OTHER OBSERVATION', color: '#3F7655', desc: 'Note or general observation'        },
+  { type: 'SUSPECTED_LEAK', label: 'SUSPECTED LEAK',  color: '#D88A19', desc: 'Possible leak' },
+  { type: 'CONFIRMED_LEAK', label: 'CONFIRMED LEAK',  color: '#B83A32', desc: 'Leak identified' },
+  { type: 'OBSERVATION',    label: 'OTHER OBSERVATION', color: '#3F7655', desc: 'Note/Observation' },
 ];
 
 export default function FindingSheet({
@@ -39,6 +40,7 @@ export default function FindingSheet({
   const [notes, setNotes] = useState<string>(init?.notes ?? '');
   const [photo, setPhoto] = useState<string | null>(init?.photo ?? null);
   const [saving, setSaving] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -80,9 +82,30 @@ export default function FindingSheet({
 
   async function handleDelete() {
     if (!init) return;
-    if (!window.confirm('Delete this finding?')) return;
     await deleteFinding(init.finding_id);
     onClose();
+  }
+
+  if (confirmDelete) {
+    return (
+      <>
+        <div className="sheet-backdrop" onClick={onClose} />
+        <div className="bottom-sheet" style={{ padding: '24px 16px' }}>
+          <h2 className="sheet-title" style={{ color: '#B83A32' }}>DELETE FINDING?</h2>
+          <p style={{ fontSize: '14px', color: '#667078', marginBottom: '24px' }}>
+            This finding and its attached photo will be removed from this inspection.
+          </p>
+          <div className="sheet-actions" style={{ flexDirection: 'column' }}>
+            <button className="btn btn-danger btn-full" onClick={handleDelete} style={{ marginBottom: '12px' }}>
+              DELETE FINDING
+            </button>
+            <button className="btn btn-secondary btn-full" onClick={() => setConfirmDelete(false)}>
+              CANCEL
+            </button>
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -93,12 +116,12 @@ export default function FindingSheet({
         <div className="sheet-handle" />
 
         <h2 className="sheet-title">
-          {isNew ? 'NEW FINDING' : 'EDIT FINDING'}
+          {isNew ? 'NEW FINDING' : 'FINDING'}
         </h2>
 
         {/* Location confirmed indicator */}
-        <div className="location-confirmed">
-          📍 Location marked on plan
+        <div className="location-confirmed" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <MapPin size={14} color="#667078" /> Location marked on plan
           {(pendingXY ?? (init && { x: init.x, y: init.y })) && (
             <span className="location-coords">
               {' '}({((pendingXY?.x ?? init!.x) * 100).toFixed(0)}%,{' '}
@@ -108,7 +131,7 @@ export default function FindingSheet({
         </div>
 
         {/* Finding type selection */}
-        <p className="sheet-label">WHAT DID YOU FIND?</p>
+        <p className="sheet-label">{isNew ? 'WHAT DID YOU FIND?' : 'TYPE'}</p>
         <div className="type-options">
           {TYPE_OPTIONS.map(opt => (
             <button
@@ -128,21 +151,21 @@ export default function FindingSheet({
           <div className="photo-preview-wrap">
             <img src={photo} alt="Finding" className="photo-preview" />
             <div className="photo-actions">
-              <button className="btn btn-secondary btn-sm" onClick={() => setPhoto(null)}>
-                ✕ REMOVE
+              <button className="btn btn-secondary btn-sm" onClick={() => setPhoto(null)} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <X size={14} /> REMOVE
               </button>
-              <button className="btn btn-secondary btn-sm" onClick={() => cameraInputRef.current?.click()}>
-                ↺ RETAKE
+              <button className="btn btn-secondary btn-sm" onClick={() => cameraInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <RotateCw size={14} /> RETAKE
               </button>
             </div>
           </div>
         ) : (
           <div className="photo-buttons">
-            <button className="btn btn-secondary" onClick={() => cameraInputRef.current?.click()}>
-              📷 TAKE PHOTO
+            <button className="btn btn-secondary" onClick={() => cameraInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+              <Camera size={16} /> TAKE PHOTO
             </button>
-            <button className="btn btn-secondary" onClick={() => galleryInputRef.current?.click()}>
-              🖼 UPLOAD PHOTO
+            <button className="btn btn-secondary" onClick={() => galleryInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+              <ImageIcon size={16} /> UPLOAD PHOTO
             </button>
           </div>
         )}
@@ -177,7 +200,7 @@ export default function FindingSheet({
         {/* Actions */}
         <div className="sheet-actions">
           {!isNew && (
-            <button className="btn btn-danger" onClick={handleDelete}>
+            <button className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
               DELETE
             </button>
           )}
@@ -189,7 +212,7 @@ export default function FindingSheet({
             onClick={handleSave}
             disabled={saving}
           >
-            {saving ? 'SAVING...' : 'SAVE FINDING'}
+            {saving ? 'SAVING...' : (isNew ? 'SAVE FINDING' : 'UPDATE FINDING')}
           </button>
         </div>
       </div>

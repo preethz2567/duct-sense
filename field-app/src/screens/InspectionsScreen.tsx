@@ -33,6 +33,7 @@ const SEED_INSPECTIONS: Inspection[] = [
 export default function InspectionsScreen() {
   const { setScreen, setActiveInspection, floorPlans, setActiveFloorPlan } = useApp();
   const [inspections, setInspections] = useState<Inspection[]>([]);
+  const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -45,15 +46,28 @@ export default function InspectionsScreen() {
     })();
   }, []);
 
-  function handleOpen(inspection: Inspection) {
-    setActiveInspection(inspection);
-    // Auto-select floor plan if the inspection specifies one
+  function handleStartSelection(inspection: Inspection) {
     if (inspection.floor_plan_id && floorPlans.length > 0) {
       const fp = floorPlans.find(f => f.id === inspection.floor_plan_id);
-      if (fp) setActiveFloorPlan(fp);
-    } else if (floorPlans.length > 0 && !inspection.floor_plan_id) {
-      setActiveFloorPlan(floorPlans[0]);
+      if (fp) {
+        setActiveInspection(inspection);
+        setActiveFloorPlan(fp);
+        setScreen('MAP');
+        return;
+      }
     }
+    setSelectedInspection(inspection);
+  }
+
+  function handleSelectPlan(planId: string) {
+    if (!selectedInspection) return;
+    const fp = floorPlans.find(f => f.id === planId);
+    if (!fp) return;
+    
+    const updatedInspection = { ...selectedInspection, floor_plan_id: planId };
+    upsertInspection(updatedInspection);
+    setActiveInspection(updatedInspection);
+    setActiveFloorPlan(fp);
     setScreen('MAP');
   }
 
@@ -63,15 +77,38 @@ export default function InspectionsScreen() {
     return '#667078';
   }
 
+  if (selectedInspection) {
+    return (
+      <div className="screen">
+        <div className="screen-header">
+          <h1 className="screen-title">SELECT PLAN</h1>
+        </div>
+        <div style={{ padding: '16px' }}>
+          <h2 style={{ fontSize: '13px', color: '#667078', marginBottom: '8px' }}>AVAILABLE PLANS</h2>
+          {floorPlans.map(fp => (
+            <div key={fp.id} className="insp-card" style={{ marginBottom: '12px' }}>
+              <div className="insp-site">{fp.id === 'PLAN-001' ? 'HVAC BUILDING' : 'SUPPLIED FLOOR PLAN'}</div>
+              <div className="insp-meta" style={{ marginBottom: '12px' }}>{fp.label}</div>
+              <button className="btn btn-secondary btn-full" onClick={() => handleSelectPlan(fp.id)}>
+                [ OPEN PLAN ]
+              </button>
+            </div>
+          ))}
+          <button className="btn btn-outline btn-full" onClick={() => setSelectedInspection(null)} style={{ marginTop: '12px' }}>
+            CANCEL
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="screen">
       <div className="screen-header">
         <h1 className="screen-title">INSPECTIONS</h1>
         {floorPlans.length === 0 && (
           <p className="hint-text">
-            No floor plans found. Add files to{' '}
-            <code>/field-app/public/floor-plans/</code> and update{' '}
-            <code>manifest.json</code>.
+            No floor plans found.
           </p>
         )}
       </div>
@@ -99,9 +136,9 @@ export default function InspectionsScreen() {
             <div className="insp-meta insp-date">{ins.date}</div>
             <button
               className="btn btn-primary btn-full"
-              onClick={() => handleOpen(ins)}
+              onClick={() => handleStartSelection(ins)}
             >
-              START INSPECTION →
+              START INSPECTION
             </button>
           </div>
         ))}
