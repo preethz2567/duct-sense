@@ -20,6 +20,7 @@ import numpy as np
 
 # ── Walkthrough constants ──────────────────────────────────────────────────────
 DUCT_LENGTH_M   = 2.0       # metres
+
 DURATION_S      = 30.0      # seconds
 SAMPLE_RATE_HZ  = 2         # samples per second
 N_SAMPLES       = int(DURATION_S * SAMPLE_RATE_HZ)   # 60

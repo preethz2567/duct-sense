@@ -18,7 +18,7 @@ import json
 import os
 import sqlite3
 from contextlib import asynccontextmanager
-from typing import List
+from typing import List, Optional
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -86,9 +86,14 @@ app.add_middleware(
 
 class LeakEvent(BaseModel):
     """A single leak-detection event from a sensor walkthrough."""
-    position_m:       float
-    leak_confidence:  float
-    timestamp:        float
+    position_m:               float
+    leak_confidence:          float
+    timestamp:                float
+    # Sensor-evidence fields — present in new walkthroughs, None in legacy ones.
+    thermal_confidence:       Optional[float] = None
+    pressure_differential_pa: Optional[float] = None
+    normalized_pressure:      Optional[float] = None
+    audio_confidence:         Optional[float] = None
 
 
 class WalkthroughReport(BaseModel):

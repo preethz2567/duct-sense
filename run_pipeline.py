@@ -14,6 +14,7 @@ Usage:
 
 import sys
 import os
+import datetime
 
 # Allow imports from sibling packages (simulator/, core/, storage/) without
 # installing the repo as a package.
@@ -22,7 +23,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from simulator.sensor_simulator import generate_walkthrough_full
 from core.fusion_logic import fuse
 from core.alert import trigger_console_alert
-from storage.storage import start_walkthrough, log_event
+from core.api_client import publish_walkthrough
+from storage.storage import start_walkthrough, log_event, get_events_for_walkthrough
 from storage.report_generator import generate_report
 
 REPORT_PATH = "docs/latest_report.md"
@@ -94,6 +96,17 @@ def run_pipeline(leak_position: float = 1.2, no_leak: bool = False) -> None:
         f.write(report)
 
     print(f"Report written to: {REPORT_PATH}")
+
+    # ── Publish to FastAPI (non-fatal if backend is unavailable) ──────────────
+    print()
+    today = datetime.date.today().isoformat()   # e.g. "2026-09-28"
+    leak_events = get_events_for_walkthrough(walkthrough_id)
+    print(f"Publishing walkthrough to FastAPI ({len(leak_events)} leak event(s))...")
+    publish_walkthrough(
+        walkthrough_id=walkthrough_id,
+        date=today,
+        events=leak_events,
+    )
 
 
 if __name__ == "__main__":

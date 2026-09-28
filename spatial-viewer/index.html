@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,10 +11,18 @@
 
   <style>
     /* ── Reset ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html, body {
-      width: 100%; height: 100%;
+    html,
+    body {
+      width: 100%;
+      height: 100%;
       background: #f4f6f9;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
@@ -22,7 +31,9 @@
     /* ── Header bar ── */
     #header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 52px;
       background: #0000B3;
       display: flex;
@@ -30,10 +41,12 @@
       padding: 0 1.5rem;
       gap: 0.75rem;
       z-index: 100;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
     }
 
-    #header span.logo { font-size: 1.3rem; }
+    #header span.logo {
+      font-size: 1.3rem;
+    }
 
     #header h1 {
       color: #ffffff;
@@ -43,7 +56,7 @@
     }
 
     #header p {
-      color: rgba(255,255,255,0.65);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 0.75rem;
       margin-left: auto;
     }
@@ -71,14 +84,21 @@
       font-weight: 700;
       color: #ffffff;
       transition: transform 0.15s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .hotspot-btn:hover { transform: scale(1.2); }
+    .hotspot-btn:hover {
+      transform: scale(1.2);
+    }
 
     /* Orange for leak, teal for clear */
-    .hotspot-btn.leak  { background: #FF9C00; }
-    .hotspot-btn.clear { background: #12C6B3; }
+    .hotspot-btn.leak {
+      background: #FF9C00;
+    }
+
+    .hotspot-btn.clear {
+      background: #12C6B3;
+    }
 
     /* ── Info panel (shown on hotspot click) ── */
     #info-panel {
@@ -91,13 +111,15 @@
       border: 1px solid #EEEEEE;
       border-radius: 8px;
       padding: 1rem 1.4rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       min-width: 260px;
       max-width: 90vw;
       z-index: 200;
     }
 
-    #info-panel.visible { display: block; }
+    #info-panel.visible {
+      display: block;
+    }
 
     #info-panel .panel-id {
       font-size: 0.68rem;
@@ -134,8 +156,13 @@
       transition: width 0.3s;
     }
 
-    .bar-fill.leak  { background: #FF9C00; }
-    .bar-fill.clear { background: #12C6B3; }
+    .bar-fill.leak {
+      background: #FF9C00;
+    }
+
+    .bar-fill.clear {
+      background: #12C6B3;
+    }
 
     #info-panel .close-btn {
       display: block;
@@ -151,7 +178,9 @@
       cursor: pointer;
     }
 
-    #info-panel .close-btn:hover { opacity: 0.85; }
+    #info-panel .close-btn:hover {
+      opacity: 0.85;
+    }
 
     /* ── Legend ── */
     #legend {
@@ -164,11 +193,18 @@
       padding: 0.75rem 1rem;
       font-size: 0.75rem;
       color: #333333;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       z-index: 100;
     }
 
-    #legend p { font-weight: 700; color: #0000B3; margin-bottom: 0.4rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    #legend p {
+      font-weight: 700;
+      color: #0000B3;
+      margin-bottom: 0.4rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
     .legend-item {
       display: flex;
@@ -178,46 +214,50 @@
     }
 
     .legend-dot {
-      width: 12px; height: 12px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    .legend-dot.leak  { background: #FF9C00; }
-    .legend-dot.clear { background: #12C6B3; }
+    .legend-dot.leak {
+      background: #FF9C00;
+    }
+
+    .legend-dot.clear {
+      background: #12C6B3;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- ── Header ─────────────────────────────────────────────────────────── -->
   <div id="header">
     <span class="logo">🌡️</span>
     <h1>DuctSense — Spatial 3D Viewer</h1>
-    <p>Placeholder model · Real scan pending</p>
+    <p>3DModel.glb · Update hotspot positions to match model coordinates</p>
   </div>
 
   <!-- ── Legend ─────────────────────────────────────────────────────────── -->
   <div id="legend">
     <p>Hotspot Key</p>
-    <div class="legend-item"><div class="legend-dot leak"></div> Leak detected</div>
-    <div class="legend-item"><div class="legend-dot clear"></div> Clear</div>
+    <div class="legend-item">
+      <div class="legend-dot leak"></div> Leak detected
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot clear"></div> Clear
+    </div>
   </div>
 
   <!--
-    MODEL_PATH — PLACEHOLDER
-    Currently points to the public model-viewer sample astronaut model.
-    Replace this src attribute with the path to the real team 3D scan
-    (GLB format) once it is available from the phone scanning app.
+    MODEL_PATH — local 3D scan file.
+    Place 3DModel.glb in the spatial-viewer/ folder alongside index.html.
+    Once real duct leak coordinates are confirmed, update hotspots.json
+    with the correct "position" strings to match this model's coordinate space.
   -->
-  <model-viewer
-    id="viewer"
-    src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-    alt="DuctSense 3D scan placeholder — astronaut model"
-    camera-controls
-    auto-rotate
-    shadow-intensity="1"
-    ar
-  >
+  <model-viewer id="viewer" src="3DModel.glb" alt="DuctSense 3D scan — duct model" camera-controls auto-rotate
+    shadow-intensity="1" ar>
     <!--
       Hotspot slots are injected here by the script below after
       hotspots.json is fetched. Each slot name matches the hotspot id.
@@ -226,7 +266,7 @@
 
   <!-- ── Info panel (populated on hotspot click) ──────────────────────── -->
   <div id="info-panel">
-    <div class="panel-id"   id="panel-id"></div>
+    <div class="panel-id" id="panel-id"></div>
     <div class="panel-status" id="panel-status"></div>
     <div class="panel-confidence" id="panel-confidence"></div>
     <div class="bar-track">
@@ -240,13 +280,13 @@
     function openPanel(hotspot) {
       const isLeak = hotspot.status === 'Leak detected';
 
-      document.getElementById('panel-id').textContent         = hotspot.id;
-      document.getElementById('panel-status').textContent     = hotspot.status;
+      document.getElementById('panel-id').textContent = hotspot.id;
+      document.getElementById('panel-status').textContent = hotspot.status;
       document.getElementById('panel-confidence').textContent = `Confidence: ${hotspot.confidence}%`;
 
       const bar = document.getElementById('panel-bar');
       bar.style.width = `${hotspot.confidence}%`;
-      bar.className   = `bar-fill ${isLeak ? 'leak' : 'clear'}`;
+      bar.className = `bar-fill ${isLeak ? 'leak' : 'clear'}`;
 
       document.getElementById('info-panel').classList.add('visible');
     }
@@ -280,11 +320,11 @@
 
           // Create the button element that acts as the visible pin
           const btn = document.createElement('button');
-          btn.className     = `hotspot-btn ${isLeak ? 'leak' : 'clear'}`;
-          btn.title         = `${hotspot.id}: ${hotspot.status} (${hotspot.confidence}%)`;
-          btn.textContent   = isLeak ? '!' : '✓';
-          btn.setAttribute('slot',              hotspot.id);
-          btn.setAttribute('data-position',     hotspot.position);
+          btn.className = `hotspot-btn ${isLeak ? 'leak' : 'clear'}`;
+          btn.title = `${hotspot.id}: ${hotspot.status} (${hotspot.confidence}%)`;
+          btn.textContent = isLeak ? '!' : '✓';
+          btn.setAttribute('slot', hotspot.id);
+          btn.setAttribute('data-position', hotspot.position);
           btn.setAttribute('data-visibility-attribute', 'visible');
 
           btn.addEventListener('click', (e) => {
@@ -301,4 +341,5 @@
       });
   </script>
 </body>
+
 </html>
