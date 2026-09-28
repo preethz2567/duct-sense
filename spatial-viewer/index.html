@@ -4,12 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DuctSense — Spatial 3D Viewer</title>
+  <title>DuctSense — Spatial Duct Viewer</title>
 
-  <!-- Google model-viewer web component (no npm install needed) -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <!-- React & Babel Standalone (No Node.js or build step required) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
+<<<<<<< HEAD
     /* ── Reset ── */
     *,
     *::before,
@@ -25,9 +28,36 @@
       height: 100%;
       background: #f4f6f9;
       font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
+=======
+    :root {
+      --spatial-bg: #0b111e;
+      --spatial-card-bg: rgba(16, 24, 40, 0.88);
+      --spatial-card-border: rgba(255, 255, 255, 0.12);
+      --spatial-electric-blue: #00e5ff;
+      --spatial-navy: #0000b3;
+      --spatial-text-primary: #ffffff;
+      --spatial-text-secondary: #94a3b8;
+      --spatial-text-muted: #64748b;
+      --sev-critical: #d32f2f;
+      --sev-high: #e53935;
+      --sev-medium: #fb8c00;
+      --sev-low: #4caf50;
+      --sev-none: #ffffff;
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body, #root {
+      width: 100%; height: 100%;
+      background: #080d17;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
+      overflow: hidden;
+      color: #ffffff;
+      user-select: none;
+    }
+
+<<<<<<< HEAD
     /* ── Header bar ── */
     #header {
       position: fixed;
@@ -36,10 +66,27 @@
       right: 0;
       height: 52px;
       background: #0000B3;
+=======
+    /* Universal App Navbar */
+    .app-navbar {
+      height: 64px;
+      background: #0000b3;
+      color: #ffffff;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 80;
+      position: relative;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
       gap: 0.75rem;
+<<<<<<< HEAD
       z-index: 100;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
     }
@@ -98,18 +145,43 @@
 
     .hotspot-btn.clear {
       background: #12C6B3;
+=======
     }
 
-    /* ── Info panel (shown on hotspot click) ── */
-    #info-panel {
-      display: none;
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+    .brand-logo {
+      width: 38px; height: 38px;
       background: #ffffff;
-      border: 1px solid #EEEEEE;
       border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .brand-tagline {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.75);
+      margin: 2px 0 0 0;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
+    }
+
+    .navbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.25);
+      padding: 4px;
+      border-radius: 8px;
+<<<<<<< HEAD
       padding: 1rem 1.4rem;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       min-width: 260px;
@@ -170,14 +242,423 @@
       padding: 0.45rem;
       background: #0000B3;
       color: #ffffff;
+=======
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
       border: none;
-      border-radius: 6px;
-      font-family: Arial, Helvetica, sans-serif;
+      color: rgba(255,255,255,0.75);
       font-size: 0.8rem;
       font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .nav-tab.active {
+      background: #ffffff;
+      color: #0000b3;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(18, 198, 179, 0.15);
+      border: 1px solid rgba(18, 198, 179, 0.4);
+      color: #12C6B3;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #12C6B3;
+      box-shadow: 0 0 8px #12C6B3;
+      animation: live-blink 1.5s infinite;
+    }
+
+    @keyframes live-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Spatial Viewer Container */
+    .spatial-viewer-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 64px);
+      background: radial-gradient(circle at 50% 30%, #131d31 0%, #080d17 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Floating Toolbar */
+    .spatial-toolbar {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--spatial-card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--spatial-card-border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      flex-wrap: wrap;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--spatial-text-secondary);
+    }
+
+    .opacity-val {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--spatial-electric-blue);
+      min-width: 36px;
+    }
+
+    .opacity-slider {
+      width: 90px;
+      height: 6px;
+      border-radius: 3px;
+      background: #22324e;
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--spatial-electric-blue);
+    }
+
+    .btn-segmented {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 2px;
+    }
+
+    .btn-toolbar {
+      background: transparent;
+      border: none;
+      color: var(--spatial-text-primary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-toolbar:hover:not(:disabled) {
+      background: rgba(255,255,255,0.12);
+      color: var(--spatial-electric-blue);
+    }
+
+    .btn-toolbar:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .zoom-readout {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      color: var(--spatial-electric-blue);
+      padding: 0 4px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .btn-toolbar-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--spatial-text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toolbar-toggle.active {
+      background: rgba(0, 229, 255, 0.12);
+      border-color: rgba(0, 229, 255, 0.4);
+      color: var(--spatial-electric-blue);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+    }
+
+    .toggle-indicator {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #475569;
+    }
+
+    .btn-toolbar-toggle.active .toggle-indicator {
+      background: var(--spatial-electric-blue);
+      box-shadow: 0 0 6px var(--spatial-electric-blue);
+    }
+
+    .severity-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .pill-critical, .pill-high { background: rgba(211,47,47,0.2); border-color: var(--sev-critical); color: #ff8a80; }
+    .pill-medium { background: rgba(251,140,0,0.2); border-color: var(--sev-medium); color: #ffd180; }
+    .pill-low { background: rgba(76,175,80,0.2); border-color: var(--sev-low); color: #b9f6ca; }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-leak {
+      background: linear-gradient(135deg, #00e5ff 0%, #0091ff 100%);
+      color: #031326;
+      box-shadow: 0 4px 14px rgba(0,229,255,0.35);
+    }
+
+    .btn-add-leak:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,229,255,0.5);
+    }
+
+    .btn-cancel-selection {
+      background: rgba(211,47,47,0.2);
+      border: 1px solid var(--sev-critical);
+      color: #ff8a80;
+    }
+
+    /* Canvas Viewport */
+    .canvas-wrapper {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .duct-map-viewport {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .duct-map-viewport.mode-nav { cursor: grab; }
+    .duct-map-viewport.is-dragging { cursor: grabbing; }
+    .duct-map-viewport.mode-pinning { cursor: crosshair; }
+
+    .duct-map-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform;
+    }
+
+    .duct-spatial-svg {
+      display: block;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    /* Pin Styling & Glow */
+    .map-pin-group {
+      cursor: pointer;
+      transform-box: fill-box;
+      transform-origin: center center;
+      transition: filter 0.2s ease, opacity 0.2s ease;
+      pointer-events: auto;
+    }
+
+    .map-pin-group:hover {
+      filter: brightness(1.2) drop-shadow(0 0 10px rgba(0, 229, 255, 0.8));
+    }
+
+    .map-pin-group.is-selected {
+      filter: brightness(1.12) drop-shadow(0 0 12px rgba(0, 229, 255, 0.95));
+    }
+
+    .map-pin-group.is-selected:hover {
+      filter: brightness(1.25) drop-shadow(0 0 16px rgba(0, 229, 255, 1));
+    }
+
+    .pin-pulse-wave {
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      transform-origin: center center;
+      transform-box: fill-box;
+      pointer-events: none;
+    }
+
+    @keyframes pulse-ring {
+      0% { r: 18; opacity: 0.7; }
+      50% { r: 38; opacity: 0.1; }
+      100% { r: 44; opacity: 0; }
+    }
+
+    /* Dynamic Scale Indicator */
+    .spatial-scale-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 40;
+      background: var(--spatial-card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--spatial-card-border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      min-width: 140px;
+    }
+
+    .scale-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--spatial-electric-blue);
+      margin-bottom: 6px;
+    }
+
+    .scale-bar-wrapper { margin-bottom: 4px; }
+
+    .scale-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--spatial-text-secondary);
+      font-family: 'Courier New', monospace;
+      margin-bottom: 2px;
+    }
+
+    .scale-bar {
+      height: 6px;
+      border: 1px solid #ffffff;
+      display: flex;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+    }
+
+    .segment-left { flex: 1; background: var(--spatial-electric-blue); }
+    .segment-right { flex: 1; background: #ffffff; }
+
+    .scale-footer {
+      font-size: 9px;
+      color: var(--spatial-text-muted);
+      text-align: right;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Pinning Mode Banner */
+    .pinning-mode-banner {
+      position: absolute;
+      top: 76px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      background: rgba(13, 22, 41, 0.95);
+      border: 1.5px solid var(--spatial-electric-blue);
+      border-radius: 12px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 30px rgba(0, 229, 255, 0.25);
+      backdrop-filter: blur(12px);
+    }
+
+    .banner-content strong {
+      color: var(--spatial-electric-blue);
+      font-size: 13px;
+      display: block;
+    }
+
+    .banner-content p {
+      margin: 0;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .btn-cancel-pinning {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
       cursor: pointer;
     }
 
+<<<<<<< HEAD
     #info-panel .close-btn:hover {
       opacity: 0.85;
     }
@@ -204,34 +685,435 @@
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+=======
+    /* QA Inspection Drawer */
+    .inspection-drawer {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 380px;
+      max-width: 90vw;
+      background: #0f172a;
+      border-left: 1px solid var(--spatial-card-border);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      animation: slide-in-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .legend-item {
+    @keyframes slide-in-right {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid var(--spatial-electric-blue);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.35rem;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.02);
     }
 
+<<<<<<< HEAD
     .legend-dot {
       width: 12px;
       height: 12px;
-      border-radius: 50%;
-      flex-shrink: 0;
+=======
+    .drawer-pre-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--spatial-electric-blue);
     }
 
+    .drawer-room-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 2px 0 0 0;
+      color: #ffffff;
+    }
+
+    .btn-drawer-close {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: #94a3b8;
+      font-size: 14px;
+      width: 28px; height: 28px;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+<<<<<<< HEAD
     .legend-dot.leak {
       background: #FF9C00;
     }
 
     .legend-dot.clear {
       background: #12C6B3;
+=======
+    .drawer-severity-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-bottom: 1px solid;
+    }
+
+    .severity-badge-large {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .severity-badge-large .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .fused-score-pill {
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      gap: 4px;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .metric-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .metric-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--spatial-text-secondary);
+    }
+
+    .metric-score {
+      font-size: 18px;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+    }
+
+    .confidence-track {
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .confidence-scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--spatial-text-muted);
+    }
+
+    .section-heading {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--spatial-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .sensor-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sensor-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .sensor-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--spatial-text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .sensor-weight { font-size: 10px; color: var(--spatial-text-muted); }
+
+    .sensor-val-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .sensor-percent {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .sensor-raw-val {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--spatial-electric-blue);
+      background: rgba(0,229,255,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .sensor-bar-track {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .thermal-fill { height: 100%; background: linear-gradient(90deg, #fb8c00, #d32f2f); }
+    .pressure-fill { height: 100%; background: linear-gradient(90deg, #00e5ff, #0091ff); }
+    .audio-fill { height: 100%; background: linear-gradient(90deg, #12c6b3, #00e5ff); }
+
+    .thermal-snapshot-container {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #000000;
+    }
+
+    .thermal-snapshot-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thermal-overlay-badge {
+      position: absolute;
+      bottom: 8px; left: 8px;
+      background: rgba(0,0,0,0.75);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .meta-label { color: var(--spatial-text-secondary); font-weight: 600; }
+    .meta-value { color: #ffffff; font-weight: 600; }
+
+    .coordinate-pill {
+      font-family: 'Courier New', monospace;
+      color: var(--spatial-electric-blue);
+      background: rgba(0,229,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .drawer-footer {
+      padding: 12px 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-drawer-action {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-ack { background: var(--spatial-navy); color: #ffffff; }
+    .btn-delete { background: rgba(211,47,47,0.2); border: 1px solid var(--sev-critical); color: #ff8a80; }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(3,7,18,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 540px;
+      max-height: 90vh;
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-preview-banner {
+      background: rgba(0,229,255,0.06);
+      border-left: 4px solid var(--spatial-electric-blue);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-form {
+      padding: 18px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-section {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--spatial-electric-blue);
+      margin-bottom: 10px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--spatial-text-secondary);
+    }
+
+    .form-control {
+      background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 7px 10px;
+      color: #ffffff;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-modal-cancel {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--spatial-text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-modal-submit {
+      background: linear-gradient(135deg, #00e5ff 0%, #0091ff 100%);
+      border: none;
+      color: #031326;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
     }
   </style>
 </head>
 
 <body>
+  <div id="root"></div>
 
+<<<<<<< HEAD
   <!-- ── Header ─────────────────────────────────────────────────────────── -->
   <div id="header">
     <span class="logo">🌡️</span>
@@ -289,35 +1171,174 @@
       bar.className = `bar-fill ${isLeak ? 'leak' : 'clear'}`;
 
       document.getElementById('info-panel').classList.add('visible');
+=======
+  <!-- React Application Source -->
+  <script type="text/babel">
+    const { useState, useMemo, useCallback, useEffect, useRef } = React;
+
+    const SVG_WIDTH = 1817;
+    const SVG_HEIGHT = 2255;
+
+    const SEVERITY_CONFIG = {
+      Critical: { label: 'Critical', color: '#D32F2F', bgColor: 'rgba(211,47,47,0.15)', borderColor: '#D32F2F', textColor: '#FF5252', pulse: true },
+      High:     { label: 'High',     color: '#E53935', bgColor: 'rgba(229,57,53,0.15)', borderColor: '#E53935', textColor: '#FF6E6A', pulse: true },
+      Medium:   { label: 'Medium',   color: '#FB8C00', bgColor: 'rgba(251,140,0,0.15)', borderColor: '#FB8C00', textColor: '#FFB74D', pulse: false },
+      Low:      { label: 'Low',      color: '#4CAF50', bgColor: 'rgba(76,175,80,0.15)', borderColor: '#4CAF50', textColor: '#81C784', pulse: false },
+      'No Leak':{ label: 'No Leak',  color: '#FFFFFF', bgColor: 'rgba(255,255,255,0.95)', borderColor: '#00E5FF', textColor: '#0000B3', pulse: false },
+    };
+
+    function computeFusedConfidence(thermalConf = 0, pressureConf = 0, audioConf = 0) {
+      const t = Math.max(0, Math.min(100, Number(thermalConf) || 0));
+      const p = Math.max(0, Math.min(100, Number(pressureConf) || 0));
+      const a = Math.max(0, Math.min(100, Number(audioConf) || 0));
+      return Math.round(((t * 0.4) + (p * 0.3) + (a * 0.3)) * 10) / 10;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
     }
 
-    function closePanel() {
-      document.getElementById('info-panel').classList.remove('visible');
+    function determineSeverity(score) {
+      const s = Number(score) || 0;
+      if (s >= 85) return 'Critical';
+      if (s >= 70) return 'High';
+      if (s >= 50) return 'Medium';
+      if (s >= 30) return 'Low';
+      return 'No Leak';
     }
 
-    // Close panel if user clicks the model background
-    document.getElementById('viewer').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('viewer')) closePanel();
-    });
+    const INITIAL_LEAKS = [
+      {
+        id: 'leak-1851',
+        roomNumber: 'Room 1851',
+        xPercent: 19.92,
+        yPercent: 47.41,
+        thermalConfidence: 95,
+        thermalImagePath: '/assets/thermal/room_1851.jpg',
+        pressureConfidence: 90,
+        pressureValuePa: 86.4,
+        audioConfidence: 90,
+        audioValueDb: 78.2,
+        fusedConfidence: 92.0,
+        severity: 'Critical',
+        timestamp: '2026-09-28 14:32:01',
+        inspector: 'Sensor Node T-04',
+        notes: 'Severe acoustic hissing and high-temperature thermal plume detected at duct joint seam.',
+      },
+      {
+        id: 'leak-1731',
+        roomNumber: 'Room 1731',
+        xPercent: 19.92,
+        yPercent: 54.94,
+        thermalConfidence: 82,
+        thermalImagePath: '/assets/thermal/room_1731.jpg',
+        pressureConfidence: 76,
+        pressureValuePa: 68.0,
+        audioConfidence: 74,
+        audioValueDb: 64.5,
+        fusedConfidence: 77.8,
+        severity: 'High',
+        timestamp: '2026-09-28 14:18:32',
+        inspector: 'Sensor Node T-09',
+        notes: 'Significant pressure drop and localized thermal bloom near connector flange.',
+      },
+      {
+        id: 'leak-1541',
+        roomNumber: 'Room 1541',
+        xPercent: 41.94,
+        yPercent: 65.59,
+        thermalConfidence: 65,
+        thermalImagePath: '/assets/thermal/room_1541.jpg',
+        pressureConfidence: 60,
+        pressureValuePa: 42.5,
+        audioConfidence: 60,
+        audioValueDb: 52.0,
+        fusedConfidence: 62.0,
+        severity: 'Medium',
+        timestamp: '2026-09-28 11:43:10',
+        inspector: 'Sensor Node M-12',
+        notes: 'Moderate warm thermal signature around square damper enclosure.',
+      },
+      {
+        id: 'leak-1453',
+        roomNumber: 'Room 1453',
+        xPercent: 54.05,
+        yPercent: 65.59,
+        thermalConfidence: 45,
+        thermalImagePath: '/assets/thermal/room_1453.jpg',
+        pressureConfidence: 40,
+        pressureValuePa: 22.0,
+        audioConfidence: 36,
+        audioValueDb: 34.0,
+        fusedConfidence: 40.8,
+        severity: 'Low',
+        timestamp: '2026-09-28 11:34:00',
+        inspector: 'Sensor Node M-15',
+        notes: 'Minor temperature variation detected. Within acceptable maintenance limits.',
+      },
+      {
+        id: 'leak-1371',
+        roomNumber: 'Room 1371',
+        xPercent: 32.86,
+        yPercent: 79.99,
+        thermalConfidence: 15,
+        thermalImagePath: '/assets/thermal/room_1371.jpg',
+        pressureConfidence: 20,
+        pressureValuePa: 6.5,
+        audioConfidence: 20,
+        audioValueDb: 18.0,
+        fusedConfidence: 18.0,
+        severity: 'No Leak',
+        timestamp: '2026-09-28 10:45:00',
+        inspector: 'Routine Scan',
+        notes: 'Uniform temperature distribution and nominal pressure reading.',
+      },
+      {
+        id: 'leak-library',
+        roomNumber: 'LIBRARY',
+        xPercent: 51.02,
+        yPercent: 78.91,
+        thermalConfidence: 5,
+        thermalImagePath: '/assets/thermal/library.jpg',
+        pressureConfidence: 10,
+        pressureValuePa: 2.1,
+        audioConfidence: 10,
+        audioValueDb: 15.0,
+        fusedConfidence: 8.0,
+        severity: 'No Leak',
+        timestamp: '2026-09-28 10:45:00',
+        inspector: 'Routine Scan',
+        notes: 'Air handling unit nominal. No anomalies detected.',
+      },
+    ];
 
-    // ── Load hotspots from hotspots.json and inject into model-viewer ────
-    //
-    // hotspots.json contains PLACEHOLDER positions and data.
-    // Once the real 3D scan and walkthrough coordinates are confirmed,
-    // update hotspots.json with the real "position" strings and
-    // replace MODEL_PATH in the <model-viewer src> attribute above.
-    //
-    fetch('hotspots.json')
-      .then(res => {
-        if (!res.ok) throw new Error(`Failed to load hotspots.json: ${res.status}`);
-        return res.json();
-      })
-      .then(hotspots => {
-        const viewer = document.getElementById('viewer');
+    const DUCT_PATHS = {
+      mainLoop: 'M 472 444 L 1372 444 L 1372 1730 L 472 1730 Z',
+      spines: [
+        'M 472 280 L 472 444',
+        'M 922 280 L 922 444',
+        'M 1372 280 L 1372 444',
+        'M 472 804 L 1372 804',
+        'M 472 1344 L 1372 1344',
+        'M 682 444 L 682 1730',
+        'M 922 804 L 922 1730',
+        'M 1162 444 L 1162 1730',
+        'M 472 1069 L 362 1069',
+        'M 472 1239 L 362 1239',
+        'M 682 1344 L 762 1479',
+        'M 922 1344 L 982 1479',
+        'M 472 1730 L 597 1804',
+        'M 922 1730 L 927 1779',
+      ]
+    };
 
-        hotspots.forEach(hotspot => {
-          const isLeak = hotspot.status === 'Leak detected';
+    function App() {
+      const [leaks, setLeaks] = useState(INITIAL_LEAKS);
+      const [selectedLeakId, setSelectedLeakId] = useState('leak-1851');
+      const [baseOpacity, setBaseOpacity] = useState(0.6);
+      const [zoom, setZoom] = useState(1.0);
+      const [pan, setPan] = useState({ x: 0, y: 0 });
+      const [rotation, setRotation] = useState(0);
+      const [ductGlow, setDuctGlow] = useState(true);
 
+<<<<<<< HEAD
           // Create the button element that acts as the visible pin
           const btn = document.createElement('button');
           btn.className = `hotspot-btn ${isLeak ? 'leak' : 'clear'}`;
@@ -326,19 +1347,556 @@
           btn.setAttribute('slot', hotspot.id);
           btn.setAttribute('data-position', hotspot.position);
           btn.setAttribute('data-visibility-attribute', 'visible');
+=======
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [isSelectingLocation, setIsSelectingLocation] = useState(false);
+      const [pendingLeak, setPendingLeak] = useState(null);
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
 
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openPanel(hotspot);
-          });
+      const [isDragging, setIsDragging] = useState(false);
+      const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+      const [ghostCoords, setGhostCoords] = useState(null);
 
-          viewer.appendChild(btn);
-        });
-      })
-      .catch(err => {
-        console.error('Hotspot load error:', err);
-        // Graceful degradation — viewer still works, just no hotspots
-      });
+      const svgRef = useRef(null);
+      const containerRef = useRef(null);
+
+      const selectedLeak = useMemo(() => leaks.find(l => l.id === selectedLeakId) || null, [leaks, selectedLeakId]);
+
+      // Coordinates transform helper
+      const getSvgCoordinates = (clientX, clientY) => {
+        if (!svgRef.current) return null;
+        const svg = svgRef.current;
+        const point = svg.createSVGPoint();
+        point.x = clientX;
+        point.y = clientY;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return null;
+        const p = point.matrixTransform(ctm.inverse());
+        return {
+          x: p.x,
+          y: p.y,
+          xPercent: Math.max(0, Math.min(100, (p.x / SVG_WIDTH) * 100)),
+          yPercent: Math.max(0, Math.min(100, (p.y / SVG_HEIGHT) * 100)),
+        };
+      };
+
+      const handleMouseDown = (e) => {
+        if (e.button !== 0 || isSelectingLocation) return;
+        if (e.target.closest('.map-pin-group')) return;
+        setIsDragging(true);
+        setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+      };
+
+      const handleMouseMove = (e) => {
+        if (isSelectingLocation) {
+          const coords = getSvgCoordinates(e.clientX, e.clientY);
+          if (coords) setGhostCoords(coords);
+          return;
+        }
+        if (!isDragging) return;
+        setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+      };
+
+      const handleMouseUp = () => setIsDragging(false);
+
+      const handleCanvasClick = (e) => {
+        if (!isSelectingLocation || !pendingLeak) return;
+        const coords = getSvgCoordinates(e.clientX, e.clientY);
+        if (coords) {
+          const newLeak = {
+            ...pendingLeak,
+            id: `leak-${Date.now()}`,
+            xPercent: Math.round(coords.xPercent * 100) / 100,
+            yPercent: Math.round(coords.yPercent * 100) / 100,
+          };
+          setLeaks(prev => [newLeak, ...prev]);
+          setSelectedLeakId(newLeak.id);
+          setIsSelectingLocation(false);
+          setPendingLeak(null);
+          setGhostCoords(null);
+        }
+      };
+
+      // Wheel zoom
+      useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        const onWheel = (e) => {
+          e.preventDefault();
+          const factor = e.deltaY < 0 ? 1.15 : 0.87;
+          setZoom(z => Math.max(0.4, Math.min(4.0, Math.round(z * factor * 100) / 100)));
+        };
+        el.addEventListener('wheel', onWheel, { passive: false });
+        return () => el.removeEventListener('wheel', onWheel);
+      }, []);
+
+      const scaleWidth = Math.max(40, Math.min(200, 5 * 20 * zoom));
+
+      return (
+        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          {/* Header Bar */}
+          <header className="app-navbar">
+            <div className="navbar-brand">
+              <div className="brand-logo">🌡️</div>
+              <div>
+                <h1 className="brand-title">DuctSense</h1>
+                <p className="brand-tagline">Spatial HVAC Dual-Layer Leak Viewer</p>
+              </div>
+            </div>
+            <div className="navbar-nav">
+              <button className="nav-tab active">🗺️ Spatial Duct Map</button>
+            </div>
+            <div className="live-pill">
+              <span className="live-dot"></span>
+              Live Telemetry Connected
+            </div>
+          </header>
+
+          {/* Spatial Container */}
+          <div className="spatial-viewer-container">
+            {/* Top Toolbar */}
+            <div className="spatial-toolbar">
+              <div className="toolbar-group">
+                <div className="toolbar-item">
+                  <label className="toolbar-label">
+                    <span>🗺️ Floorplan Opacity:</span>
+                    <span className="opacity-val">{Math.round(baseOpacity * 100)}%</span>
+                  </label>
+                  <input
+                    type="range" min="0" max="1" step="0.05"
+                    value={baseOpacity}
+                    onChange={(e) => setBaseOpacity(parseFloat(e.target.value))}
+                    className="opacity-slider"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className={`btn-toolbar-toggle ${ductGlow ? 'active' : ''}`}
+                  onClick={() => setDuctGlow(!ductGlow)}
+                >
+                  <span className="toggle-indicator"></span>
+                  <span>⚡ Duct Glow</span>
+                </button>
+              </div>
+
+              {/* Navigation Controls */}
+              <div className="toolbar-group">
+                <div className="btn-segmented">
+                  <button className="btn-toolbar" onClick={() => setZoom(z => Math.max(0.4, Math.round((z - 0.25) * 100) / 100))}>🔍−</button>
+                  <span className="zoom-readout">{Math.round(zoom * 100)}%</span>
+                  <button className="btn-toolbar" onClick={() => setZoom(z => Math.min(4.0, Math.round((z + 0.25) * 100) / 100))}>🔍+</button>
+                  <button className="btn-toolbar" onClick={() => { setZoom(1.0); setPan({ x: 0, y: 0 }); }}>Fit</button>
+                </div>
+                <div className="btn-segmented">
+                  <button className="btn-toolbar" onClick={() => setRotation(r => (r - 90 + 360) % 360)}>↺ 90°</button>
+                  <button className="btn-toolbar" onClick={() => setRotation(r => (r + 90) % 360)}>↻ 90°</button>
+                  {rotation !== 0 && (
+                    <button className="btn-toolbar" onClick={() => setRotation(0)}>{rotation}° (Reset)</button>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="toolbar-group">
+                <div className="severity-pills">
+                  <span className="pill">Pins: {leaks.length}</span>
+                  <span className="pill pill-critical">🔴 {leaks.filter(l => l.severity === 'Critical' || l.severity === 'High').length}</span>
+                  <span className="pill pill-medium">🟠 {leaks.filter(l => l.severity === 'Medium').length}</span>
+                  <span className="pill pill-low">🟢 {leaks.filter(l => l.severity === 'Low').length}</span>
+                </div>
+                {isSelectingLocation ? (
+                  <button className="btn-action btn-cancel-selection" onClick={() => { setIsSelectingLocation(false); setPendingLeak(null); }}>
+                    ✕ Cancel Placement
+                  </button>
+                ) : (
+                  <button className="btn-action btn-add-leak" onClick={() => setIsModalOpen(true)}>
+                    + Add Manual Leak
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Canvas Viewport */}
+            <div className="canvas-wrapper">
+              <div
+                ref={containerRef}
+                className={`duct-map-viewport ${isSelectingLocation ? 'mode-pinning' : isDragging ? 'is-dragging' : 'mode-nav'}`}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onClick={handleCanvasClick}
+              >
+                {isSelectingLocation && (
+                  <div className="pinning-mode-banner">
+                    <div className="banner-content">
+                      <strong>Target Location Mode Active</strong>
+                      <p>Click anywhere on the floor plan to place leak pin for {pendingLeak?.roomNumber}</p>
+                    </div>
+                    <button className="btn-cancel-pinning" onClick={() => { setIsSelectingLocation(false); setPendingLeak(null); }}>
+                      Cancel
+                    </button>
+                  </div>
+                )}
+
+                <div
+                  className="duct-map-stage"
+                  style={{
+                    transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom}) rotate(${rotation}deg)`,
+                    transformOrigin: 'center center',
+                    transition: isDragging ? 'none' : 'transform 0.15s ease',
+                  }}
+                >
+                  <svg
+                    ref={svgRef}
+                    className="duct-spatial-svg"
+                    viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
+                    width={SVG_WIDTH}
+                    height={SVG_HEIGHT}
+                  >
+                    <defs>
+                      <filter id="duct-glow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="6" result="b1" />
+                        <feGaussianBlur stdDeviation="14" result="b2" />
+                        <feMerge>
+                          <feMergeNode in="b2" />
+                          <feMergeNode in="b1" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                    </defs>
+
+                    {/* LAYER 1: Base Floorplan */}
+                    <g style={{ opacity: baseOpacity, transition: 'opacity 0.2s' }}>
+                      <image href="assets/floor_plan.svg" width={SVG_WIDTH} height={SVG_HEIGHT} />
+                    </g>
+
+                    {/* LAYER 2: Duct Layer (#00E5FF, 4px) */}
+                    <g filter={ductGlow ? 'url(#duct-glow)' : undefined}>
+                      <path d={DUCT_PATHS.mainLoop} fill="none" stroke="#005B66" strokeWidth="10" opacity="0.4" />
+                      {DUCT_PATHS.spines.map((s, i) => (
+                        <path key={`c-${i}`} d={s} fill="none" stroke="#005B66" strokeWidth="10" opacity="0.4" />
+                      ))}
+                      <path d={DUCT_PATHS.mainLoop} fill="none" stroke="#00E5FF" strokeWidth="4" />
+                      {DUCT_PATHS.spines.map((s, i) => (
+                        <path key={`s-${i}`} d={s} fill="none" stroke="#00E5FF" strokeWidth="4" />
+                      ))}
+                    </g>
+
+                    {/* LAYER 3: Dynamic Annotation Pins */}
+                    <g>
+                      {leaks.map(leak => {
+                        const cx = (leak.xPercent / 100) * SVG_WIDTH;
+                        const cy = (leak.yPercent / 100) * SVG_HEIGHT;
+                        const isSelected = selectedLeakId === leak.id;
+                        const config = SEVERITY_CONFIG[leak.severity] || SEVERITY_CONFIG['No Leak'];
+
+                        return (
+                          <g
+                            key={leak.id}
+                            className={`map-pin-group ${isSelected ? 'is-selected' : ''}`}
+                            transform={`translate(${cx}, ${cy})`}
+                            onClick={(e) => { e.stopPropagation(); setSelectedLeakId(leak.id); }}
+                            onMouseEnter={(e) => { e.stopPropagation(); }}
+                            onMouseLeave={(e) => { e.stopPropagation(); }}
+                            onMouseDown={(e) => { e.stopPropagation(); }}
+                            cursor="pointer"
+                          >
+                            {isSelected && (
+                              <circle cx="0" cy="0" r="34" fill="none" stroke="#00E5FF" strokeWidth="3" strokeDasharray="6 4" pointerEvents="none" />
+                            )}
+                            {config.pulse && (
+                              <circle cx="0" cy="0" r="28" fill={config.color} className="pin-pulse-wave" opacity="0.3" pointerEvents="none" />
+                            )}
+                            <circle cx="0" cy="0" r="18" fill={config.color} stroke={isSelected ? '#00E5FF' : (leak.severity === 'No Leak' ? '#00E5FF' : '#FFFFFF')} strokeWidth={isSelected ? '3' : (leak.severity === 'No Leak' ? '3' : '2.5')} />
+                            <text x="0" y="1" textAnchor="middle" dominantBaseline="middle" fill={leak.severity === 'No Leak' ? '#0000B3' : '#FFFFFF'} fontSize="13" fontWeight="bold" pointerEvents="none">
+                              {leak.severity === 'Critical' || leak.severity === 'High' ? '!' : leak.severity === 'Medium' ? '▲' : leak.severity === 'Low' ? '●' : '✓'}
+                            </text>
+                            <g transform="translate(0, -28)">
+                              <rect x="-50" y="-14" width="100" height="22" rx="11" fill="#0D1629" stroke={isSelected ? '#00E5FF' : config.borderColor} strokeWidth={isSelected ? '2' : '1.5'} />
+                              <text x="0" y="-1" textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="10" fontWeight="bold" pointerEvents="none">
+                                {leak.roomNumber.replace('Room ', '')} · {Math.round(leak.fusedConfidence)}%
+                              </text>
+                            </g>
+                          </g>
+                        );
+                      })}
+
+                      {isSelectingLocation && ghostCoords && (
+                        <g transform={`translate(${ghostCoords.x}, ${ghostCoords.y})`} opacity="0.85" pointerEvents="none">
+                          <circle cx="0" cy="0" r="20" fill="#00E5FF" />
+                          <text x="0" y="1" textAnchor="middle" dominantBaseline="middle" fill="#0000B3" fontSize="12" fontWeight="bold">📍</text>
+                        </g>
+                      )}
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Dynamic Scale Indicator */}
+              <div className="spatial-scale-indicator">
+                <div className="scale-header">
+                  <span>📐 Scale: 1m = {(20 * zoom).toFixed(1)}px</span>
+                </div>
+                <div className="scale-bar-wrapper">
+                  <div className="scale-ticks">
+                    <span>0</span>
+                    <span>2.5m</span>
+                    <span>5m</span>
+                  </div>
+                  <div className="scale-bar" style={{ width: `${scaleWidth}px` }}>
+                    <div className="segment-left"></div>
+                    <div className="segment-right"></div>
+                  </div>
+                </div>
+                <div className="scale-footer">Zoom: {Math.round(zoom * 100)}%</div>
+              </div>
+            </div>
+
+            {/* QA Inspection Drawer */}
+            {selectedLeak && (
+              <aside className="inspection-drawer">
+                <div className="drawer-header" style={{ borderLeftColor: SEVERITY_CONFIG[selectedLeak.severity]?.borderColor }}>
+                  <div>
+                    <div className="drawer-pre-title">QA INSPECTION PANEL</div>
+                    <h2 className="drawer-room-title">{selectedLeak.roomNumber}</h2>
+                  </div>
+                  <button className="btn-drawer-close" onClick={() => setSelectedLeakId(null)}>✕</button>
+                </div>
+
+                <div className="drawer-severity-strip" style={{ backgroundColor: SEVERITY_CONFIG[selectedLeak.severity]?.bgColor, borderColor: SEVERITY_CONFIG[selectedLeak.severity]?.borderColor }}>
+                  <div className="severity-badge-large" style={{ color: SEVERITY_CONFIG[selectedLeak.severity]?.textColor }}>
+                    <span className="dot" style={{ backgroundColor: SEVERITY_CONFIG[selectedLeak.severity]?.color }}></span>
+                    <span>{selectedLeak.severity} Severity</span>
+                  </div>
+                  <div className="fused-score-pill" style={{ color: SEVERITY_CONFIG[selectedLeak.severity]?.textColor }}>
+                    <span>Fused:</span>
+                    <strong>{selectedLeak.fusedConfidence.toFixed(1)}%</strong>
+                  </div>
+                </div>
+
+                <div className="drawer-body">
+                  <div className="metric-card">
+                    <div className="metric-header">
+                      <span className="metric-title">Fused Overall Leak Confidence</span>
+                      <span className="metric-score" style={{ color: SEVERITY_CONFIG[selectedLeak.severity]?.textColor }}>
+                        {selectedLeak.fusedConfidence.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="confidence-track">
+                      <div className="confidence-fill" style={{ width: `${selectedLeak.fusedConfidence}%`, backgroundColor: SEVERITY_CONFIG[selectedLeak.severity]?.color }}></div>
+                    </div>
+                    <div className="confidence-scale-labels">
+                      <span>Safe (0%)</span>
+                      <span>30%</span>
+                      <span>50%</span>
+                      <span>70%</span>
+                      <span>Critical (85%+)</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="section-heading">📡 Individual Sensor Breakdown</h3>
+                    <div className="sensor-grid">
+                      <div className="sensor-card">
+                        <div className="sensor-top">
+                          <span>🌡️ Thermal Sensor</span>
+                          <span className="sensor-weight">40% wt</span>
+                        </div>
+                        <div className="sensor-val-row">
+                          <span className="sensor-percent">{selectedLeak.thermalConfidence}%</span>
+                          <span className="sensor-raw-val">{selectedLeak.thermalConfidence >= 70 ? 'Hot Plume' : 'Nominal'}</span>
+                        </div>
+                        <div className="sensor-bar-track"><div className="thermal-fill" style={{ width: `${selectedLeak.thermalConfidence}%` }}></div></div>
+                      </div>
+
+                      <div className="sensor-card">
+                        <div className="sensor-top">
+                          <span>💨 Diff. Pressure</span>
+                          <span className="sensor-weight">30% wt</span>
+                        </div>
+                        <div className="sensor-val-row">
+                          <span className="sensor-percent">{selectedLeak.pressureConfidence}%</span>
+                          <span className="sensor-raw-val">{selectedLeak.pressureValuePa.toFixed(1)} Pa</span>
+                        </div>
+                        <div className="sensor-bar-track"><div className="pressure-fill" style={{ width: `${selectedLeak.pressureConfidence}%` }}></div></div>
+                      </div>
+
+                      <div className="sensor-card">
+                        <div className="sensor-top">
+                          <span>🔊 Acoustic Sensor</span>
+                          <span className="sensor-weight">30% wt</span>
+                        </div>
+                        <div className="sensor-val-row">
+                          <span className="sensor-percent">{selectedLeak.audioConfidence}%</span>
+                          <span className="sensor-raw-val">{selectedLeak.audioValueDb.toFixed(1)} dB</span>
+                        </div>
+                        <div className="sensor-bar-track"><div className="audio-fill" style={{ width: `${selectedLeak.audioConfidence}%` }}></div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="section-heading">📷 Rendered Thermal Image Snapshot</h3>
+                    <div className="thermal-snapshot-container">
+                      <img src={selectedLeak.thermalImagePath} alt="Thermal Anomaly" className="thermal-snapshot-img" onError={(e) => { e.currentTarget.src = 'assets/thermal/room_1851.jpg'; }} />
+                      <div className="thermal-overlay-badge">FLIR IR · Ironbow Palette</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="section-heading">📍 Precise Spatial Coordinates</h3>
+                    <div className="meta-list">
+                      <div className="meta-row">
+                        <span className="meta-label">Coordinates (%):</span>
+                        <span className="coordinate-pill">X: {selectedLeak.xPercent.toFixed(2)}% · Y: {selectedLeak.yPercent.toFixed(2)}%</span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">SVG Anchor:</span>
+                        <span className="meta-value">({Math.round(selectedLeak.xPercent * 18.17)} px, {Math.round(selectedLeak.yPercent * 22.55)} px)</span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">Timestamp:</span>
+                        <span className="meta-value">{selectedLeak.timestamp}</span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">Inspector / Node:</span>
+                        <span className="meta-value">{selectedLeak.inspector}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="drawer-footer">
+                  <button className="btn-drawer-action btn-ack" onClick={() => alert(`Marked ${selectedLeak.roomNumber} as acknowledged!`)}>
+                    ✓ Acknowledge QA
+                  </button>
+                  <button className="btn-drawer-action btn-delete" onClick={() => { setLeaks(prev => prev.filter(l => l.id !== selectedLeak.id)); setSelectedLeakId(null); }}>
+                    🗑 Delete Pin
+                  </button>
+                </div>
+              </aside>
+            )}
+
+            {/* Manual Leak Modal Form */}
+            {isModalOpen && (
+              <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
+                <div className="modal-card" onClick={e => e.stopPropagation()}>
+                  <div className="modal-header">
+                    <div>
+                      <h2 style={{ fontSize: '16px', fontWeight: 800 }}>+ Add Manual Leak Annotation</h2>
+                      <p style={{ fontSize: '12px', color: '#94a3b8' }}>Calculate fused severity and place pin on duct network</p>
+                    </div>
+                    <button className="btn-drawer-close" onClick={() => setIsModalOpen(false)}>✕</button>
+                  </div>
+
+                  <form className="modal-form" onSubmit={(e) => {
+                    e.preventDefault();
+                    const form = e.target;
+                    const tConf = Number(form.tConf.value);
+                    const pConf = Number(form.pConf.value);
+                    const pVal = Number(form.pVal.value);
+                    const aConf = Number(form.aConf.value);
+                    const aVal = Number(form.aVal.value);
+                    const fused = computeFusedConfidence(tConf, pConf, aConf);
+                    const sev = determineSeverity(fused);
+
+                    setPendingLeak({
+                      roomNumber: form.room.value,
+                      thermalConfidence: tConf,
+                      thermalImagePath: form.tImg.value,
+                      pressureConfidence: pConf,
+                      pressureValuePa: pVal,
+                      audioConfidence: aConf,
+                      audioValueDb: aVal,
+                      fusedConfidence: fused,
+                      severity: sev,
+                      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                      inspector: 'QA Technician (Manual)',
+                      notes: 'Manual field measurement pin'
+                    });
+                    setIsModalOpen(false);
+                    setIsSelectingLocation(true);
+                  }}>
+                    <div className="form-section">
+                      <div className="section-title">🚪 1. Room Number</div>
+                      <div className="form-group">
+                        <select name="room" className="form-control" defaultValue="Room 1852">
+                          <option value="Room 1851">Room 1851</option>
+                          <option value="Room 1852">Room 1852</option>
+                          <option value="Room 1731">Room 1731</option>
+                          <option value="Room 1732">Room 1732</option>
+                          <option value="Room 1541">Room 1541</option>
+                          <option value="Room 1453">Room 1453</option>
+                          <option value="Room 1371">Room 1371</option>
+                          <option value="LIBRARY">LIBRARY</option>
+                          <option value="Server Room A">Server Room A</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="form-section">
+                      <div className="section-title">🌡️ 2. Thermal Sensor</div>
+                      <div className="form-grid-2">
+                        <div className="form-group">
+                          <label>Confidence (%)</label>
+                          <input name="tConf" type="number" min="0" max="100" defaultValue="85" className="form-control" />
+                        </div>
+                        <div className="form-group">
+                          <label>Thermal Image Asset</label>
+                          <select name="tImg" className="form-control" defaultValue="assets/thermal/room_1851.jpg">
+                            <option value="assets/thermal/room_1851.jpg">Room 1851 (Severe Plume)</option>
+                            <option value="assets/thermal/room_1731.jpg">Room 1731 (Joint Seam)</option>
+                            <option value="assets/thermal/room_1541.jpg">Room 1541 (Vent Hotspot)</option>
+                            <option value="assets/thermal/room_1453.jpg">Room 1453 (Mild Variance)</option>
+                            <option value="assets/thermal/room_1371.jpg">Room 1371 (Normal Clean)</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-section">
+                      <div className="section-title">💨 3. Differential Pressure</div>
+                      <div className="form-grid-2">
+                        <div className="form-group">
+                          <label>Confidence (%)</label>
+                          <input name="pConf" type="number" min="0" max="100" defaultValue="80" className="form-control" />
+                        </div>
+                        <div className="form-group">
+                          <label>Value (Pa)</label>
+                          <input name="pVal" type="number" step="0.1" defaultValue="75.0" className="form-control" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-section">
+                      <div className="section-title">🔊 4. Audio / Acoustic Sensor</div>
+                      <div className="form-grid-2">
+                        <div className="form-group">
+                          <label>Confidence (%)</label>
+                          <input name="aConf" type="number" min="0" max="100" defaultValue="75" className="form-control" />
+                        </div>
+                        <div className="form-group">
+                          <label>Value (dB)</label>
+                          <input name="aVal" type="number" step="0.1" defaultValue="65.0" className="form-control" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="modal-actions">
+                      <button type="button" className="btn-modal-cancel" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                      <button type="submit" className="btn-modal-submit">Next: Pin on Map 📍</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 

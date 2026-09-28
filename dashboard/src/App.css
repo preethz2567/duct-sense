@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ==========================================================================
    DUCTSENSE HVAC COMMISSIONING INSTRUMENT — AUTHENTIC INDUSTRIAL PALETTE
    ========================================================================== */
@@ -56,6 +57,186 @@ body {
   flex-direction: column;
   border-right: 1px solid #15181C;
   z-index: 10;
+=======
+/* ── App.css ────────────────────────────────────────────────────────────────
+   DuctSense Dashboard — Brand Identity Stylesheet
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── App Layout ──────────────────────────────────────────────────────────── */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #080d17;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000000;
+}
+
+/* ── Top Universal Navbar ────────────────────────────────────────────────── */
+.app-navbar {
+  height: 72px;
+  background: #0000B3;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  z-index: 80;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.brand-tagline {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 2px 0 0 0;
+  font-weight: 400;
+}
+
+/* ── Navigation Tabs ─────────────────────────────────────────────────────── */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.nav-tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-tab.active {
+  background: #ffffff;
+  color: #0000B3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-icon {
+  font-size: 1rem;
+}
+
+.navbar-meta {
+  display: flex;
+  align-items: center;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(18, 198, 179, 0.15);
+  border: 1px solid rgba(18, 198, 179, 0.4);
+  color: #12C6B3;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #12C6B3;
+  box-shadow: 0 0 8px #12C6B3;
+  animation: live-blink 1.5s infinite;
+}
+
+@keyframes live-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Main content area ───────────────────────────────────────────────────── */
+.app-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-content-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Section label ───────────────────────────────────────────────────────── */
+.section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 1rem;
+}
+
+/* ── Walkthrough card grid ───────────────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #EEEEEE;
+  border-radius: 8px;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.18s, border-color 0.18s;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
 }
 
 .ds-sidebar-brand {
@@ -69,6 +250,7 @@ body {
   gap: 12px;
 }
 
+<<<<<<< HEAD
 .ds-brand-mark {
   width: 32px;
   height: 32px;
@@ -77,6 +259,38 @@ body {
   font-weight: 800;
   font-size: 14px;
   display: flex;
+=======
+/* ── Status badge / pill ─────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-danger {
+  background: #FF9C00;
+  color: #000000;
+}
+
+.badge-safe {
+  background: #12C6B3;
+  color: #000000;
+}
+
+.card-leak-label {
+  font-size: 0.8rem;
+  color: #444444;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
   align-items: center;
   justify-content: center;
   border-radius: 2px;
@@ -367,8 +581,32 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
+<<<<<<< HEAD
   color: var(--ds-text-muted);
   padding: 4px;
+=======
+  transition: opacity 0.15s;
+  text-transform: none;
+}
+
+.btn:hover  { opacity: 0.85; }
+.btn:active { opacity: 0.7;  }
+
+.btn-primary {
+  background: #0000B3;
+  color: #ffffff;
+  margin-top: auto;
+}
+
+.btn-back {
+  background: #ffffff;
+  color: #0000B3;
+  border: 1.5px solid #0000B3;
+}
+
+/* ── Detail view ─────────────────────────────────────────────────────────── */
+.detail-header {
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
   display: flex;
   align-items: center;
   justify-content: center;
@@ -731,9 +969,37 @@ body {
   margin-bottom: 4px;
 }
 
+<<<<<<< HEAD
 .ds-route-sec-id {
   font-family: var(--ds-font-mono);
   font-size: 11px;
+=======
+.detail-meta {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  color: #888888;
+}
+
+/* ── Stat strip ──────────────────────────────────────────────────────────── */
+.detail-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: #ffffff;
+  border: 1px solid #EEEEEE;
+  border-radius: 8px;
+  padding: 0.9rem 1.4rem;
+  min-width: 130px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-box .stat-value {
+  font-size: 1.75rem;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
   font-weight: 700;
   color: var(--ds-structure-primary);
 }
@@ -1520,8 +1786,13 @@ body {
   font-size: 11px;
 }
 
+<<<<<<< HEAD
 .ds-td-bold {
   font-weight: 700;
+=======
+tr.high-confidence {
+  background: #FDECEC;
+>>>>>>> 254092c (feat(spatial-viewer): Created spatial viewer in 2D + Fix pin hover jitter + Polish UI)
 }
 
 .ds-td-highlight {
