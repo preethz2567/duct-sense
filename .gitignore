@@ -23,3 +23,4 @@ ml-training/thermal/raw_dataset/
 
 # DuctSense thermal training checkpoint
 ml-training/thermal/best_model.pth
+ml-training/thermal_v1.zip

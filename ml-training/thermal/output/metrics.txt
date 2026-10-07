@@ -1,0 +1,9 @@
+Validation set: 20 images (11 leak, 9 no_leak)
+Accuracy:  0.750
+Precision: 0.800
+Recall:    0.727
+F1 score:  0.762
+
+Confusion matrix (rows=actual, cols=predicted, order=[no_leak, leak]):
+[[7 2]
+ [3 8]]

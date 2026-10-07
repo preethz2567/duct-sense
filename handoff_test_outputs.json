@@ -1,0 +1,44 @@
+{
+  "leak_test": {
+    "image": "ml-training\\thermal\\dataset\\leak\\FLIR1419.jpg",
+    "result": {
+      "image_id": "FLIR1419.jpg",
+      "source_file": "ml-training\\thermal\\dataset\\leak\\FLIR1419.jpg",
+      "ingested_at": "2026-10-07T20:15:24",
+      "model_version": "v2-lr",
+      "thermal_confidence": 0.9979,
+      "anomaly_delta_c": 16.35,
+      "anomaly_type": "warm",
+      "anomaly_xy": [
+        0,
+        270
+      ],
+      "scene_temp_min_c": 30.95,
+      "scene_temp_max_c": 48.66,
+      "background_c": 32.12,
+      "quality_flag": "ok",
+      "overlay_png": "out\\FLIR1419_overlay.png"
+    }
+  },
+  "no_leak_test": {
+    "image": "ml-training\\thermal\\dataset\\no_leak\\FLIR1409.jpg",
+    "result": {
+      "image_id": "FLIR1409.jpg",
+      "source_file": "ml-training\\thermal\\dataset\\no_leak\\FLIR1409.jpg",
+      "ingested_at": "2026-10-07T20:15:26",
+      "model_version": "v2-lr",
+      "thermal_confidence": 0.228,
+      "anomaly_delta_c": 1.25,
+      "anomaly_type": "warm",
+      "anomaly_xy": [
+        159,
+        177
+      ],
+      "scene_temp_min_c": 31.67,
+      "scene_temp_max_c": 34.09,
+      "background_c": 32.23,
+      "quality_flag": "low_contrast",
+      "overlay_png": "out\\FLIR1409_overlay.png"
+    }
+  }
+}

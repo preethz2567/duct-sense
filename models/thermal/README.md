@@ -1,3 +1,4 @@
+venv\Scripts\activate
 # DuctSense Thermal Leak Detection Model
 
 ## Model
