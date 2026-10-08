@@ -332,6 +332,113 @@ def get_inspections() -> List[dict]:
     return [dict(r) for r in rows]
 
 
+
+# ── Pressure test path (development / software-test only) ────────────────────
+#
+# IMPORTANT: This endpoint uses MOCK data only.
+# The physical BMP280 / Raspberry Pi hardware is NOT connected.
+# source is always "mock". This endpoint must not be used as a live sensor API.
+#
+# It demonstrates that the corrected_delta_p_pa value produced by
+# sensors/pressure_reader.py (Phase 1) can be transported through the backend
+# as the existing pressure_differential_pa field without any schema changes.
+
+import sys as _sys
+import os as _os
+
+_backend_dir = _os.path.dirname(_os.path.abspath(__file__))
+_repo_root   = _os.path.dirname(_backend_dir)
+if _repo_root not in _sys.path:
+    _sys.path.insert(0, _repo_root)
+
+from sensors.pressure_reader import (          # noqa: E402
+    read_pressure_data,
+    MODE_MOCK,
+    MOCK_FIXTURE_NORMAL,
+    MOCK_FIXTURE_LEAK,
+    MOCK_FIXTURE_POST_REPAIR,
+)
+
+_PRESSURE_FIXTURES: dict = {
+    "normal": MOCK_FIXTURE_NORMAL,
+    "leak":   MOCK_FIXTURE_LEAK,
+    "repair": MOCK_FIXTURE_POST_REPAIR,
+}
+
+
+@app.get(
+    "/pressure/mock",
+    summary="[DEV/TEST] Read mock BMP280 pressure evidence",
+    response_description=(
+        "Mock dual-BMP280 pressure reading mapped to the DuctSense pressure evidence schema. "
+        "source is always 'mock'. Hardware is NOT connected."
+    ),
+    tags=["dev-pressure"],
+)
+def get_pressure_mock(
+    scenario: str = "normal",
+) -> dict:
+    """
+    **Development / software-test endpoint only.**
+
+    Returns a mock BMP280 dual-sensor pressure reading and maps it to the
+    `pressure_differential_pa` field used by the existing `LeakEvent` model.
+
+    Mapping applied:
+
+        pressure_differential_pa = corrected_delta_p_pa
+            where corrected_delta_p_pa = (p1_hpa - p2_hpa) * 100 - 50.80
+
+    The `source` field is always `"mock"`. This endpoint will never return
+    live hardware data until Phase 3 hardware integration is approved.
+
+    **Scenarios:**
+    - `normal` — baseline condition, small ΔP
+    - `leak`   — controlled-leak-like condition, elevated ΔP
+    - `repair` — post-repair condition, near-zero raw ΔP (but -45.80 Pa corrected)
+
+    The `normalized_pressure` field is **not** populated here because it is
+    calculated by the fusion layer (`fusion_logic.py`), which is out of scope
+    for this phase.
+    """
+    fixture = _PRESSURE_FIXTURES.get(scenario.lower())
+    if fixture is None:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Unknown scenario '{scenario}'. "
+                f"Valid options: {list(_PRESSURE_FIXTURES.keys())}"
+            ),
+        )
+
+    raw = read_pressure_data(mode=MODE_MOCK, mock_fixture=fixture)
+
+    return {
+        # Identity / traceability
+        "source":                   raw["source"],          # always "mock"
+        "scenario":                 scenario.lower(),
+        "fixture_label":            raw["label"],
+        "hardware_connected":       False,
+        # Raw BMP280 readings (as returned by pressure_reader)
+        "p1_hpa":                   raw["p1_hpa"],
+        "p2_hpa":                   raw["p2_hpa"],
+        "t1_c":                     raw["t1_c"],
+        "t2_c":                     raw["t2_c"],
+        "raw_delta_p_pa":           raw["raw_delta_p_pa"],
+        "corrected_delta_p_pa":     raw["corrected_delta_p_pa"],
+        # Application-level field — matches LeakEvent.pressure_differential_pa
+        "pressure_differential_pa": raw["corrected_delta_p_pa"],
+        # NOT populated: normalized_pressure — belongs to fusion_logic, not this phase
+        "normalized_pressure":      None,
+        "note": (
+            "pressure_differential_pa = corrected_delta_p_pa = "
+            "(p1_hpa - p2_hpa) * 100 - 50.80. "
+            "Pressure hardware was not tested. "
+            "This phase validates software/backend transport using deterministic mock fixtures only."
+        ),
+    }
+
+
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
