@@ -4,20 +4,28 @@ import ViewerToolbar from './ViewerToolbar';
 import ScaleIndicator from './ScaleIndicator';
 import ManualLeakModal from './ManualLeakModal';
 import InspectionDrawer from './InspectionDrawer';
-import { INITIAL_LEAKS } from '../../data/leaksData';
+import { API_BASE } from '../../services/apiService';
 import './SpatialViewer.css';
 
-export default function SpatialViewer({ initialLeaks = INITIAL_LEAKS }) {
-  // Leaks dataset state
-  const [leaks, setLeaks] = useState(initialLeaks);
+export default function SpatialViewer({ findings = [], floorPlanUrl }) {
+  // Leaks dataset state (mapped from findings for compatibility with existing UI)
+  const leaks = useMemo(() => {
+    return findings.map(f => ({
+      id: f.finding_id,
+      xPercent: f.x * 100,
+      yPercent: f.y * 100,
+      severity: f.finding_type === 'CONFIRMED_LEAK' ? 'High' : (f.finding_type === 'SUSPECTED_LEAK' ? 'Medium' : 'Low'),
+      ...f
+    }));
+  }, [findings]);
+  
   const [selectedLeakId, setSelectedLeakId] = useState(null);
 
   // Viewer viewport state
-  const [baseOpacity, setBaseOpacity] = useState(0.6); // 60% default opacity
+  const [baseOpacity, setBaseOpacity] = useState(1.0); 
   const [zoom, setZoom] = useState(1.0);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0); // 0, 90, 180, 270
-  const [ductGlow, setDuctGlow] = useState(true);
+  const [rotation, setRotation] = useState(0); 
 
   // Manual Annotation Modal and Interactive Pinning Mode state
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
@@ -118,12 +126,34 @@ export default function SpatialViewer({ initialLeaks = INITIAL_LEAKS }) {
     }
   };
 
-  const handleAcknowledgeLeak = (id) => {
-    setLeaks((prev) =>
-      prev.map((l) =>
-        l.id === id ? { ...l, acknowledged: true, notes: `${l.notes || ''} [Acknowledged by QA]` } : l
-      )
-    );
+  const handleAcknowledgeLeak = async (id) => {
+    const leakToUpdate = leaks.find((l) => l.id === id);
+    if (!leakToUpdate) return;
+    
+    // Create updated finding object
+    const updatedFinding = {
+      ...leakToUpdate,
+      status: 'VERIFIED',
+      verification_status: 'APPROVED',
+      notes: `${leakToUpdate.notes || ''}\n[Acknowledged by QA]`
+    };
+    
+    // Clean up mapped UI properties before sending
+    delete updatedFinding.id;
+    delete updatedFinding.xPercent;
+    delete updatedFinding.yPercent;
+    delete updatedFinding.severity;
+    
+    try {
+      await fetch(`${API_BASE}/findings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFinding)
+      });
+      // App.jsx will pick up the change in the next poll
+    } catch (err) {
+      console.error('Failed to update finding', err);
+    }
   };
 
   return (
@@ -143,10 +173,6 @@ export default function SpatialViewer({ initialLeaks = INITIAL_LEAKS }) {
         onOpenManualModal={handleOpenManualModal}
         isSelectingLocation={isSelectingLocation}
         onCancelSelectLocation={handleCancelSelectLocation}
-        ductGlow={ductGlow}
-        onToggleDuctGlow={() => setDuctGlow(!ductGlow)}
-        leakCount={leaks.length}
-        severityCounts={severityCounts}
       />
 
       {/* Main Dual-Layer Canvas Stage */}
@@ -165,7 +191,7 @@ export default function SpatialViewer({ initialLeaks = INITIAL_LEAKS }) {
           pendingLeakData={pendingLeakData}
           onPlacePin={handlePlacePin}
           onCancelSelectLocation={handleCancelSelectLocation}
-          ductGlow={ductGlow}
+          floorPlanUrl={floorPlanUrl}
         />
 
         {/* Dynamic Scale Indicator in Bottom-Left Corner */}
