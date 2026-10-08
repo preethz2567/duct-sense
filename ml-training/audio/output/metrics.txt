@@ -1,0 +1,28 @@
+DuctSense Binary Acoustic Leak Detection
+============================================================
+
+Sample rate: 16000 Hz
+Window: 2 seconds
+Feature count: 30
+
+Accuracy: 0.991379
+Balanced Accuracy: 0.980769
+Precision: 0.989011
+LEAK Recall: 1.000000
+F1 Score: 0.994475
+NO_LEAK Specificity: 0.961538
+NO_LEAK False Positive Rate: 0.038462
+
+Confusion Matrix:
+[[25  1]
+ [ 0 90]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     NO_LEAK       1.00      0.96      0.98        26
+        LEAK       0.99      1.00      0.99        90
+
+    accuracy                           0.99       116
+   macro avg       0.99      0.98      0.99       116
+weighted avg       0.99      0.99      0.99       116

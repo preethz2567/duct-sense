@@ -1,0 +1,4 @@
+leak_type,samples,detected,missed,recall
+TUBELEAK,30,30,0,1.0
+VENTLEAK,30,30,0,1.0
+VENTLOW,30,30,0,1.0

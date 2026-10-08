@@ -1,0 +1,3 @@
+environment,samples,correct_no_leak,false_leak,no_leak_accuracy,false_leak_rate
+RoomTone2,20,20,0,1.0,0.0
+EmptyMall,6,5,1,0.8333333333333334,0.16666666666666666
