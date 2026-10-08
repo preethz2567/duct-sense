@@ -14,6 +14,7 @@ import SyncPage from './pages/SyncPage';
 import EngineeringPage from './pages/EngineeringPage';
 import SpatialViewer from './components/spatial-viewer';
 import ThermalMLTest from './pages/ThermalMLTest';
+import PressureTest from './pages/PressureTest';
 
 import { initialInspectionSession } from './services/inspectionService';
 import { fetchFindings, fetchInspections } from './services/apiService';
@@ -285,6 +286,8 @@ export default function App() {
         return <SpatialViewer />;
       case 'thermal-ml-test':
         return <ThermalMLTest />;
+      case 'pressure-test':
+        return <PressureTest />;
       default:
         return (
           <InspectionsPage
