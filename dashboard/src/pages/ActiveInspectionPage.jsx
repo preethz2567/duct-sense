@@ -13,28 +13,29 @@ import {
   ShieldCheck,
   Eye,
 } from 'lucide-react';
+import SpatialViewer from '../components/spatial-viewer';
 
 export default function ActiveInspectionPage({
   session,
-  onSelectSection,
+  floorPlans,
+  findings,
   onOpenEvidenceDrawer,
   onOpenPhotoCapture,
   onOpenWorkflowModal,
   onUpdatePlanLocation,
+  onSelectSection,
 }) {
   const [isManualPlacing, setIsManualPlacing] = useState(false);
   const activeSection = session.sections.find((s) => s.id === session.activeSectionId) || session.sections[2];
   const { activeAnomaly } = session;
 
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+
+  const activeFloorPlan = floorPlans?.find(p => p.id === selectedPlanId) || floorPlans?.[0]; // Fallback to first plan
+  const floorPlanUrl = activeFloorPlan?.url || '';
+
   const handleMapClick = (e) => {
-    const svgRect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - svgRect.left;
-    const width = svgRect.width;
-    // Map click along 0m to 1m
-    const relX = Math.max(0, Math.min(1, clickX / width));
-    const positionM = parseFloat((relX * 1.0).toFixed(2));
-    onUpdatePlanLocation(positionM);
-    setIsManualPlacing(false);
+    // Handled by SpatialViewer now
   };
 
   return (
@@ -104,91 +105,22 @@ export default function ActiveInspectionPage({
         {/* Left: 1.0 m POC Prototype Duct Plan */}
         <div className="ds-card ds-map-container-card">
           <div className="ds-viewport-top-bar">
-            <span className="ds-vp-title">1.0 m POC Duct Rig Plan · Section {activeSection.id}</span>
+            <span className="ds-vp-title">Facility Blueprint</span>
             <div className="ds-header-actions">
-              <button
-                className={`ds-btn ds-btn-compact ${isManualPlacing ? 'ds-btn-amber' : 'ds-btn-secondary'}`}
-                onClick={() => setIsManualPlacing(!isManualPlacing)}
+              <select 
+                className="ds-select-compact" 
+                value={activeFloorPlan?.id || ''}
+                onChange={(e) => setSelectedPlanId(e.target.value)}
               >
-                <MapPin size={12} /> {isManualPlacing ? 'Click on duct to place' : 'Mark Plan Location'}
-              </button>
+                {floorPlans?.map(p => (
+                  <option key={p.id} value={p.id}>{p.label || p.name || p.filename}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          <div className="ds-map-svg-wrap">
-            <svg
-              viewBox="0 0 600 240"
-              className="ds-map-svg"
-              onClick={isManualPlacing ? handleMapClick : undefined}
-              style={{ cursor: isManualPlacing ? 'crosshair' : 'default' }}
-            >
-              <defs>
-                <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E2E8F0" strokeWidth="1" />
-                </pattern>
-              </defs>
-
-              <rect width="100%" height="100%" fill="#F8FAFC" />
-              <rect width="100%" height="100%" fill="url(#gridPattern)" opacity="0.6" />
-
-              {/* Physical Rig Frame */}
-              <rect x="20" y="20" width="560" height="200" fill="none" stroke="#CDD0CE" strokeWidth="1.5" strokeDasharray="5 3" />
-              <text x="35" y="40" fill="#667078" fontSize="10" fontWeight="bold">
-                PHYSICAL POC DUCT RIG (1000 mm × 100 mm)
-              </text>
-
-              {/* Blower Unit @ 0.0 m */}
-              <rect x="40" y="70" width="50" height="90" fill="#20252A" stroke="#344B5E" strokeWidth="1.5" rx="2" />
-              <text x="65" y="120" fill="#FFFFFF" fontSize="9" fontWeight="bold" textAnchor="middle">BLOWER</text>
-              <text x="65" y="180" fill="#667078" fontSize="9" textAnchor="middle">0.0 m</text>
-
-              {/* Main 1.0 m Duct Cylinder */}
-              <rect x="90" y="80" width="440" height="70" fill="#FFFFFF" stroke="#344B5E" strokeWidth="2" />
-
-              {/* Distance Scale Markers along duct */}
-              <line x1="90" y1="160" x2="530" y2="160" stroke="#344B5E" strokeWidth="1.5" />
-              {[
-                { pos: '0.0 m', x: 90 },
-                { pos: '0.25 m', x: 200 },
-                { pos: '0.50 m', x: 310 },
-                { pos: '0.75 m', x: 420 },
-                { pos: '1.0 m', x: 530 },
-              ].map((m, idx) => (
-                <g key={idx}>
-                  <line x1={m.x} y1="155" x2={m.x} y2="165" stroke="#344B5E" strokeWidth="1.5" />
-                  <text x={m.x} y="178" fill="#667078" fontSize="9" textAnchor="middle">{m.pos}</text>
-                </g>
-              ))}
-
-              {/* Static Tap @ 0.15 m */}
-              <g transform="translate(156, 75)">
-                <circle cx="0" cy="0" r="4" fill="#176B73" />
-                <line x1="0" y1="0" x2="0" y2="-18" stroke="#176B73" strokeWidth="1.5" />
-                <text x="0" y="-22" fill="#176B73" fontSize="8" fontWeight="bold" textAnchor="middle">
-                  BMP280 Tap (0.15m)
-                </text>
-              </g>
-
-              {/* Controlled Joint Seam @ 0.50 m */}
-              <line x1="310" y1="75" x2="310" y2="155" stroke="#D88A19" strokeWidth="2" strokeDasharray="3 2" />
-
-              {/* Plan Location Pin (@ activeAnomaly.positionM) */}
-              {activeAnomaly && (
-                <g transform={`translate(${90 + (activeAnomaly.positionM / 1.0) * 440}, 115)`}>
-                  <circle cx="0" cy="0" r="16" fill={activeAnomaly.status === 'CONFIRMED' ? 'rgba(184, 58, 50, 0.25)' : 'rgba(216, 138, 25, 0.25)'} />
-                  <circle cx="0" cy="0" r="7" fill={activeAnomaly.status === 'CONFIRMED' ? '#B83A32' : '#D88A19'} />
-                  <path d="M 0 -7 L 0 -22" stroke={activeAnomaly.status === 'CONFIRMED' ? '#B83A32' : '#D88A19'} strokeWidth="2" />
-                  <rect x="-60" y="-42" width="120" height="18" fill="#20252A" rx="2" />
-                  <text x="0" y="-30" fill="#FFFFFF" fontSize="9" fontWeight="bold" textAnchor="middle">
-                    PLAN LOCATION: {activeAnomaly.positionM.toFixed(2)} m
-                  </text>
-                </g>
-              )}
-
-              {/* End Cap @ 1.0 m */}
-              <rect x="530" y="70" width="16" height="90" fill="#20252A" stroke="#344B5E" strokeWidth="1.5" rx="2" />
-              <text x="538" y="120" fill="#FFFFFF" fontSize="8" fontWeight="bold" textAnchor="middle">CAP</text>
-            </svg>
+          <div className="ds-map-svg-wrap" style={{ position: 'relative', height: '100%', minHeight: '500px', overflow: 'hidden' }}>
+            <SpatialViewer findings={findings} floorPlanUrl={floorPlanUrl} />
           </div>
         </div>
 
@@ -209,7 +141,7 @@ export default function ActiveInspectionPage({
               <div style={{ marginTop: '4px' }}>
                 {activeAnomaly?.status === 'CONFIRMED' ? (
                   <span className="ds-status-indicator ds-status-red">
-                    <AlertTriangle size={14} /> ● CONFIRMED LEAK (Action Required)
+                    <AlertTriangle size={14} /> ● LEAK ANOMALY DETECTED
                   </span>
                 ) : activeAnomaly?.status === 'VERIFIED' ? (
                   <span className="ds-status-indicator ds-status-green">
@@ -234,15 +166,21 @@ export default function ActiveInspectionPage({
               <div className="ds-compact-sensor-rows">
                 <div className="ds-compact-sensor-item">
                   <span className="ds-cs-name">Pressure Differential</span>
-                  <span className="ds-cs-val ds-cs-avail">✓ Available (+205.8 Pa)</span>
+                  <span className="ds-cs-val ds-cs-avail">
+                    ✓ Available ({session.telemetry?.calibratedDeltaPPa > 0 ? '+' : ''}{(session.telemetry?.calibratedDeltaPPa || 0).toFixed(1)} Pa)
+                  </span>
                 </div>
                 <div className="ds-compact-sensor-item">
                   <span className="ds-cs-name">Thermal Gradient (FLIR)</span>
-                  <span className="ds-cs-val ds-cs-avail">✓ Available (ΔT +9.3 °C)</span>
+                  <span className="ds-cs-val ds-cs-avail">
+                    ✓ Available (ΔT {session.telemetry?.deltaTC > 0 ? '+' : ''}{(session.telemetry?.deltaTC || 0).toFixed(1)} °C)
+                  </span>
                 </div>
                 <div className="ds-compact-sensor-item">
                   <span className="ds-cs-name">Acoustic Anomaly (INMP441)</span>
-                  <span className="ds-cs-val ds-cs-avail">✓ Available (Audible turbulence)</span>
+                  <span className="ds-cs-val ds-cs-avail">
+                    ✓ Available (Score: {(session.telemetry?.acousticScore || 0).toFixed(2)})
+                  </span>
                 </div>
                 <div className="ds-compact-sensor-item">
                   <span className="ds-cs-name">Field Inspection Photo</span>

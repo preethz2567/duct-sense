@@ -112,18 +112,20 @@ export default function UnifiedEvidencePage({ session, onOpenPhotoCapture }) {
                   </defs>
                   <rect width="400" height="180" fill="#0B0B2E" rx="3" />
                   <rect x="20" y="30" width="360" height="120" fill="url(#ironbowEv)" opacity="0.7" rx="2" />
-                  <ellipse cx="200" cy="90" rx="60" ry="35" fill="url(#hotEv)" />
-                  <rect x="150" y="55" width="100" height="70" fill="none" stroke="#D88A19" strokeWidth="1.5" strokeDasharray="4 2" />
+                  <ellipse cx="200" cy="90" rx="60" ry="35" fill="url(#hotEv)" opacity={telemetry.thermalScore > 0.5 ? 1 : 0} />
+                  {telemetry.thermalScore > 0.5 && (
+                    <rect x="150" y="55" width="100" height="70" fill="none" stroke="#D88A19" strokeWidth="1.5" strokeDasharray="4 2" />
+                  )}
                   <text x="200" y="45" fill="#FFFFFF" fontSize="10" fontWeight="bold" textAnchor="middle">
-                    HOTSPOT 31.4°C (ΔT +9.3°C)
+                    HOTSPOT {telemetry.tempMaxC.toFixed(1)}°C (ΔT {telemetry.deltaTC > 0 ? '+' : ''}{telemetry.deltaTC.toFixed(1)}°C)
                   </text>
                 </svg>
               </div>
 
               <div className="ds-subpanel-kv-row">
                 <span>Camera: <strong>FLIR Thermal Camera</strong></span>
-                <span>Surface Ref: <strong>22.1 °C</strong></span>
-                <span>Anomaly Score: <strong>0.86</strong></span>
+                <span>Surface Ref: <strong>{telemetry.tempRefC.toFixed(1)} °C</strong></span>
+                <span>Anomaly Score: <strong>{telemetry.thermalScore.toFixed(2)}</strong></span>
               </div>
             </div>
 

@@ -8,24 +8,20 @@ import {
 
 export const API_BASE = 'http://localhost:8000';
 
-/**
- * Normalizes FastAPI walkthroughs
- */
-export function normalizeWalkthrough(raw) {
-  return {
-    walkthrough_id: raw.walkthrough_id,
-    date: raw.date,
-    leak_events: Array.isArray(raw.events) ? raw.events : [],
-  };
-}
-
-export async function fetchWalkthroughs() {
-  const res = await fetch(`${API_BASE}/walkthroughs`);
+export async function fetchFindings() {
+  const res = await fetch(`${API_BASE}/findings`);
   if (!res.ok) {
     throw new Error(`Server responded with HTTP ${res.status}`);
   }
-  const raw = await res.json();
-  return raw.map(normalizeWalkthrough);
+  return await res.json();
+}
+
+export async function fetchInspections() {
+  const res = await fetch(`${API_BASE}/inspections`);
+  if (!res.ok) {
+    throw new Error(`Server responded with HTTP ${res.status}`);
+  }
+  return await res.json();
 }
 
 export async function fetchCalibrationData() {
