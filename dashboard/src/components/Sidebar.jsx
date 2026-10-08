@@ -26,6 +26,8 @@ const SECONDARY_NAV = [
   { id: 'spatial', label: 'SPATIAL VIEWER', icon: Map },
   { id: 'engineering', label: 'DEVICE / ENGINEERING', icon: Cpu },
   { id: 'thermal-ml-test', label: 'THERMAL ML TEST', icon: Activity },
+  { id: 'pressure-test', label: 'PRESSURE TEST', icon: Activity },
+  { id: 'multimodal-evidence', label: 'MULTIMODAL EVIDENCE', icon: Layers },
 ];
 
 export default function Sidebar({ activePage, onNavigate, session }) {

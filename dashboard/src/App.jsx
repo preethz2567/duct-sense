@@ -14,6 +14,8 @@ import SyncPage from './pages/SyncPage';
 import EngineeringPage from './pages/EngineeringPage';
 import SpatialViewer from './components/spatial-viewer';
 import ThermalMLTest from './pages/ThermalMLTest';
+import PressureTest from './pages/PressureTest';
+import MultimodalEvidenceTest from './pages/MultimodalEvidenceTest';
 
 import { initialInspectionSession } from './services/inspectionService';
 import { fetchFindings, fetchInspections } from './services/apiService';
@@ -81,7 +83,7 @@ export default function App() {
       } catch {
         setSession((s) => ({ ...s, syncStatus: 'OFFLINE_PENDING' }));
       }
-    }, 3000);
+    }, 600000); // Changed from 3000 to prevent backend memory exhaustion
 
     return () => clearInterval(intervalId);
   }, [loading]);
@@ -285,6 +287,10 @@ export default function App() {
         return <SpatialViewer />;
       case 'thermal-ml-test':
         return <ThermalMLTest />;
+      case 'pressure-test':
+        return <PressureTest />;
+      case 'multimodal-evidence':
+        return <MultimodalEvidenceTest />;
       default:
         return (
           <InspectionsPage
