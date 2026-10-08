@@ -26,11 +26,10 @@ from core.alert import trigger_console_alert
 from core.api_client import publish_walkthrough
 from storage.storage import start_walkthrough, log_event, get_events_for_walkthrough
 from storage.report_generator import generate_report
-
 REPORT_PATH = "docs/latest_report.md"
 
 
-def run_pipeline(leak_position: float = 1.2, no_leak: bool = False) -> None:
+def run_pipeline(leak_position: float = 1.2, no_leak: bool = False, thermal_image_path: str = None) -> None:
     """
     Run the full sensor -> fusion -> alert -> storage -> report pipeline.
 
@@ -40,10 +39,15 @@ def run_pipeline(leak_position: float = 1.2, no_leak: bool = False) -> None:
         Simulated leak position in metres (passed to the simulator).
     no_leak : bool
         If True, run a clean no-leak walkthrough (baseline only).
+    thermal_image_path : str
+        Optional path to a real FLIR thermal image. If provided, the true ML
+        confidence will override the simulated thermal confidence near the leak.
     """
     print("=" * 65)
     print("DuctSense Pipeline Runner")
     print(f"  Simulator : leak_position={leak_position} m  |  no_leak={no_leak}")
+    if thermal_image_path:
+        print(f"  Thermal Image : {thermal_image_path}")
     print("=" * 65)
 
     # ── Start a new walkthrough session ───────────────────────────────────
@@ -53,11 +57,31 @@ def run_pipeline(leak_position: float = 1.2, no_leak: bool = False) -> None:
     # ── Process all samples ────────────────────────────────────────────────
     samples = generate_walkthrough_full(leak_position=leak_position, no_leak=no_leak)
 
+    real_thermal_conf = None
+    if thermal_image_path:
+        if not os.path.exists(thermal_image_path):
+            print(f"  -> Error: Thermal image path does not exist: {thermal_image_path}")
+        else:
+            try:
+                from sensors.thermal_reader import analyze
+                print(f"  Analyzing real thermal image: {thermal_image_path}...")
+                analysis = analyze(thermal_image_path)
+                real_thermal_conf = analysis.get("thermal_confidence")
+                print(f"  -> Real thermal_confidence: {real_thermal_conf}")
+            except ImportError as e:
+                print(f"  -> Thermal Integration Error: Missing dependencies. {e}")
+            except Exception as e:
+                print(f"  -> Error analyzing thermal image: {e}")
+
     total_samples  = 0
     leak_count     = 0
     first_leak_pos = None
 
     for sample in samples:
+        # Inject real thermal confidence if near the leak position (e.g. within 0.15m)
+        if real_thermal_conf is not None and abs(sample["position_m"] - leak_position) <= 0.15:
+            sample["thermal_confidence"] = real_thermal_conf
+
         fused = fuse(sample)
 
         # Console alert
@@ -110,4 +134,5 @@ def run_pipeline(leak_position: float = 1.2, no_leak: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    run_pipeline()
+    thermal_img = sys.argv[1] if len(sys.argv) > 1 else None
+    run_pipeline(thermal_image_path=thermal_img)

@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   Radio,
   Wifi,
+  Activity,
 } from 'lucide-react';
 
 const PRIMARY_NAV = [
@@ -22,7 +23,9 @@ const PRIMARY_NAV = [
 ];
 
 const SECONDARY_NAV = [
+  { id: 'spatial', label: 'SPATIAL VIEWER', icon: Map },
   { id: 'engineering', label: 'DEVICE / ENGINEERING', icon: Cpu },
+  { id: 'thermal-ml-test', label: 'THERMAL ML TEST', icon: Activity },
 ];
 
 export default function Sidebar({ activePage, onNavigate, session }) {
@@ -112,9 +115,12 @@ export default function Sidebar({ activePage, onNavigate, session }) {
           <Wifi size={12} color={isOnline ? '#3F7655' : '#D88A19'} />
         </div>
 
-        <div className="ds-footer-mode-tag">
+        <div className="ds-footer-mode-tag" style={{ 
+          backgroundColor: session.systemStatus === 'LEAK DETECTED' ? 'var(--ds-state-red)' : 'var(--ds-structure-primary)',
+          color: '#FFF'
+        }}>
           <Radio size={12} />
-          <span>{isSim ? 'SIMULATION MODE' : 'LIVE SENSORS'}</span>
+          <span>SYSTEM STATUS {session.systemStatus ? `— ${session.systemStatus}` : ''}</span>
         </div>
       </div>
     </aside>

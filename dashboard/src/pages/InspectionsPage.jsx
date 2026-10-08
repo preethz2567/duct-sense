@@ -28,7 +28,9 @@ export default function InspectionsPage({ session, onSelectInspection, onOpenAct
         </div>
 
         <div className="ds-header-actions">
-          <span className="ds-pill-tag ds-pill-teal">HVAC COMMISSIONING MODE</span>
+          <span className={`ds-pill-tag ${session.systemStatus === 'LEAK DETECTED' ? 'ds-pill-red' : 'ds-pill-green'}`}>
+            SYSTEM STATUS — {session.systemStatus || 'NORMAL'}
+          </span>
         </div>
       </header>
 

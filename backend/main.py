@@ -23,6 +23,7 @@ from typing import List, Optional
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 # ── Database setup ────────────────────────────────────────────────────────────
@@ -53,19 +54,41 @@ def _init_db() -> None:
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS findings (
-                finding_id      TEXT PRIMARY KEY,
-                inspection_id   TEXT,
-                floor_plan_id   TEXT,
-                floor_plan_page INTEGER,
-                finding_type    TEXT,
-                x               REAL,
-                y               REAL,
-                created_at      TEXT,
-                updated_at      TEXT,
-                photo           TEXT,
-                notes           TEXT,
-                status          TEXT,
-                sync_status     TEXT
+                finding_id          TEXT PRIMARY KEY,
+                inspection_id       TEXT,
+                floor_plan_id       TEXT,
+                plan_version_id     TEXT,
+                room_id             TEXT,
+                floor_plan_page     INTEGER,
+                finding_type        TEXT,
+                x                   REAL,
+                y                   REAL,
+                created_at          TEXT,
+                updated_at          TEXT,
+                photo               TEXT,
+                notes               TEXT,
+                status              TEXT,
+                sync_status         TEXT,
+                repair_type         TEXT,
+                repair_note         TEXT,
+                repair_photo        TEXT,
+                verification_status TEXT
+            )
+            """
+        )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS inspections (
+                id             TEXT PRIMARY KEY,
+                site           TEXT,
+                building       TEXT,
+                level          TEXT,
+                hvac_system    TEXT,
+                floor_plan_id  TEXT,
+                technician     TEXT,
+                date           TEXT,
+                status         TEXT,
+                progress       TEXT
             )
             """
         )
@@ -100,6 +123,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount floor-plans directory to serve floor plans statically
+# We point directly to the field-app's public/floor-plans directory as the source of truth
+FLOOR_PLANS_DIR = os.path.join(os.path.dirname(__file__), "..", "field-app", "public", "floor-plans")
+app.mount("/floor-plans", StaticFiles(directory=FLOOR_PLANS_DIR), name="floor-plans")
+
+PHOTOS_DIR = os.path.join(os.path.dirname(__file__), "data", "photos")
+os.makedirs(PHOTOS_DIR, exist_ok=True)
+app.mount("/photos", StaticFiles(directory=PHOTOS_DIR), name="photos")
+
 
 # ── Pydantic models ───────────────────────────────────────────────────────────
 
@@ -125,6 +157,8 @@ class Finding(BaseModel):
     finding_id: str
     inspection_id: str
     floor_plan_id: str
+    plan_version_id: Optional[str] = None
+    room_id: Optional[str] = None
     floor_plan_page: int
     finding_type: str
     x: float
@@ -135,6 +169,23 @@ class Finding(BaseModel):
     notes: str
     status: str
     sync_status: str
+    repair_type: Optional[str] = None
+    repair_note: Optional[str] = None
+    repair_photo: Optional[str] = None
+    verification_status: Optional[str] = None
+
+
+class Inspection(BaseModel):
+    id: str
+    site: str
+    building: str
+    level: str
+    hvac_system: str
+    floor_plan_id: str
+    technician: str
+    date: str
+    status: str
+    progress: Optional[str] = None
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -218,13 +269,14 @@ def post_finding(finding: Finding) -> dict:
         conn.execute(
             """
             INSERT OR REPLACE INTO findings 
-            (finding_id, inspection_id, floor_plan_id, floor_plan_page, finding_type, x, y, created_at, updated_at, photo, notes, status, sync_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (finding_id, inspection_id, floor_plan_id, plan_version_id, room_id, floor_plan_page, finding_type, x, y, created_at, updated_at, photo, notes, status, sync_status, repair_type, repair_note, repair_photo, verification_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                finding.finding_id, finding.inspection_id, finding.floor_plan_id, finding.floor_plan_page,
+                finding.finding_id, finding.inspection_id, finding.floor_plan_id, finding.plan_version_id, finding.room_id, finding.floor_plan_page,
                 finding.finding_type, finding.x, finding.y, finding.created_at, finding.updated_at,
-                finding.photo, finding.notes, finding.status, finding.sync_status
+                finding.photo, finding.notes, finding.status, finding.sync_status,
+                finding.repair_type, finding.repair_note, finding.repair_photo, finding.verification_status
             ),
         )
         conn.commit()
@@ -249,6 +301,35 @@ def get_findings() -> List[dict]:
         conn.close()
 
     return [dict(row) for row in rows]
+
+@app.post("/inspections", status_code=201, summary="Upsert an inspection", response_description="Stored inspection")
+def post_inspection(inspection: Inspection) -> dict:
+    conn = _get_connection()
+    try:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO inspections 
+            (id, site, building, level, hvac_system, floor_plan_id, technician, date, status, progress)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (inspection.id, inspection.site, inspection.building, inspection.level, inspection.hvac_system, inspection.floor_plan_id, inspection.technician, inspection.date, inspection.status, inspection.progress)
+        )
+        conn.commit()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    finally:
+        conn.close()
+    return {"message": "Inspection stored successfully.", "id": inspection.id}
+
+@app.get("/inspections", summary="Get all inspections", response_description="List of inspections")
+def get_inspections() -> List[dict]:
+    conn = _get_connection()
+    try:
+        cursor = conn.execute("SELECT * FROM inspections")
+        rows = cursor.fetchall()
+    finally:
+        conn.close()
+    return [dict(r) for r in rows]
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────

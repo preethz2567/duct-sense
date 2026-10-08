@@ -14,10 +14,6 @@ export default function ViewerToolbar({
   onOpenManualModal,
   isSelectingLocation,
   onCancelSelectLocation,
-  ductGlow,
-  onToggleDuctGlow,
-  leakCount,
-  severityCounts,
 }) {
   return (
     <div className="spatial-toolbar">
@@ -41,17 +37,6 @@ export default function ViewerToolbar({
             title="Adjust base floorplan opacity"
           />
         </div>
-
-        <button
-          type="button"
-          className={`btn-toolbar-toggle ${ductGlow ? 'active' : ''}`}
-          onClick={onToggleDuctGlow}
-          title="Toggle electric neon duct glow effect"
-        >
-          <span className="toggle-indicator"></span>
-          <span className="icon">⚡</span>
-          <span>Duct Glow</span>
-        </button>
       </div>
 
       {/* Middle section: Canvas Navigation Controls (Zoom, Pan, Rotate) */}
@@ -122,31 +107,7 @@ export default function ViewerToolbar({
 
       {/* Right section: Severity Summary & "+ Add Manual Leak" button */}
       <div className="toolbar-group right-controls">
-        <div className="severity-pills" title="Total active annotations on map">
-          <span className="pill pill-total">
-            Pins: <strong>{leakCount}</strong>
-          </span>
-          {severityCounts.Critical > 0 && (
-            <span className="pill pill-critical" title="Critical Severity Leaks">
-              🔴 {severityCounts.Critical}
-            </span>
-          )}
-          {severityCounts.High > 0 && (
-            <span className="pill pill-high" title="High Severity Leaks">
-              🔴 {severityCounts.High}
-            </span>
-          )}
-          {severityCounts.Medium > 0 && (
-            <span className="pill pill-medium" title="Medium Severity Leaks">
-              🟠 {severityCounts.Medium}
-            </span>
-          )}
-          {severityCounts.Low > 0 && (
-            <span className="pill pill-low" title="Low Severity Leaks">
-              🟢 {severityCounts.Low}
-            </span>
-          )}
-        </div>
+
 
         {isSelectingLocation ? (
           <button

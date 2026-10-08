@@ -4,16 +4,18 @@
 // Designed for clean mapping to the existing backend WalkthroughReport model.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type FindingType = 'SUSPECTED_LEAK' | 'CONFIRMED_LEAK' | 'OBSERVATION';
+export type FindingType = 'SUSPECTED_LEAK' | 'CONFIRMED_LEAK' | 'OBSERVATION' | 'REVIEW_REQUEST';
 
 export type SyncStatus = 'LOCAL' | 'QUEUED' | 'SYNCING' | 'SYNCED' | 'FAILED';
 
-export type FindingStatus = 'OPEN' | 'RESOLVED';
+export type FindingStatus = 'OPEN' | 'REPAIR_REQUIRED' | 'REPAIRED' | 'VERIFIED';
 
 export interface Finding {
   finding_id: string;
   inspection_id: string;
   floor_plan_id: string;
+  plan_version_id?: string;
+  room_id?: string;
   floor_plan_page: number;      // 1-indexed; always 1 for image plans
   finding_type: FindingType;
   /** Normalised X position (0.0–1.0) relative to plan display area */
@@ -26,6 +28,10 @@ export interface Finding {
   notes: string;
   status: FindingStatus;
   sync_status: SyncStatus;
+  repair_type?: string;
+  repair_note?: string;
+  repair_photo?: string;
+  verification_status?: string;
 }
 
 export interface FloorPlan {
@@ -46,4 +52,5 @@ export interface Inspection {
   technician: string;
   date: string;                 // ISO date
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  progress?: string;
 }

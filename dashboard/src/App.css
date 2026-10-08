@@ -1,1647 +1,1647 @@
-/* ==========================================================================਍ഀ
-   DUCTSENSE HVAC COMMISSIONING INSTRUMENT ΓÇö AUTHENTIC INDUSTRIAL PALETTE਍ഀ
-   ========================================================================== */਍ഀ
-਍ഀ
-:root {਍ഀ
-  --ds-surface-primary: #F4F3EF;    /* Warm technical white */਍ഀ
-  --ds-surface-secondary: #E9E8E2;  /* Slightly deeper surface */਍ഀ
-  --ds-surface-card: #FFFFFF;       /* Clean pure white for panels */਍ഀ
-  --ds-structure-primary: #20252A;  /* Deep charcoal */਍ഀ
-  --ds-structure-secondary: #344B5E;/* Steel blue */਍ഀ
-  --ds-accent-petrol: #176B73;      /* Deep petrol */਍ഀ
-  --ds-state-amber: #D88A19;        /* Attention / Active */਍ഀ
-  --ds-state-red: #B83A32;          /* Critical / Confirmed leak */਍ഀ
-  --ds-state-green: #3F7655;        /* Healthy / Verified pass */਍ഀ
-  --ds-text-primary: #1C2024;       /* High contrast body text */਍ഀ
-  --ds-text-muted: #667078;         /* Subtitles & metadata */਍ഀ
-  --ds-border: #CDD0CE;             /* Engineering crisp border */਍ഀ
-  --ds-border-light: #E2E8F0;਍ഀ
-  --ds-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;਍ഀ
-  --ds-font-mono: "SF Mono", "Roboto Mono", Consolas, Menlo, monospace;਍ഀ
-}਍ഀ
-਍ഀ
-*, *::before, *::after {਍ഀ
-  box-sizing: border-box;਍ഀ
-  margin: 0;਍ഀ
-  padding: 0;਍ഀ
-}਍ഀ
-਍ഀ
-body {਍ഀ
-  background-color: var(--ds-surface-primary);਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-  font-family: var(--ds-font-sans);਍ഀ
-  font-size: 13px;਍ഀ
-  line-height: 1.5;਍ഀ
-  -webkit-font-smoothing: antialiased;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   App Layout & Sidebar਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-app-layout {਍ഀ
-  display: flex;਍ഀ
-  height: 100vh;਍ഀ
-  width: 100vw;਍ഀ
-  overflow: hidden;਍ഀ
-  background-color: var(--ds-surface-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sidebar {਍ഀ
-  width: 260px;਍ഀ
-  min-width: 260px;਍ഀ
-  height: 100vh;਍ഀ
-  background-color: var(--ds-structure-primary);਍ഀ
-  color: #FFFFFF;਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  border-right: 1px solid #15181C;਍ഀ
-  z-index: 10;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sidebar-brand {਍ഀ
-  padding: 20px;਍ഀ
-  border-bottom: 1px solid #2C3238;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-brand-logo-wrap {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-brand-mark {਍ഀ
-  width: 32px;਍ഀ
-  height: 32px;਍ഀ
-  background-color: var(--ds-accent-petrol);਍ഀ
-  color: #FFFFFF;਍ഀ
-  font-weight: 800;਍ഀ
-  font-size: 14px;਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: center;਍ഀ
-  border-radius: 2px;਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-brand-title {਍ഀ
-  font-size: 14px;਍ഀ
-  font-weight: 700;਍ഀ
-  letter-spacing: 1px;਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-brand-subtitle {਍ഀ
-  font-size: 10px;਍ഀ
-  color: #8E99A2;਍ഀ
-  text-transform: uppercase;਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sidebar-nav {਍ഀ
-  flex: 1;਍ഀ
-  padding: 16px 12px;਍ഀ
-  overflow-y: auto;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-group-title {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: #6C7A86;਍ഀ
-  letter-spacing: 0.8px;਍ഀ
-  margin-bottom: 8px;਍ഀ
-  padding-left: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-group-items {਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  gap: 3px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-item {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-  padding: 10px 12px;਍ഀ
-  width: 100%;਍ഀ
-  background: transparent;਍ഀ
-  border: 1px solid transparent;਍ഀ
-  color: #CDD5DC;਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 600;਍ഀ
-  border-radius: 3px;਍ഀ
-  cursor: pointer;਍ഀ
-  text-align: left;਍ഀ
-  position: relative;਍ഀ
-  transition: background 0.15s ease, color 0.15s ease;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-item:hover {਍ഀ
-  background-color: #2A3036;਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-item--active {਍ഀ
-  background-color: #344B5E;਍ഀ
-  color: #FFFFFF;਍ഀ
-  border-color: #4A6378;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-indicator {਍ഀ
-  position: absolute;਍ഀ
-  right: 0;਍ഀ
-  top: 6px;਍ഀ
-  bottom: 6px;਍ഀ
-  width: 3px;਍ഀ
-  background-color: var(--ds-state-amber);਍ഀ
-  border-radius: 2px 0 0 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-nav-item-secondary {਍ഀ
-  opacity: 0.85;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sidebar-footer {਍ഀ
-  padding: 16px;਍ഀ
-  border-top: 1px solid #2C3238;਍ഀ
-  background-color: #1A1E22;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-footer-inspection-info {਍ഀ
-  margin-bottom: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-footer-sec-title {਍ഀ
-  font-size: 9px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: #6C7A86;਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-footer-sec-val {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  margin-top: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sec-id {਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: #FFFFFF;਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sec-badge {਍ഀ
-  font-size: 9px;਍ഀ
-  font-weight: 700;਍ഀ
-  padding: 2px 6px;਍ഀ
-  background-color: #344B5E;਍ഀ
-  color: #CDD5DC;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-footer-sync-strip {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding: 8px 10px;਍ഀ
-  background-color: #242A2F;਍ഀ
-  border: 1px solid #363E44;਍ഀ
-  border-radius: 3px;਍ഀ
-  margin-bottom: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-dot {਍ഀ
-  width: 7px;਍ഀ
-  height: 7px;਍ഀ
-  border-radius: 50%;਍ഀ
-  display: inline-block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-dot-green {਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-dot-amber {਍ഀ
-  background-color: var(--ds-state-amber);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-footer-mode-tag {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 6px;਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: #A0ACB6;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Main Viewport Canvas਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-main-viewport {਍ഀ
-  flex: 1;਍ഀ
-  height: 100vh;਍ഀ
-  overflow-y: auto;਍ഀ
-  background-color: var(--ds-surface-primary);਍ഀ
-  padding: 24px 32px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-page-container {਍ഀ
-  max-width: 1360px;਍ഀ
-  margin: 0 auto;਍ഀ
-}਍ഀ
-਍ഀ
-/* Page Header */਍ഀ
-.ds-page-header {਍ഀ
-  display: flex;਍ഀ
-  align-items: flex-end;਍ഀ
-  justify-content: space-between;਍ഀ
-  margin-bottom: 20px;਍ഀ
-  padding-bottom: 14px;਍ഀ
-  border-bottom: 1px solid var(--ds-border);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-kicker-label {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-accent-petrol);਍ഀ
-  letter-spacing: 0.8px;਍ഀ
-  text-transform: uppercase;਍ഀ
-  margin-bottom: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-page-title {਍ഀ
-  font-size: 18px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  letter-spacing: -0.2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-header-actions {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Buttons & Tags਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-btn {਍ഀ
-  display: inline-flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 6px;਍ഀ
-  padding: 8px 14px;਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 600;਍ഀ
-  font-family: var(--ds-font-sans);਍ഀ
-  border-radius: 2px;਍ഀ
-  cursor: pointer;਍ഀ
-  border: 1px solid transparent;਍ഀ
-  transition: background 0.15s ease;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-primary {਍ഀ
-  background-color: var(--ds-structure-primary);਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-.ds-btn-primary:hover {਍ഀ
-  background-color: var(--ds-structure-secondary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-secondary {਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  border-color: var(--ds-border);਍ഀ
-}਍ഀ
-.ds-btn-secondary:hover {਍ഀ
-  background-color: var(--ds-surface-secondary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-amber {਍ഀ
-  background-color: var(--ds-state-amber);਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-.ds-btn-amber:hover {਍ഀ
-  background-color: #C07912;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-red {਍ഀ
-  background-color: var(--ds-state-red);਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-.ds-btn-red:hover {਍ഀ
-  background-color: #9E2E27;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-green {਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-.ds-btn-green:hover {਍ഀ
-  background-color: #326044;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-lg {਍ഀ
-  padding: 10px 18px;਍ഀ
-  font-size: 13px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-compact {਍ഀ
-  padding: 5px 10px;਍ഀ
-  font-size: 11px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-full {਍ഀ
-  width: 100%;਍ഀ
-  justify-content: center;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-disabled {਍ഀ
-  background-color: #D6D8D7;਍ഀ
-  color: #8E99A2;਍ഀ
-  cursor: not-allowed;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-btn-icon {਍ഀ
-  background: transparent;਍ഀ
-  border: none;਍ഀ
-  cursor: pointer;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  padding: 4px;਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: center;਍ഀ
-}਍ഀ
-.ds-btn-icon:hover {਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-/* Pills & Badges */਍ഀ
-.ds-pill-tag {਍ഀ
-  display: inline-flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 5px;਍ഀ
-  padding: 4px 8px;਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pill-amber {਍ഀ
-  background-color: #FDF3E7;਍ഀ
-  border-color: #F7D4A4;਍ഀ
-  color: #A36209;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pill-red {਍ഀ
-  background-color: #FBEBEA;਍ഀ
-  border-color: #F0BBB8;਍ഀ
-  color: var(--ds-state-red);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pill-green {਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  border-color: #C1DEC9;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pill-teal {਍ഀ
-  background-color: #E8F4F5;਍ഀ
-  border-color: #B5DFE3;਍ഀ
-  color: var(--ds-accent-petrol);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-badge-green {਍ഀ
-  display: inline-flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 4px;਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-/* Mode pill toggles */਍ഀ
-.ds-mode-pill-group {਍ഀ
-  display: flex;਍ഀ
-  background-color: var(--ds-surface-secondary);਍ഀ
-  padding: 3px;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 3px;਍ഀ
-  gap: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-mode-pill {਍ഀ
-  padding: 4px 10px;਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  background: transparent;਍ഀ
-  border: none;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  cursor: pointer;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-mode-pill--sim {਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Cards & Panels਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-card {਍ഀ
-  background-color: var(--ds-surface-card);਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-  padding: 20px;਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-card-header {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  margin-bottom: 14px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-card-title {਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Hero & Inspections Landing Page਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-active-inspection-hero-card {਍ഀ
-  border-left: 4px solid var(--ds-state-amber);਍ഀ
-  background-color: #FFFFFF;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-card-head {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  margin-bottom: 16px;਍ഀ
-  padding-bottom: 12px;਍ഀ
-  border-bottom: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-badge-row {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-mono-id {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 15px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-details-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1.5fr 1.5fr 1fr;਍ഀ
-  gap: 20px;਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-site-title {਍ഀ
-  font-size: 16px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 3px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-site-sub {਍ഀ
-  font-size: 12px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-hvac-val {਍ഀ
-  font-size: 14px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-secondary);਍ഀ
-  margin-top: 3px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-tech-val {਍ഀ
-  font-size: 12px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-progress-num {਍ഀ
-  font-size: 13px;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-  margin-top: 3px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-mini-progress-bar {਍ഀ
-  height: 6px;਍ഀ
-  background-color: var(--ds-surface-secondary);਍ഀ
-  border-radius: 3px;਍ഀ
-  overflow: hidden;਍ഀ
-  margin-top: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-mini-progress-fill {਍ഀ
-  height: 100%;਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-card-footer {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding-top: 16px;਍ഀ
-  border-top: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-hero-current-task {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-  font-size: 13px;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-inspections-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));਍ഀ
-  gap: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-inspection-card {਍ഀ
-  padding: 16px;਍ഀ
-  cursor: pointer;਍ഀ
-  transition: transform 0.1s ease, border-color 0.15s ease;਍ഀ
-}਍ഀ
-.ds-inspection-card:hover {਍ഀ
-  border-color: var(--ds-structure-secondary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-card-top {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: flex-start;਍ഀ
-  margin-bottom: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-id {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 700;਍ഀ
-  margin-right: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-date {਍ഀ
-  font-size: 11px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-site {਍ഀ
-  font-size: 14px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-bottom: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-system {਍ഀ
-  font-size: 12px;਍ഀ
-  color: var(--ds-accent-petrol);਍ഀ
-  margin-bottom: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-progress-row {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  font-size: 12px;਍ഀ
-  margin-bottom: 14px;਍ഀ
-  padding: 6px 0;਍ഀ
-  border-top: 1px solid var(--ds-border-light);਍ഀ
-  border-bottom: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-insp-card-bottom {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-leak-tag-amber {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-state-amber);਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-leak-tag-green {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-link-arrow {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-secondary);਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Duct Route Ribbon (Active Inspection Top)਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-route-ribbon-card {਍ഀ
-  padding: 16px 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-duct-route-line {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  gap: 8px;਍ഀ
-  overflow-x: auto;਍ഀ
-  padding: 8px 0;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-section-box {਍ഀ
-  flex: 1;਍ഀ
-  min-width: 140px;਍ഀ
-  padding: 10px 12px;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  border-radius: 2px;਍ഀ
-  cursor: pointer;਍ഀ
-  transition: all 0.15s ease;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-node-green {਍ഀ
-  border-left: 4px solid var(--ds-state-green);਍ഀ
-}਍ഀ
-.ds-route-node-green .ds-route-sec-state-dot {਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-node-amber {਍ഀ
-  border-left: 4px solid var(--ds-state-amber);਍ഀ
-  background-color: #FFFAF3;਍ഀ
-}਍ഀ
-.ds-route-node-amber .ds-route-sec-state-dot {਍ഀ
-  background-color: var(--ds-state-amber);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-node-red {਍ഀ
-  border-left: 4px solid var(--ds-state-red);਍ഀ
-  background-color: #FFF6F6;਍ഀ
-}਍ഀ
-.ds-route-node-red .ds-route-sec-state-dot {਍ഀ
-  background-color: var(--ds-state-red);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-node-gray {਍ഀ
-  border-left: 4px solid #CDD0CE;਍ഀ
-  opacity: 0.75;਍ഀ
-}਍ഀ
-.ds-route-node-gray .ds-route-sec-state-dot {਍ഀ
-  background-color: #A0ACB6;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-section-active-ring {਍ഀ
-  outline: 2px solid var(--ds-structure-secondary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-sec-top {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: center;਍ഀ
-  margin-bottom: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-sec-id {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-sec-state-dot {਍ഀ
-  width: 7px;਍ഀ
-  height: 7px;਍ഀ
-  border-radius: 50%;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-sec-name {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  white-space: nowrap;਍ഀ
-  overflow: hidden;਍ഀ
-  text-overflow: ellipsis;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-sec-status-text {਍ഀ
-  font-size: 10px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  margin-top: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-route-segment-connector {਍ഀ
-  width: 16px;਍ഀ
-  height: 2px;਍ഀ
-  background-color: var(--ds-border);਍ഀ
-  flex-shrink: 0;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-connector-green {਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Active Inspection Grid & Map Canvas਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-grid-active-inspection {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1.6fr 1fr;਍ഀ
-  gap: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-map-container-card {਍ഀ
-  padding: 0;਍ഀ
-  overflow: hidden;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-viewport-top-bar {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding: 12px 16px;਍ഀ
-  border-bottom: 1px solid var(--ds-border);਍ഀ
-  background-color: #FAFAF8;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-vp-title {਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-map-svg-wrap {਍ഀ
-  padding: 20px;਍ഀ
-  display: flex;਍ഀ
-  justify-content: center;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-map-svg {਍ഀ
-  width: 100%;਍ഀ
-  height: auto;਍ഀ
-  max-height: 280px;਍ഀ
-}਍ഀ
-਍ഀ
-/* Current Section Panel */਍ഀ
-.ds-current-section-panel {਍ഀ
-  padding: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-active-sec-title {਍ഀ
-  font-size: 16px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-section-status-strip {਍ഀ
-  margin-bottom: 16px;਍ഀ
-  padding-bottom: 14px;਍ഀ
-  border-bottom: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-status-indicator {਍ഀ
-  display: inline-flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 6px;਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 700;਍ഀ
-  padding: 6px 10px;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-status-red {਍ഀ
-  background-color: #FBEBEA;਍ഀ
-  color: var(--ds-state-red);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-status-amber {਍ഀ
-  background-color: #FDF3E7;਍ഀ
-  color: var(--ds-state-amber);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-status-green {਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-compact-evidence-block {਍ഀ
-  margin-bottom: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-compact-sensor-rows {਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  gap: 6px;਍ഀ
-  margin-top: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-compact-sensor-item {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: center;਍ഀ
-  padding: 6px 10px;਍ഀ
-  background-color: #F9F9F8;਍ഀ
-  border: 1px solid var(--ds-border-light);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cs-name {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cs-val {਍ഀ
-  font-size: 11px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cs-avail {਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-anomaly-alert-box {਍ഀ
-  padding: 10px 12px;਍ഀ
-  background-color: #FFFAF3;਍ഀ
-  border: 1px solid #F7D4A4;਍ഀ
-  border-radius: 2px;਍ഀ
-  margin-bottom: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-active-btn-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 8px;਍ഀ
-  margin-bottom: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-active-section-actions {਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  gap: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Modals & Drawers਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-modal-backdrop {਍ഀ
-  position: fixed;਍ഀ
-  inset: 0;਍ഀ
-  background-color: rgba(32, 37, 42, 0.65);਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: center;਍ഀ
-  z-index: 1000;਍ഀ
-  padding: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-modal-instrument {਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  border: 1px solid var(--ds-structure-primary);਍ഀ
-  border-radius: 3px;਍ഀ
-  width: 100%;਍ഀ
-  max-width: 680px;਍ഀ
-  max-height: 90vh;਍ഀ
-  overflow-y: auto;਍ഀ
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-modal-instrument-header {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding: 12px 18px;਍ഀ
-  background-color: var(--ds-structure-primary);਍ഀ
-  color: #FFFFFF;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-modal-header-tag {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-tag-amber {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  background-color: var(--ds-state-amber);਍ഀ
-  color: #FFFFFF;਍ഀ
-  padding: 2px 6px;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-tag-green {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-  color: #FFFFFF;਍ഀ
-  padding: 2px 6px;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-tag-mono {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 11px;਍ഀ
-  color: #CDD5DC;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-modal-instrument-body {਍ഀ
-  padding: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-attention-banner {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 12px;਍ഀ
-  padding: 12px 14px;਍ഀ
-  background-color: #FFFAF3;਍ഀ
-  border: 1px solid var(--ds-state-amber);਍ഀ
-  border-radius: 2px;਍ഀ
-  margin-bottom: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-attention-title {਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: #A36209;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-attention-sub {਍ഀ
-  font-size: 11px;਍ഀ
-  color: #667078;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-agreement-strip {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: repeat(3, 1fr);਍ഀ
-  gap: 10px;਍ഀ
-  margin-bottom: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-agreement-metric {਍ഀ
-  padding: 8px 10px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border-light);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ag-label {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ag-val {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 700;਍ഀ
-  margin-top: 2px;਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-attach-row {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding: 10px 14px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-  margin-bottom: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-modal-actions-bar {਍ഀ
-  display: flex;਍ഀ
-  justify-content: flex-end;਍ഀ
-  gap: 10px;਍ഀ
-  margin-top: 20px;਍ഀ
-  padding-top: 14px;਍ഀ
-  border-top: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-/* Repair Option Buttons */਍ഀ
-.ds-repair-options-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 8px;਍ഀ
-  margin: 12px 0 16px 0;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-repair-opt-btn {਍ഀ
-  padding: 10px 12px;਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-  cursor: pointer;਍ഀ
-  text-align: left;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-repair-opt--active {਍ഀ
-  border-color: var(--ds-state-amber);਍ഀ
-  background-color: #FFFAF3;਍ഀ
-  color: #A36209;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-input-group {਍ഀ
-  margin-bottom: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-input-label {਍ഀ
-  display: block;਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 600;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  margin-bottom: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-input-text {਍ഀ
-  width: 100%;਍ഀ
-  padding: 8px 10px;਍ഀ
-  font-size: 12px;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-/* Verification Pass Banner */਍ഀ
-.ds-verification-pass-banner {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 14px;਍ഀ
-  padding: 14px 16px;਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  border: 1px solid var(--ds-state-green);਍ഀ
-  border-radius: 2px;਍ഀ
-  margin-bottom: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pass-title {਍ഀ
-  font-size: 14px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-pass-sub {਍ഀ
-  font-size: 12px;਍ഀ
-  color: #326044;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-before-after-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ba-box {਍ഀ
-  padding: 12px;਍ഀ
-  border-radius: 2px;਍ഀ
-  font-size: 12px;਍ഀ
-  line-height: 1.6;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ba-before {਍ഀ
-  background-color: #FFF6F6;਍ഀ
-  border: 1px solid #F0BBB8;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ba-after {਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  border: 1px solid #C1DEC9;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-ba-label {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 800;਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-  display: block;਍ഀ
-  margin-bottom: 6px;਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Photo Capture & Gallery਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-photo-capture-box {਍ഀ
-  border: 2px dashed var(--ds-border);਍ഀ
-  padding: 32px 20px;਍ഀ
-  text-align: center;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-preview-card {਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-  padding: 12px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-img-wrap {਍ഀ
-  position: relative;਍ഀ
-  width: 100%;਍ഀ
-  max-height: 240px;਍ഀ
-  overflow: hidden;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-preview-img {਍ഀ
-  width: 100%;਍ഀ
-  height: 220px;਍ഀ
-  object-fit: cover;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-badge-attached {਍ഀ
-  position: absolute;਍ഀ
-  top: 10px;਍ഀ
-  right: 10px;਍ഀ
-  background-color: var(--ds-state-green);਍ഀ
-  color: #FFFFFF;਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  padding: 3px 8px;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-meta-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 8px;਍ഀ
-  margin-top: 12px;਍ഀ
-  padding-top: 10px;਍ഀ
-  border-top: 1px solid var(--ds-border-light);਍ഀ
-  font-size: 11px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-meta-k {਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  font-weight: 600;਍ഀ
-  margin-right: 4px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photo-meta-v {਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-photos-gallery-strip {਍ഀ
-  display: flex;਍ഀ
-  gap: 12px;਍ഀ
-  overflow-x: auto;਍ഀ
-  padding: 4px 0;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-gallery-item {਍ഀ
-  width: 180px;਍ഀ
-  flex-shrink: 0;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  border-radius: 2px;਍ഀ
-  overflow: hidden;਍ഀ
-  background-color: #FFFFFF;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-gallery-img {਍ഀ
-  width: 100%;਍ഀ
-  height: 110px;਍ഀ
-  object-fit: cover;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-gallery-placeholder {਍ഀ
-  height: 110px;਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: center;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  font-size: 10px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  gap: 6px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-gallery-caption {਍ഀ
-  padding: 6px 8px;਍ഀ
-  font-size: 10px;਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-/* --------------------------------------------------------------------------਍ഀ
-   Evidence Hub & Report Certificate਍ഀ
-   -------------------------------------------------------------------------- */਍ഀ
-.ds-grid-2col {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-card-evidence-summary {਍ഀ
-  padding: 14px 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-meta-grid-4 {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: repeat(4, 1fr);਍ഀ
-  gap: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-meta-lbl {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-  text-transform: uppercase;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-meta-val {਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-val-amber { color: var(--ds-state-amber); }਍ഀ
-.ds-val-red { color: var(--ds-state-red); }਍ഀ
-.ds-val-green { color: var(--ds-state-green); }਍ഀ
-਍ഀ
-.ds-subpanel-metrics-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 10px;਍ഀ
-  margin-top: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sm-item {਍ഀ
-  padding: 8px 10px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border-light);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sm-val {਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 2px;਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-commissioning-cert-card {਍ഀ
-  background-color: #FFFFFF;਍ഀ
-  border: 2px solid var(--ds-structure-primary);਍ഀ
-  padding: 32px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-header {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: flex-start;਍ഀ
-  padding-bottom: 20px;਍ഀ
-  border-bottom: 2px solid var(--ds-structure-primary);਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-brand {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-brand-title {਍ഀ
-  font-size: 16px;਍ഀ
-  font-weight: 800;਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-brand-sub {਍ഀ
-  font-size: 11px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-id-tag {਍ഀ
-  text-align: right;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-id-label {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-id-val {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 16px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-metadata-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: repeat(3, 1fr);਍ഀ
-  gap: 14px;਍ഀ
-  padding: 16px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-meta-k {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-meta-v {਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 2px;਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-map-schematic {਍ഀ
-  padding: 12px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-summary-strip {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: repeat(4, 1fr);਍ഀ
-  gap: 12px;਍ഀ
-  margin-bottom: 24px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-summary-box {਍ഀ
-  padding: 12px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  text-align: center;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-summary-k {਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-summary-v {਍ഀ
-  font-size: 18px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  margin-top: 4px;਍ഀ
-  display: block;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-block-title {਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-  margin-bottom: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-report-item {਍ഀ
-  border: 1px solid var(--ds-border);਍ഀ
-  padding: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-head {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: center;਍ഀ
-  margin-bottom: 12px;਍ഀ
-  padding-bottom: 8px;਍ഀ
-  border-bottom: 1px solid var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-title {਍ഀ
-  font-size: 13px;਍ഀ
-  font-weight: 700;਍ഀ
-  margin-left: 8px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-details-grid {਍ഀ
-  display: grid;਍ഀ
-  grid-template-columns: 1fr 1fr;਍ഀ
-  gap: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-subhead {਍ഀ
-  font-size: 11px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-secondary);਍ഀ
-  margin-bottom: 8px;਍ഀ
-  text-transform: uppercase;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-defect-kv {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  font-size: 11px;਍ഀ
-  padding: 4px 0;਍ഀ
-  border-bottom: 1px dotted var(--ds-border-light);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-cert-signoff-block {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  padding-top: 24px;਍ഀ
-  margin-top: 24px;਍ഀ
-  border-top: 1px solid var(--ds-border);਍ഀ
-  font-size: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-/* Engineering Table */਍ഀ
-.ds-table-responsive {਍ഀ
-  overflow-x: auto;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-engineering-table {਍ഀ
-  width: 100%;਍ഀ
-  border-collapse: collapse;਍ഀ
-  font-size: 12px;਍ഀ
-  text-align: left;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-engineering-table th {਍ഀ
-  padding: 8px 12px;਍ഀ
-  background-color: #F1F4F6;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-  font-size: 10px;਍ഀ
-  font-weight: 700;਍ഀ
-  border-bottom: 1px solid var(--ds-border);਍ഀ
-  letter-spacing: 0.5px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-engineering-table td {਍ഀ
-  padding: 8px 12px;਍ഀ
-  border-bottom: 1px solid var(--ds-border-light);਍ഀ
-  color: var(--ds-text-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-td-mono {਍ഀ
-  font-family: var(--ds-font-mono);਍ഀ
-  font-size: 11px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-td-bold {਍ഀ
-  font-weight: 700;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-td-highlight {਍ഀ
-  font-weight: 700;਍ഀ
-  color: var(--ds-state-amber);਍ഀ
-}਍ഀ
-਍ഀ
-/* Sync Page */਍ഀ
-.ds-sync-hero-card {਍ഀ
-  border-left: 4px solid var(--ds-state-green);਍ഀ
-  margin-bottom: 20px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-status-row {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 16px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-icon-wrap {਍ഀ
-  width: 44px;਍ഀ
-  height: 44px;਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  border-radius: 50%;਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  justify-content: center;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-hero-title {਍ഀ
-  font-size: 15px;਍ഀ
-  font-weight: 800;਍ഀ
-  color: var(--ds-structure-primary);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-hero-sub {਍ഀ
-  font-size: 12px;਍ഀ
-  color: var(--ds-text-muted);਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-success-alert {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 8px;਍ഀ
-  margin-top: 14px;਍ഀ
-  padding: 10px 12px;਍ഀ
-  background-color: #EDF6F0;਍ഀ
-  color: var(--ds-state-green);਍ഀ
-  font-size: 12px;਍ഀ
-  font-weight: 600;਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-sync-queue-list {਍ഀ
-  display: flex;਍ഀ
-  flex-direction: column;਍ഀ
-  gap: 10px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-queue-item {਍ഀ
-  display: flex;਍ഀ
-  justify-content: space-between;਍ഀ
-  align-items: center;਍ഀ
-  padding: 10px 12px;਍ഀ
-  background-color: #F8FAFC;਍ഀ
-  border: 1px solid var(--ds-border-light);਍ഀ
-  border-radius: 2px;਍ഀ
-}਍ഀ
-਍ഀ
-.ds-queue-item-left {਍ഀ
-  display: flex;਍ഀ
-  align-items: center;਍ഀ
-  gap: 10px;਍ഀ
-  font-size: 12px;਍ഀ
-}਍ഀ
-਍ഀ
-/* Responsive Media Queries */਍ഀ
-@media (max-width: 1024px) {਍ഀ
-  .ds-grid-active-inspection {਍ഀ
-    grid-template-columns: 1fr;਍ഀ
-  }਍ഀ
-  .ds-grid-2col {਍ഀ
-    grid-template-columns: 1fr;਍ഀ
-  }਍ഀ
-  .ds-meta-grid-4 {਍ഀ
-    grid-template-columns: 1fr 1fr;਍ഀ
-  }਍ഀ
-  .ds-cert-summary-strip {਍ഀ
-    grid-template-columns: 1fr 1fr;਍ഀ
-  }਍ഀ
-}਍ഀ
-਍ഀ
-@media (max-width: 768px) {਍ഀ
-  .ds-app-layout {਍ഀ
-    flex-direction: column;਍ഀ
-  }਍ഀ
-  .ds-sidebar {਍ഀ
-    width: 100%;਍ഀ
-    min-width: 100%;਍ഀ
-    height: auto;਍ഀ
-  }਍ഀ
-  .ds-main-viewport {਍ഀ
-    padding: 16px;਍ഀ
-  }਍ഀ
-  .ds-hero-details-grid {਍ഀ
-    grid-template-columns: 1fr;਍ഀ
-  }਍ഀ
-  .ds-hero-card-footer {਍ഀ
-    flex-direction: column;਍ഀ
-    align-items: flex-start;਍ഀ
-    gap: 12px;਍ഀ
-  }਍ഀ
-  .ds-cert-metadata-grid {਍ഀ
-    grid-template-columns: 1fr;਍ഀ
-  }਍ഀ
-  .ds-defect-details-grid {਍ഀ
-    grid-template-columns: 1fr;਍ഀ
-  }਍ഀ
-  .ds-cert-signoff-block {਍ഀ
-    flex-direction: column;਍ഀ
-    gap: 10px;਍ഀ
-  }਍ഀ
-}਍ഀ
+/* ==========================================================================
+   DUCTSENSE HVAC COMMISSIONING INSTRUMENT ΓÇö AUTHENTIC INDUSTRIAL PALETTE
+   ========================================================================== */
+
+:root {
+  --ds-surface-primary: #F4F3EF;    /* Warm technical white */
+  --ds-surface-secondary: #E9E8E2;  /* Slightly deeper surface */
+  --ds-surface-card: #FFFFFF;       /* Clean pure white for panels */
+  --ds-structure-primary: #20252A;  /* Deep charcoal */
+  --ds-structure-secondary: #344B5E;/* Steel blue */
+  --ds-accent-petrol: #176B73;      /* Deep petrol */
+  --ds-state-amber: #D88A19;        /* Attention / Active */
+  --ds-state-red: #B83A32;          /* Critical / Confirmed leak */
+  --ds-state-green: #3F7655;        /* Healthy / Verified pass */
+  --ds-text-primary: #1C2024;       /* High contrast body text */
+  --ds-text-muted: #667078;         /* Subtitles & metadata */
+  --ds-border: #CDD0CE;             /* Engineering crisp border */
+  --ds-border-light: #E2E8F0;
+  --ds-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ds-font-mono: "SF Mono", "Roboto Mono", Consolas, Menlo, monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--ds-surface-primary);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   App Layout & Sidebar
+   -------------------------------------------------------------------------- */
+.ds-app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--ds-surface-primary);
+}
+
+.ds-sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  background-color: var(--ds-structure-primary);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #15181C;
+  z-index: 10;
+}
+
+.ds-sidebar-brand {
+  padding: 20px;
+  border-bottom: 1px solid #2C3238;
+}
+
+.ds-brand-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ds-brand-mark {
+  width: 32px;
+  height: 32px;
+  background-color: var(--ds-accent-petrol);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.ds-brand-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #FFFFFF;
+}
+
+.ds-brand-subtitle {
+  font-size: 10px;
+  color: #8E99A2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ds-sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.ds-nav-group-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6C7A86;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  padding-left: 8px;
+}
+
+.ds-nav-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ds-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #CDD5DC;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.ds-nav-item:hover {
+  background-color: #2A3036;
+  color: #FFFFFF;
+}
+
+.ds-nav-item--active {
+  background-color: #344B5E;
+  color: #FFFFFF;
+  border-color: #4A6378;
+}
+
+.ds-nav-indicator {
+  position: absolute;
+  right: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background-color: var(--ds-state-amber);
+  border-radius: 2px 0 0 2px;
+}
+
+.ds-nav-item-secondary {
+  opacity: 0.85;
+}
+
+.ds-sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #2C3238;
+  background-color: #1A1E22;
+}
+
+.ds-footer-inspection-info {
+  margin-bottom: 12px;
+}
+
+.ds-footer-sec-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: #6C7A86;
+  letter-spacing: 0.5px;
+}
+
+.ds-footer-sec-val {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.ds-sec-id {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-family: var(--ds-font-mono);
+}
+
+.ds-sec-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background-color: #344B5E;
+  color: #CDD5DC;
+  border-radius: 2px;
+}
+
+.ds-footer-sync-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background-color: #242A2F;
+  border: 1px solid #363E44;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.ds-sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ds-sync-dot-green {
+  background-color: var(--ds-state-green);
+}
+
+.ds-sync-dot-amber {
+  background-color: var(--ds-state-amber);
+}
+
+.ds-footer-mode-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #A0ACB6;
+}
+
+/* --------------------------------------------------------------------------
+   Main Viewport Canvas
+   -------------------------------------------------------------------------- */
+.ds-main-viewport {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: var(--ds-surface-primary);
+  padding: 24px 32px;
+}
+
+.ds-page-container {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* Page Header */
+.ds-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.ds-kicker-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ds-accent-petrol);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.ds-page-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ds-structure-primary);
+  letter-spacing: -0.2px;
+}
+
+.ds-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & Tags
+   -------------------------------------------------------------------------- */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--ds-font-sans);
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease;
+}
+
+.ds-btn-primary {
+  background-color: var(--ds-structure-primary);
+  color: #FFFFFF;
+}
+.ds-btn-primary:hover {
+  background-color: var(--ds-structure-secondary);
+}
+
+.ds-btn-secondary {
+  background-color: #FFFFFF;
+  color: var(--ds-structure-primary);
+  border-color: var(--ds-border);
+}
+.ds-btn-secondary:hover {
+  background-color: var(--ds-surface-secondary);
+}
+
+.ds-btn-amber {
+  background-color: var(--ds-state-amber);
+  color: #FFFFFF;
+}
+.ds-btn-amber:hover {
+  background-color: #C07912;
+}
+
+.ds-btn-red {
+  background-color: var(--ds-state-red);
+  color: #FFFFFF;
+}
+.ds-btn-red:hover {
+  background-color: #9E2E27;
+}
+
+.ds-btn-green {
+  background-color: var(--ds-state-green);
+  color: #FFFFFF;
+}
+.ds-btn-green:hover {
+  background-color: #326044;
+}
+
+.ds-btn-lg {
+  padding: 10px 18px;
+  font-size: 13px;
+}
+
+.ds-btn-compact {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.ds-btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+.ds-btn-disabled {
+  background-color: #D6D8D7;
+  color: #8E99A2;
+  cursor: not-allowed;
+}
+
+.ds-btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ds-text-muted);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ds-btn-icon:hover {
+  color: var(--ds-text-primary);
+}
+
+/* Pills & Badges */
+.ds-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--ds-border);
+  background-color: #FFFFFF;
+  color: var(--ds-text-primary);
+  border-radius: 2px;
+}
+
+.ds-pill-amber {
+  background-color: #FDF3E7;
+  border-color: #F7D4A4;
+  color: #A36209;
+}
+
+.ds-pill-red {
+  background-color: #FBEBEA;
+  border-color: #F0BBB8;
+  color: var(--ds-state-red);
+}
+
+.ds-pill-green {
+  background-color: #EDF6F0;
+  border-color: #C1DEC9;
+  color: var(--ds-state-green);
+}
+
+.ds-pill-teal {
+  background-color: #E8F4F5;
+  border-color: #B5DFE3;
+  color: var(--ds-accent-petrol);
+}
+
+.ds-badge-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ds-state-green);
+}
+
+/* Mode pill toggles */
+.ds-mode-pill-group {
+  display: flex;
+  background-color: var(--ds-surface-secondary);
+  padding: 3px;
+  border: 1px solid var(--ds-border);
+  border-radius: 3px;
+  gap: 2px;
+}
+
+.ds-mode-pill {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--ds-text-muted);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.ds-mode-pill--sim {
+  background-color: #FFFFFF;
+  color: var(--ds-text-primary);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* --------------------------------------------------------------------------
+   Cards & Panels
+   -------------------------------------------------------------------------- */
+.ds-card {
+  background-color: var(--ds-surface-card);
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.ds-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ds-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  letter-spacing: 0.5px;
+}
+
+/* --------------------------------------------------------------------------
+   Hero & Inspections Landing Page
+   -------------------------------------------------------------------------- */
+.ds-active-inspection-hero-card {
+  border-left: 4px solid var(--ds-state-amber);
+  background-color: #FFFFFF;
+}
+
+.ds-hero-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ds-border-light);
+}
+
+.ds-hero-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-mono-id {
+  font-family: var(--ds-font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+}
+
+.ds-hero-details-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.ds-hero-site-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-top: 3px;
+}
+
+.ds-hero-site-sub {
+  font-size: 12px;
+  color: var(--ds-text-muted);
+}
+
+.ds-hero-hvac-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ds-structure-secondary);
+  margin-top: 3px;
+}
+
+.ds-hero-tech-val {
+  font-size: 12px;
+  color: var(--ds-text-muted);
+}
+
+.ds-hero-progress-num {
+  font-size: 13px;
+  color: var(--ds-text-primary);
+  margin-top: 3px;
+}
+
+.ds-mini-progress-bar {
+  height: 6px;
+  background-color: var(--ds-surface-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.ds-mini-progress-fill {
+  height: 100%;
+  background-color: var(--ds-state-green);
+}
+
+.ds-hero-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--ds-border-light);
+}
+
+.ds-hero-current-task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ds-text-primary);
+}
+
+.ds-inspections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.ds-inspection-card {
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+.ds-inspection-card:hover {
+  border-color: var(--ds-structure-secondary);
+}
+
+.ds-insp-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.ds-insp-id {
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.ds-insp-date {
+  font-size: 11px;
+  color: var(--ds-text-muted);
+}
+
+.ds-insp-site {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-bottom: 2px;
+}
+
+.ds-insp-system {
+  font-size: 12px;
+  color: var(--ds-accent-petrol);
+  margin-bottom: 12px;
+}
+
+.ds-insp-progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 14px;
+  padding: 6px 0;
+  border-top: 1px solid var(--ds-border-light);
+  border-bottom: 1px solid var(--ds-border-light);
+}
+
+.ds-insp-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-leak-tag-amber {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ds-state-amber);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ds-leak-tag-green {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ds-state-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ds-link-arrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ds-structure-secondary);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Duct Route Ribbon (Active Inspection Top)
+   -------------------------------------------------------------------------- */
+.ds-route-ribbon-card {
+  padding: 16px 20px;
+}
+
+.ds-duct-route-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.ds-route-section-box {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border: 1px solid var(--ds-border);
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ds-route-node-green {
+  border-left: 4px solid var(--ds-state-green);
+}
+.ds-route-node-green .ds-route-sec-state-dot {
+  background-color: var(--ds-state-green);
+}
+
+.ds-route-node-amber {
+  border-left: 4px solid var(--ds-state-amber);
+  background-color: #FFFAF3;
+}
+.ds-route-node-amber .ds-route-sec-state-dot {
+  background-color: var(--ds-state-amber);
+}
+
+.ds-route-node-red {
+  border-left: 4px solid var(--ds-state-red);
+  background-color: #FFF6F6;
+}
+.ds-route-node-red .ds-route-sec-state-dot {
+  background-color: var(--ds-state-red);
+}
+
+.ds-route-node-gray {
+  border-left: 4px solid #CDD0CE;
+  opacity: 0.75;
+}
+.ds-route-node-gray .ds-route-sec-state-dot {
+  background-color: #A0ACB6;
+}
+
+.ds-section-active-ring {
+  outline: 2px solid var(--ds-structure-secondary);
+}
+
+.ds-route-sec-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.ds-route-sec-id {
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+}
+
+.ds-route-sec-state-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.ds-route-sec-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ds-structure-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-route-sec-status-text {
+  font-size: 10px;
+  color: var(--ds-text-muted);
+  margin-top: 2px;
+}
+
+.ds-route-segment-connector {
+  width: 16px;
+  height: 2px;
+  background-color: var(--ds-border);
+  flex-shrink: 0;
+}
+
+.ds-connector-green {
+  background-color: var(--ds-state-green);
+}
+
+/* --------------------------------------------------------------------------
+   Active Inspection Grid & Map Canvas
+   -------------------------------------------------------------------------- */
+.ds-grid-active-inspection {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+}
+
+.ds-map-container-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.ds-viewport-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ds-border);
+  background-color: #FAFAF8;
+}
+
+.ds-vp-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+}
+
+.ds-map-svg-wrap {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #F8FAFC;
+}
+
+.ds-map-svg {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+}
+
+/* Current Section Panel */
+.ds-current-section-panel {
+  padding: 20px;
+}
+
+.ds-active-sec-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-top: 2px;
+}
+
+.ds-section-status-strip {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ds-border-light);
+}
+
+.ds-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+.ds-status-red {
+  background-color: #FBEBEA;
+  color: var(--ds-state-red);
+}
+
+.ds-status-amber {
+  background-color: #FDF3E7;
+  color: var(--ds-state-amber);
+}
+
+.ds-status-green {
+  background-color: #EDF6F0;
+  color: var(--ds-state-green);
+}
+
+.ds-compact-evidence-block {
+  margin-bottom: 16px;
+}
+
+.ds-compact-sensor-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.ds-compact-sensor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background-color: #F9F9F8;
+  border: 1px solid var(--ds-border-light);
+  border-radius: 2px;
+}
+
+.ds-cs-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.ds-cs-val {
+  font-size: 11px;
+  color: var(--ds-text-muted);
+}
+
+.ds-cs-avail {
+  font-weight: 700;
+  color: var(--ds-state-green);
+}
+
+.ds-anomaly-alert-box {
+  padding: 10px 12px;
+  background-color: #FFFAF3;
+  border: 1px solid #F7D4A4;
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+
+.ds-active-btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ds-active-section-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Modals & Drawers
+   -------------------------------------------------------------------------- */
+.ds-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(32, 37, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.ds-modal-instrument {
+  background-color: #FFFFFF;
+  border: 1px solid var(--ds-structure-primary);
+  border-radius: 3px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.ds-modal-instrument-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background-color: var(--ds-structure-primary);
+  color: #FFFFFF;
+}
+
+.ds-modal-header-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-tag-amber {
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--ds-state-amber);
+  color: #FFFFFF;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.ds-tag-green {
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--ds-state-green);
+  color: #FFFFFF;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.ds-tag-mono {
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  color: #CDD5DC;
+}
+
+.ds-modal-instrument-body {
+  padding: 20px;
+}
+
+.ds-attention-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background-color: #FFFAF3;
+  border: 1px solid var(--ds-state-amber);
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.ds-attention-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #A36209;
+}
+
+.ds-attention-sub {
+  font-size: 11px;
+  color: #667078;
+}
+
+.ds-agreement-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ds-agreement-metric {
+  padding: 8px 10px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border-light);
+  border-radius: 2px;
+}
+
+.ds-ag-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ds-text-muted);
+  display: block;
+}
+
+.ds-ag-val {
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 2px;
+  display: block;
+}
+
+.ds-photo-attach-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.ds-modal-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ds-border-light);
+}
+
+/* Repair Option Buttons */
+.ds-repair-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0 16px 0;
+}
+
+.ds-repair-opt-btn {
+  padding: 10px 12px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.ds-repair-opt--active {
+  border-color: var(--ds-state-amber);
+  background-color: #FFFAF3;
+  color: #A36209;
+}
+
+.ds-input-group {
+  margin-bottom: 12px;
+}
+
+.ds-input-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ds-text-muted);
+  margin-bottom: 4px;
+}
+
+.ds-input-text {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+}
+
+/* Verification Pass Banner */
+.ds-verification-pass-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background-color: #EDF6F0;
+  border: 1px solid var(--ds-state-green);
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.ds-pass-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ds-state-green);
+}
+
+.ds-pass-sub {
+  font-size: 12px;
+  color: #326044;
+}
+
+.ds-before-after-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ds-ba-box {
+  padding: 12px;
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.ds-ba-before {
+  background-color: #FFF6F6;
+  border: 1px solid #F0BBB8;
+}
+
+.ds-ba-after {
+  background-color: #EDF6F0;
+  border: 1px solid #C1DEC9;
+}
+
+.ds-ba-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Photo Capture & Gallery
+   -------------------------------------------------------------------------- */
+.ds-photo-capture-box {
+  border: 2px dashed var(--ds-border);
+  padding: 32px 20px;
+  text-align: center;
+  background-color: #F8FAFC;
+  border-radius: 2px;
+}
+
+.ds-photo-preview-card {
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+  padding: 12px;
+  background-color: #F8FAFC;
+}
+
+.ds-photo-img-wrap {
+  position: relative;
+  width: 100%;
+  max-height: 240px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.ds-photo-preview-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.ds-photo-badge-attached {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--ds-state-green);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.ds-photo-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ds-border-light);
+  font-size: 11px;
+}
+
+.ds-photo-meta-k {
+  color: var(--ds-text-muted);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.ds-photo-meta-v {
+  font-weight: 700;
+  color: var(--ds-text-primary);
+}
+
+.ds-photos-gallery-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.ds-gallery-item {
+  width: 180px;
+  flex-shrink: 0;
+  border: 1px solid var(--ds-border);
+  border-radius: 2px;
+  overflow: hidden;
+  background-color: #FFFFFF;
+}
+
+.ds-gallery-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+}
+
+.ds-gallery-placeholder {
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #F8FAFC;
+  font-size: 10px;
+  color: var(--ds-text-muted);
+  gap: 6px;
+}
+
+.ds-gallery-caption {
+  padding: 6px 8px;
+  font-size: 10px;
+  color: var(--ds-text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Evidence Hub & Report Certificate
+   -------------------------------------------------------------------------- */
+.ds-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ds-card-evidence-summary {
+  padding: 14px 20px;
+}
+
+.ds-meta-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.ds-meta-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ds-meta-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-top: 2px;
+}
+
+.ds-val-amber { color: var(--ds-state-amber); }
+.ds-val-red { color: var(--ds-state-red); }
+.ds-val-green { color: var(--ds-state-green); }
+
+.ds-subpanel-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ds-sm-item {
+  padding: 8px 10px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border-light);
+  border-radius: 2px;
+}
+
+.ds-sm-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-top: 2px;
+  display: block;
+}
+
+.ds-commissioning-cert-card {
+  background-color: #FFFFFF;
+  border: 2px solid var(--ds-structure-primary);
+  padding: 32px;
+}
+
+.ds-cert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ds-structure-primary);
+  margin-bottom: 20px;
+}
+
+.ds-cert-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ds-cert-brand-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--ds-structure-primary);
+}
+
+.ds-cert-brand-sub {
+  font-size: 11px;
+  color: var(--ds-text-muted);
+}
+
+.ds-cert-id-tag {
+  text-align: right;
+}
+
+.ds-cert-id-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  display: block;
+}
+
+.ds-cert-id-val {
+  font-family: var(--ds-font-mono);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ds-structure-primary);
+}
+
+.ds-cert-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 16px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border);
+  margin-bottom: 20px;
+}
+
+.ds-cert-meta-k {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  display: block;
+}
+
+.ds-cert-meta-v {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ds-structure-primary);
+  margin-top: 2px;
+  display: block;
+}
+
+.ds-cert-map-schematic {
+  padding: 12px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border);
+  margin-bottom: 20px;
+}
+
+.ds-cert-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ds-cert-summary-box {
+  padding: 12px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border);
+  text-align: center;
+}
+
+.ds-summary-k {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ds-text-muted);
+  display: block;
+}
+
+.ds-summary-v {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ds-structure-primary);
+  margin-top: 4px;
+  display: block;
+}
+
+.ds-cert-block-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ds-structure-primary);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.ds-defect-report-item {
+  border: 1px solid var(--ds-border);
+  padding: 16px;
+}
+
+.ds-defect-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ds-border-light);
+}
+
+.ds-defect-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.ds-defect-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ds-defect-subhead {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ds-structure-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.ds-defect-kv {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--ds-border-light);
+}
+
+.ds-cert-signoff-block {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid var(--ds-border);
+  font-size: 12px;
+}
+
+/* Engineering Table */
+.ds-table-responsive {
+  overflow-x: auto;
+}
+
+.ds-engineering-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.ds-engineering-table th {
+  padding: 8px 12px;
+  background-color: #F1F4F6;
+  color: var(--ds-structure-primary);
+  font-size: 10px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--ds-border);
+  letter-spacing: 0.5px;
+}
+
+.ds-engineering-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ds-border-light);
+  color: var(--ds-text-primary);
+}
+
+.ds-td-mono {
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+}
+
+.ds-td-bold {
+  font-weight: 700;
+}
+
+.ds-td-highlight {
+  font-weight: 700;
+  color: var(--ds-state-amber);
+}
+
+/* Sync Page */
+.ds-sync-hero-card {
+  border-left: 4px solid var(--ds-state-green);
+  margin-bottom: 20px;
+}
+
+.ds-sync-status-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ds-sync-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background-color: #EDF6F0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-sync-hero-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ds-structure-primary);
+}
+
+.ds-sync-hero-sub {
+  font-size: 12px;
+  color: var(--ds-text-muted);
+}
+
+.ds-sync-success-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  background-color: #EDF6F0;
+  color: var(--ds-state-green);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 2px;
+}
+
+.ds-sync-queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ds-queue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background-color: #F8FAFC;
+  border: 1px solid var(--ds-border-light);
+  border-radius: 2px;
+}
+
+.ds-queue-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .ds-grid-active-inspection {
+    grid-template-columns: 1fr;
+  }
+  .ds-grid-2col {
+    grid-template-columns: 1fr;
+  }
+  .ds-meta-grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .ds-cert-summary-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ds-app-layout {
+    flex-direction: column;
+  }
+  .ds-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+  }
+  .ds-main-viewport {
+    padding: 16px;
+  }
+  .ds-hero-details-grid {
+    grid-template-columns: 1fr;
+  }
+  .ds-hero-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .ds-cert-metadata-grid {
+    grid-template-columns: 1fr;
+  }
+  .ds-defect-details-grid {
+    grid-template-columns: 1fr;
+  }
+  .ds-cert-signoff-block {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

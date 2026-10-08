@@ -1,14 +1,15 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { DUCT_PATH_DATA, SEVERITY_CONFIG } from '../../data/leaksData';
+import { SEVERITY_CONFIG } from '../../data/leaksData';
 
-const SVG_WIDTH = 1817;
-const SVG_HEIGHT = 2255;
+// We use a normalized 1000x1000 coordinate system for the SVG overlay
+const SVG_WIDTH = 1000;
+const SVG_HEIGHT = 1000;
 
 export default function DuctMapCanvas({
   leaks,
   selectedLeakId,
   onSelectLeak,
-  baseOpacity,
+  baseOpacity = 1.0,
   zoom,
   pan,
   rotation,
@@ -18,7 +19,7 @@ export default function DuctMapCanvas({
   pendingLeakData,
   onPlacePin,
   onCancelSelectLocation,
-  ductGlow = true,
+  floorPlanUrl,
 }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
@@ -188,79 +189,20 @@ export default function DuctMapCanvas({
               LAYER 1: Base Floorplan Layer
               ═══════════════════════════════════════════════════════════════════ */}
           <g className="layer-base-floorplan" style={{ opacity: baseOpacity, transition: 'opacity 0.2s ease' }}>
-            <image
-              href="/floorplan.svg"
-              width={SVG_WIDTH}
-              height={SVG_HEIGHT}
-              preserveAspectRatio="xMidYMid meet"
-            />
+            {floorPlanUrl ? (
+              <image
+                href={floorPlanUrl}
+                width={SVG_WIDTH}
+                height={SVG_HEIGHT}
+                preserveAspectRatio="xMidYMid meet"
+              />
+            ) : (
+              <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="#F8FAFC" />
+            )}
           </g>
 
           {/* ═══════════════════════════════════════════════════════════════════
-              LAYER 2: Duct Network Layer (Bright Electric Blue: #00E5FF, 4px)
-              ═══════════════════════════════════════════════════════════════════ */}
-          <g
-            className="layer-ducts"
-            filter={ductGlow ? 'url(#duct-electric-glow)' : undefined}
-          >
-            {/* Background casing / ambient duct stroke */}
-            <path
-              d={DUCT_PATH_DATA.mainLoop}
-              fill="none"
-              stroke="#005B66"
-              strokeWidth="10"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              opacity="0.4"
-            />
-            {DUCT_PATH_DATA.corridorSpines.map((dStr, idx) => (
-              <path
-                key={`casing-${idx}`}
-                d={dStr}
-                fill="none"
-                stroke="#005B66"
-                strokeWidth="10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                opacity="0.4"
-              />
-            ))}
-
-            {/* Primary Electric Blue High-Visibility Core Path (#00E5FF, 4px) */}
-            <path
-              d={DUCT_PATH_DATA.mainLoop}
-              fill="none"
-              stroke="#00E5FF"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="duct-path-core"
-            />
-            {DUCT_PATH_DATA.corridorSpines.map((dStr, idx) => (
-              <path
-                key={`duct-spine-${idx}`}
-                d={dStr}
-                fill="none"
-                stroke="#00E5FF"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="duct-path-core"
-              />
-            ))}
-
-            {/* Duct Airflow Arrow / Junction Markers */}
-            <circle cx="472" cy="444" r="6" fill="#00E5FF" />
-            <circle cx="1372" cy="444" r="6" fill="#00E5FF" />
-            <circle cx="1372" cy="1730" r="6" fill="#00E5FF" />
-            <circle cx="472" cy="1730" r="6" fill="#00E5FF" />
-            <circle cx="682" cy="1344" r="5" fill="#00E5FF" />
-            <circle cx="922" cy="1344" r="5" fill="#00E5FF" />
-            <circle cx="1162" cy="1344" r="5" fill="#00E5FF" />
-          </g>
-
-          {/* ═══════════════════════════════════════════════════════════════════
-              LAYER 3: Annotation Layer (Dynamic Leak Pins)
+              LAYER 2: Annotation Layer (Dynamic Leak Pins)
               ═══════════════════════════════════════════════════════════════════ */}
           <g className="layer-annotations">
             {leaks.map((leak) => {
@@ -415,7 +357,7 @@ export default function DuctMapCanvas({
                       fontFamily="Arial, sans-serif"
                       pointerEvents="none"
                     >
-                      {leak.roomNumber.replace('Room ', '')} · {Math.round(leak.fusedConfidence)}%
+                      {(leak.roomNumber || leak.room_id || 'Unknown').replace('Room ', '')} · {Math.round(leak.fusedConfidence || 100)}%
                     </text>
                   </g>
                 </g>

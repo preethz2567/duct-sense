@@ -23,7 +23,7 @@
 .spatial-viewer-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 72px);
+  height: 100%;
   min-height: 580px;
   background: radial-gradient(circle at 50% 30%, #131d31 0%, #080d17 100%);
   overflow: hidden;

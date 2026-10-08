@@ -1,249 +1,115 @@
 import React, { useState } from 'react';
-import { SEVERITY_CONFIG } from '../../data/leaksData';
+import { API_BASE } from '../../services/apiService';
 
 export default function InspectionDrawer({
   selectedLeak,
   onClose,
-  onDeleteLeak,
   onAcknowledgeLeak,
 }) {
   const [isImageExpanded, setIsImageExpanded] = useState(false);
 
   if (!selectedLeak) return null;
 
-  const severityConfig = SEVERITY_CONFIG[selectedLeak.severity] || SEVERITY_CONFIG['No Leak'];
+  const severityColor = selectedLeak.severity === 'High' ? '#e53935' : (selectedLeak.severity === 'Medium' ? '#fb8c00' : '#4caf50');
+  const typeLabel = selectedLeak.finding_type ? selectedLeak.finding_type.replace('_', ' ') : 'Unknown';
 
   return (
-    <aside className="inspection-drawer open" aria-label="QA Inspection Panel">
+    <aside className="inspection-drawer open" style={{ width: '350px', backgroundColor: '#101828', borderLeft: '1px solid #1f2937', color: 'white' }}>
       {/* Drawer Header */}
-      <div className="drawer-header" style={{ borderLeftColor: severityConfig.borderColor }}>
-        <div className="drawer-title-block">
-          <div className="drawer-pre-title">QA INSPECTION PANEL</div>
-          <h2 className="drawer-room-title">{selectedLeak.roomNumber}</h2>
+      <div style={{ padding: '20px', borderBottom: '1px solid #1f2937', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <div style={{ fontSize: '11px', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em' }}>FINDING DETAILS</div>
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: 'white' }}>{selectedLeak.finding_id}</h2>
         </div>
         <button
-          type="button"
-          className="btn-drawer-close"
           onClick={onClose}
-          title="Close inspection panel"
-          aria-label="Close"
+          style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '18px' }}
         >
           ✕
         </button>
       </div>
 
-      {/* Severity & Status Banner */}
-      <div
-        className="drawer-severity-strip"
-        style={{
-          backgroundColor: severityConfig.bgColor,
-          borderColor: severityConfig.borderColor,
-        }}
-      >
-        <div className="severity-badge-large" style={{ color: severityConfig.textColor }}>
-          <span className="dot" style={{ backgroundColor: severityConfig.color }}></span>
-          <span className="badge-text">{severityConfig.label} Severity</span>
-        </div>
-        <div className="fused-score-pill" style={{ color: severityConfig.textColor }}>
-          <span>Fused:</span>
-          <strong>{selectedLeak.fusedConfidence.toFixed(1)}%</strong>
-        </div>
+      {/* Type Banner */}
+      <div style={{ padding: '12px 20px', backgroundColor: `${severityColor}20`, borderBottom: `1px solid ${severityColor}40`, display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: severityColor }}></div>
+        <span style={{ fontWeight: 600, fontSize: '13px', color: severityColor }}>{typeLabel}</span>
       </div>
 
       {/* Drawer Body Scrollable Content */}
-      <div className="drawer-body">
-        {/* Overall Fused Confidence Card */}
-        <div className="metric-card">
-          <div className="metric-header">
-            <span className="metric-title">Fused Overall Leak Confidence</span>
-            <span className="metric-score" style={{ color: severityConfig.textColor }}>
-              {selectedLeak.fusedConfidence.toFixed(1)}%
-            </span>
-          </div>
-          <div className="confidence-track">
-            <div
-              className="confidence-fill"
-              style={{
-                width: `${Math.min(100, Math.max(0, selectedLeak.fusedConfidence))}%`,
-                backgroundColor: severityConfig.color,
-              }}
-            ></div>
-          </div>
-          <div className="confidence-scale-labels">
-            <span>0% (Safe)</span>
-            <span>30%</span>
-            <span>50%</span>
-            <span>70%</span>
-            <span>85%+ (Critical)</span>
+      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto', flex: 1 }}>
+        
+        {/* Room/Zone Context */}
+        <div>
+          <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>ROOM / ZONE CONTEXT</div>
+          <div style={{ fontSize: '14px', color: '#f3f4f6' }}>{selectedLeak.room_id || 'Unknown Zone'}</div>
+        </div>
+
+        {/* Technician Notes */}
+        <div>
+          <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>TECHNICIAN NOTES</div>
+          <div style={{ fontSize: '14px', color: '#f3f4f6', backgroundColor: '#1f2937', padding: '12px', borderRadius: '6px' }}>
+            {selectedLeak.notes || 'No notes provided.'}
           </div>
         </div>
 
-        {/* Individual Sensor Breakdown (Thermal %, Pressure %, Audio %) */}
-        <div className="section-block">
-          <h3 className="section-heading">
-            <span>📡</span> Individual Sensor Breakdown
-          </h3>
-          <div className="sensor-grid">
-            {/* Thermal Sensor */}
-            <div className="sensor-card sensor-thermal">
-              <div className="sensor-top">
-                <span className="sensor-icon">🌡️</span>
-                <span className="sensor-name">Thermal Sensor</span>
-                <span className="sensor-weight">40% wt</span>
-              </div>
-              <div className="sensor-val-row">
-                <span className="sensor-percent">{selectedLeak.thermalConfidence}%</span>
-                <span className="sensor-status-tag">
-                  {selectedLeak.thermalConfidence >= 70 ? 'Hot Anomaly' : 'Nominal'}
-                </span>
-              </div>
-              <div className="sensor-bar-track">
-                <div
-                  className="sensor-bar-fill thermal-fill"
-                  style={{ width: `${selectedLeak.thermalConfidence}%` }}
-                ></div>
-              </div>
+        {/* Status & Repair */}
+        <div>
+          <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>WORKFLOW STATUS</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ backgroundColor: '#1f2937', padding: '12px', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#9ca3af' }}>Finding Status</div>
+              <div style={{ fontSize: '13px', color: '#f3f4f6', marginTop: '4px' }}>{selectedLeak.status}</div>
             </div>
-
-            {/* Differential Pressure Sensor */}
-            <div className="sensor-card sensor-pressure">
-              <div className="sensor-top">
-                <span className="sensor-icon">💨</span>
-                <span className="sensor-name">Diff. Pressure</span>
-                <span className="sensor-weight">30% wt</span>
-              </div>
-              <div className="sensor-val-row">
-                <span className="sensor-percent">{selectedLeak.pressureConfidence}%</span>
-                <span className="sensor-raw-val">{selectedLeak.pressureValuePa.toFixed(1)} Pa</span>
-              </div>
-              <div className="sensor-bar-track">
-                <div
-                  className="sensor-bar-fill pressure-fill"
-                  style={{ width: `${selectedLeak.pressureConfidence}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Audio/Acoustic Sensor */}
-            <div className="sensor-card sensor-audio">
-              <div className="sensor-top">
-                <span className="sensor-icon">🔊</span>
-                <span className="sensor-name">Acoustic Sensor</span>
-                <span className="sensor-weight">30% wt</span>
-              </div>
-              <div className="sensor-val-row">
-                <span className="sensor-percent">{selectedLeak.audioConfidence}%</span>
-                <span className="sensor-raw-val">{selectedLeak.audioValueDb.toFixed(1)} dB</span>
-              </div>
-              <div className="sensor-bar-track">
-                <div
-                  className="sensor-bar-fill audio-fill"
-                  style={{ width: `${selectedLeak.audioConfidence}%` }}
-                ></div>
-              </div>
+            <div style={{ backgroundColor: '#1f2937', padding: '12px', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#9ca3af' }}>Repair Type</div>
+              <div style={{ fontSize: '13px', color: '#f3f4f6', marginTop: '4px' }}>{selectedLeak.repair_type || 'None'}</div>
             </div>
           </div>
         </div>
 
-        {/* Rendered Thermal Image Snapshot */}
-        <div className="section-block">
-          <div className="thermal-section-header">
-            <h3 className="section-heading">
-              <span>📷</span> Rendered Thermal Image Snapshot
-            </h3>
-            <button
-              type="button"
-              className="btn-expand-image"
-              onClick={() => setIsImageExpanded(!isImageExpanded)}
-              title="Toggle full thermal image view"
+        {/* Evidence Thumbnail */}
+        {selectedLeak.photo && (
+          <div>
+            <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '8px' }}>EVIDENCE</div>
+            <div 
+              style={{ width: '100%', height: '200px', backgroundColor: '#1f2937', borderRadius: '6px', overflow: 'hidden', cursor: 'pointer', border: '1px solid #374151' }}
+              onClick={() => setIsImageExpanded(true)}
             >
-              {isImageExpanded ? 'Collapse' : 'Expand ↗'}
-            </button>
-          </div>
-
-          <div className={`thermal-snapshot-container ${isImageExpanded ? 'expanded' : ''}`}>
-            {selectedLeak.thermalImagePath ? (
-              <img
-                src={selectedLeak.thermalImagePath}
-                alt={`Thermal Scan for ${selectedLeak.roomNumber}`}
-                className="thermal-snapshot-img"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/assets/thermal/room_1851.jpg';
-                }}
+              <img 
+                src={selectedLeak.photo.startsWith('data:') || selectedLeak.photo.startsWith('http') ? selectedLeak.photo : `${API_BASE}/photos/${selectedLeak.photo}`} 
+                alt="Evidence" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = '<div style="padding:20px;text-align:center;color:#9ca3af">Image Not Found</div>'; }}
               />
-            ) : (
-              <div className="thermal-placeholder">
-                <span>🌡️ Thermal Infrared Heatmap Generated</span>
-              </div>
-            )}
-            <div className="thermal-overlay-badge">
-              <span>FLIR IR · Ironbow Palette</span>
             </div>
           </div>
-          <p className="thermal-caption">
-            Captured infrared heat pattern displaying temperature plume at duct interface.
-          </p>
-        </div>
-
-        {/* Precise Spatial Coordinates & Timestamp */}
-        <div className="section-block">
-          <h3 className="section-heading">
-            <span>📍</span> Precise Spatial Coordinates & Metadata
-          </h3>
-          <div className="meta-list">
-            <div className="meta-row">
-              <span className="meta-label">Map Coordinates (%):</span>
-              <span className="meta-value coordinate-pill">
-                X: {selectedLeak.xPercent.toFixed(2)}% · Y: {selectedLeak.yPercent.toFixed(2)}%
-              </span>
-            </div>
-            <div className="meta-row">
-              <span className="meta-label">SVG Anchor:</span>
-              <span className="meta-value">
-                ({Math.round((selectedLeak.xPercent / 100) * 1817)} px,{' '}
-                {Math.round((selectedLeak.yPercent / 100) * 2255)} px)
-              </span>
-            </div>
-            <div className="meta-row">
-              <span className="meta-label">Timestamp:</span>
-              <span className="meta-value">{selectedLeak.timestamp || '2026-09-28 14:32:00'}</span>
-            </div>
-            <div className="meta-row">
-              <span className="meta-label">Assigned Node / Inspector:</span>
-              <span className="meta-value">{selectedLeak.inspector || 'DuctSense Automated Rover'}</span>
-            </div>
-            {selectedLeak.notes && (
-              <div className="meta-row notes-row">
-                <span className="meta-label">Field Notes:</span>
-                <span className="meta-value notes-text">{selectedLeak.notes}</span>
-              </div>
-            )}
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Drawer Footer Actions */}
-      <div className="drawer-footer">
+      <div style={{ padding: '20px', borderTop: '1px solid #1f2937', display: 'flex', gap: '12px' }}>
         <button
-          type="button"
-          className="btn-drawer-action btn-ack"
-          onClick={() => onAcknowledgeLeak && onAcknowledgeLeak(selectedLeak.id)}
-          title="Mark inspection as reviewed / acknowledged"
+          onClick={() => onAcknowledgeLeak && onAcknowledgeLeak(selectedLeak.finding_id || selectedLeak.id)}
+          disabled={selectedLeak.status === 'VERIFIED'}
+          style={{ flex: 1, padding: '12px', backgroundColor: selectedLeak.status === 'VERIFIED' ? '#374151' : '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: selectedLeak.status === 'VERIFIED' ? 'not-allowed' : 'pointer' }}
         >
-          <span>✓ Acknowledge QA</span>
+          {selectedLeak.status === 'VERIFIED' ? '✓ Acknowledged' : 'Verify / Acknowledge'}
         </button>
-        {onDeleteLeak && (
-          <button
-            type="button"
-            className="btn-drawer-action btn-delete"
-            onClick={() => onDeleteLeak(selectedLeak.id)}
-            title="Delete this pin annotation"
-          >
-            <span>🗑 Delete Pin</span>
-          </button>
-        )}
       </div>
+
+      {/* Image Modal (Lightroom style) */}
+      {isImageExpanded && selectedLeak.photo && (
+        <div 
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          onClick={() => setIsImageExpanded(false)}
+        >
+          <img 
+            src={selectedLeak.photo.startsWith('data:') || selectedLeak.photo.startsWith('http') ? selectedLeak.photo : `${API_BASE}/photos/${selectedLeak.photo}`} 
+            alt="Evidence Full" 
+            style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain' }} 
+          />
+        </div>
+      )}
     </aside>
   );
 }

@@ -1,223 +1,391 @@
-// src/pages/CommissioningReport.jsx
-import React from 'react';
-import {
-  FileText,
-  Download,
-  CheckCircle2,
-  AlertTriangle,
-  Calendar,
-  Building,
-  User,
-  ShieldCheck,
-  Camera,
-  Thermometer,
-  Gauge,
-  Mic,
-  MapPin,
-} from 'lucide-react';
+import React, { useMemo } from 'react';
+import { Download, FileText } from 'lucide-react';
+import { mapSessionToReportModel } from '../services/reportMapper';
+import './CommissioningReport.css';
 
 export default function CommissioningReport({ session }) {
-  const { activeAnomaly } = session;
-  const currentSection = session.sections.find((s) => s.id === session.activeSectionId) || session.sections[2];
+  const report = useMemo(() => mapSessionToReportModel(session), [session]);
 
-  const exportCSV = () => {
-    const content = `DUCTSENSE HVAC COMMISSIONING REPORT\nInspection ID,${session.id}\nFacility,${session.site}\nBuilding,${session.building}\nLevel,${session.level}\nAHU,${session.system}\nLead Technician,${session.technician}\nDate,${session.date}\n\nSection,Plan Location,Pressure Initial,Thermal Score,Acoustic Score,Repair Action,Verification Status\n${currentSection.id},0.50m,+205.8 Pa,0.86,0.74,"${activeAnomaly?.repair?.action || 'Joint Resealed'}","VERIFIED PASS"`;
-    const uri = 'data:text/csv;charset=utf-8,' + encodeURI(content);
-    const link = document.createElement('a');
-    link.href = uri;
-    link.download = `ductsense_commissioning_${session.id}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  if (!report) return <div className="ds-report-placeholder">No data available</div>;
 
   const handlePrint = () => {
     window.print();
   };
 
-  return (
-    <div className="ds-page-container ds-instrument-view ds-report-print-target">
-      {/* Header */}
-      <header className="ds-page-header ds-header-compact">
-        <div>
-          <div className="ds-kicker-label">DOCUMENTATION LAYER</div>
-          <h1 className="ds-page-title">HVAC COMMISSIONING CERTIFICATE</h1>
-        </div>
+  const exportCSV = () => {
+    // Basic CSV export matching requirements
+    const content = `DUCTSENSE HVAC COMMISSIONING REPORT
+Inspection ID,${report.documentControl.inspectionId}
+Facility,${report.inspectionDetails.site}
+Building,${report.inspectionDetails.building}
+Level,${report.inspectionDetails.level}
+AHU,${report.inspectionDetails.system}
+Lead Technician,${report.documentControl.preparedBy}
+Date,${report.documentControl.inspectionDate}
 
+Finding ID,Location,Type,Status,Date/Time,Technician
+${report.findings.map(f => `${f.id},"${f.location}",${f.type},${f.status},"${f.dateTime}",${f.technician}`).join('\n')}
+`;
+    const uri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
+    const link = document.createElement('a');
+    link.href = uri;
+    link.download = `ductsense_commissioning_${report.documentControl.inspectionId}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <div className="ds-page-container ds-report-page-container">
+      {/* Non-printable Action Header */}
+      <header className="ds-page-header ds-header-compact ds-no-print">
+        <div>
+          <div className="ds-kicker-label" style={{ color: '#000' }}>DOCUMENTATION LAYER</div>
+          <h1 className="ds-page-title" style={{ color: '#000' }}>HVAC COMMISSIONING REPORT PREVIEW</h1>
+        </div>
         <div className="ds-header-actions">
           <button className="ds-btn ds-btn-secondary ds-btn-compact" onClick={exportCSV}>
             <Download size={13} /> Export CSV
           </button>
-          <button className="ds-btn ds-btn-primary ds-btn-compact" onClick={handlePrint}>
+          <button className="ds-btn ds-btn-primary ds-btn-compact" onClick={handlePrint} style={{ backgroundColor: '#000', color: '#fff' }}>
             <FileText size={13} /> Print / PDF Record
           </button>
         </div>
       </header>
 
-      {/* Main Certificate Sheet */}
-      <div className="ds-card ds-commissioning-cert-card">
-        {/* Document Top */}
-        <div className="ds-cert-header">
-          <div className="ds-cert-brand">
-            <div className="ds-brand-mark">DS</div>
-            <div>
-              <div className="ds-cert-brand-title">DUCTSENSE FIELD COMMISSIONING RECORD</div>
-              <div className="ds-cert-brand-sub">
-                Technician-Led Multimodal HVAC Leakage Diagnostic & Remediation Certificate
-              </div>
+      {/* Printable Report Canvas */}
+      <div className="ds-print-canvas">
+        
+        {/* --- PAGE 1: TITLE PAGE --- */}
+        <div className="ds-print-page">
+          <div className="ds-report-title-header">
+            <h2>DUCTSENSE</h2>
+            <p>Edge-First HVAC Leak Inspection System</p>
+          </div>
+          <div className="ds-report-main-title">
+            <h1>HVAC DUCT INSPECTION & COMMISSIONING REPORT</h1>
+          </div>
+          
+          <div className="ds-report-section">
+            <table className="ds-report-table ds-table-title-meta">
+              <tbody>
+                <tr><td><strong>Inspection ID</strong></td><td>{report.documentControl.inspectionId}</td></tr>
+                <tr><td><strong>Site / Facility</strong></td><td>{report.inspectionDetails.site}</td></tr>
+                <tr><td><strong>Building</strong></td><td>{report.inspectionDetails.building}</td></tr>
+                <tr><td><strong>Floor / Level</strong></td><td>{report.inspectionDetails.level}</td></tr>
+                <tr><td><strong>Area / Room</strong></td><td>{report.inspectionDetails.area}</td></tr>
+                <tr><td><strong>AHU / HVAC System</strong></td><td>{report.inspectionDetails.system}</td></tr>
+                <tr><td><strong>Duct / Section</strong></td><td>{report.inspectionDetails.section}</td></tr>
+                <tr><td><strong>Inspection Date</strong></td><td>{report.documentControl.inspectionDate}</td></tr>
+                <tr><td><strong>Technician</strong></td><td>{report.documentControl.preparedBy}</td></tr>
+                <tr><td><strong>Reviewer</strong></td><td>{report.documentControl.reviewedBy}</td></tr>
+                <tr><td><strong>Report Version</strong></td><td>{report.documentControl.revision}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ds-report-purpose">
+            <strong>REPORT PURPOSE</strong>
+            <p>This report documents the inspection, sensor evidence, field findings, repair actions and verification results recorded during the DuctSense HVAC duct inspection.</p>
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">1. DOCUMENT CONTROL</h3>
+            <table className="ds-report-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Report ID</td><td>{report.documentControl.reportId}</td></tr>
+                <tr><td>Inspection ID</td><td>{report.documentControl.inspectionId}</td></tr>
+                <tr><td>Revision</td><td>{report.documentControl.revision}</td></tr>
+                <tr><td>Prepared By</td><td>{report.documentControl.preparedBy}</td></tr>
+                <tr><td>Reviewed By</td><td>{report.documentControl.reviewedBy}</td></tr>
+                <tr><td>Inspection Date</td><td>{report.documentControl.inspectionDate}</td></tr>
+                <tr><td>Generated Date</td><td>{report.documentControl.generatedDate}</td></tr>
+                <tr><td>Status</td><td>{report.documentControl.status}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">2. EXECUTIVE SUMMARY</h3>
+            <table className="ds-report-table">
+              <tbody>
+                <tr><td><strong>Inspection Status</strong></td><td>{report.executiveSummary.inspectionStatus}</td></tr>
+                <tr><td><strong>Overall Finding</strong></td><td>{report.executiveSummary.overallFinding}</td></tr>
+                <tr><td><strong>Sections Inspected</strong></td><td>{report.executiveSummary.sectionsInspected}</td></tr>
+                <tr><td><strong>Findings Recorded</strong></td><td>{report.executiveSummary.findingsRecorded}</td></tr>
+                <tr><td><strong>Repairs Recorded</strong></td><td>{report.executiveSummary.repairsRecorded}</td></tr>
+                <tr><td><strong>Verification Status</strong></td><td>{report.executiveSummary.verificationStatus}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="ds-report-footer">
+            <span>Inspection ID: {report.documentControl.inspectionId} | Report Revision: {report.documentControl.revision} | Page 1 of 4</span>
+          </div>
+        </div>
+
+        {/* --- PAGE 2: FINDINGS & SENSOR EVIDENCE --- */}
+        <div className="ds-print-page">
+          <div className="ds-report-header-print">
+            <strong>DUCTSENSE</strong> - HVAC DUCT INSPECTION & COMMISSIONING REPORT
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">3. INSPECTION LOCATION / FLOOR PLAN</h3>
+            <table className="ds-report-table">
+              <tbody>
+                <tr><td><strong>Plan ID</strong></td><td>{report.inspectionDetails.planId}</td></tr>
+                <tr><td><strong>Plan Version</strong></td><td>{report.inspectionDetails.planVersion}</td></tr>
+                <tr><td><strong>Room / Area</strong></td><td>{report.inspectionDetails.area}</td></tr>
+                <tr><td><strong>Floor plan</strong></td><td>Not available</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">4. FINDINGS TABLE</h3>
+            {report.findings.length === 0 ? (
+              <p>No findings recorded.</p>
+            ) : (
+              <table className="ds-report-table ds-table-full">
+                <thead>
+                  <tr>
+                    <th>Finding ID</th>
+                    <th>Location</th>
+                    <th>Finding Type</th>
+                    <th>Status</th>
+                    <th>Date/Time</th>
+                    <th>Technician</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.findings.map((f, i) => (
+                    <tr key={i}>
+                      <td>{f.id}</td>
+                      <td>{f.location}</td>
+                      <td>{f.type}</td>
+                      <td>{f.status}</td>
+                      <td>{f.dateTime}</td>
+                      <td>{f.technician}</td>
+                      <td>{f.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          {report.sensorEvidence.pressure && (
+            <div className="ds-report-section">
+              <h3 className="ds-report-h3">5. SENSOR EVIDENCE — PRESSURE</h3>
+              <table className="ds-report-table">
+                <tbody>
+                  <tr><td><strong>Sensor 1</strong></td><td>{report.sensorEvidence.pressure.sensor1}</td></tr>
+                  <tr><td><strong>Sensor 2</strong></td><td>{report.sensorEvidence.pressure.sensor2}</td></tr>
+                  <tr><td><strong>Pressure 1</strong></td><td>{report.sensorEvidence.pressure.p1} hPa</td></tr>
+                  <tr><td><strong>Pressure 2</strong></td><td>{report.sensorEvidence.pressure.p2} hPa</td></tr>
+                  <tr><td><strong>Raw ΔP</strong></td><td>{report.sensorEvidence.pressure.rawDeltaP} Pa</td></tr>
+                  <tr><td><strong>Calibration Offset</strong></td><td>{report.sensorEvidence.pressure.calibrationOffset} Pa</td></tr>
+                  <tr><td><strong>Corrected ΔP</strong></td><td>{report.sensorEvidence.pressure.correctedDeltaP} Pa</td></tr>
+                  <tr><td><strong>Temperature 1</strong></td><td>{report.sensorEvidence.pressure.t1} °C</td></tr>
+                  <tr><td><strong>Temperature 2</strong></td><td>{report.sensorEvidence.pressure.t2} °C</td></tr>
+                  <tr><td><strong>Timestamp</strong></td><td>{report.sensorEvidence.pressure.timestamp}</td></tr>
+                </tbody>
+              </table>
             </div>
-          </div>
-          <div className="ds-cert-id-tag">
-            <span className="ds-cert-id-label">REPORT ID</span>
-            <span className="ds-cert-id-val">{session.id}</span>
-          </div>
-        </div>
+          )}
 
-        {/* Metadata Grid */}
-        <div className="ds-cert-metadata-grid">
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">FACILITY / SITE</span>
-            <span className="ds-cert-meta-v">{session.site}</span>
-          </div>
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">BUILDING & LEVEL</span>
-            <span className="ds-cert-meta-v">{session.building} · {session.level}</span>
-          </div>
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">HVAC AIR SYSTEM</span>
-            <span className="ds-cert-meta-v">{session.system}</span>
-          </div>
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">LEAD INSPECTOR</span>
-            <span className="ds-cert-meta-v">{session.technician}</span>
-          </div>
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">INSPECTION DATE</span>
-            <span className="ds-cert-meta-v">{session.date}</span>
-          </div>
-          <div className="ds-cert-meta-item">
-            <span className="ds-cert-meta-k">INSTRUMENTATION</span>
-            <span className="ds-cert-meta-v">BMP280 Tap Pair + FLIR + INMP441</span>
-          </div>
-        </div>
-
-        {/* Inspection Route Spatial Map Representation */}
-        <div className="ds-cert-map-block">
-          <div className="ds-cert-block-title">INSPECTION ROUTE & POC RIG SCHEMATIC</div>
-          <div className="ds-cert-map-schematic">
-            <svg viewBox="0 0 600 120" className="ds-svg-fluid">
-              <rect width="600" height="120" fill="#F8FAFC" rx="2" stroke="#CDD0CE" />
-              {/* Duct line */}
-              <line x1="50" y1="60" x2="550" y2="60" stroke="#344B5E" strokeWidth="4" />
-              {/* Markers */}
-              {[
-                { name: 'D-01 (Pass)', x: 90, color: '#3F7655' },
-                { name: 'D-02 (Pass)', x: 200, color: '#3F7655' },
-                { name: 'D-03 (Leak Remedied)', x: 310, color: '#D88A19' },
-                { name: 'D-04 (Pending)', x: 420, color: '#667078' },
-                { name: 'D-05 (Pending)', x: 520, color: '#667078' },
-              ].map((m, idx) => (
-                <g key={idx} transform={`translate(${m.x}, 60)`}>
-                  <circle cx="0" cy="0" r="8" fill={m.color} />
-                  <text x="0" y="24" fill="#20252A" fontSize="9" fontWeight="bold" textAnchor="middle">
-                    {m.name}
-                  </text>
-                </g>
-              ))}
-            </svg>
-          </div>
-        </div>
-
-        {/* Summary Metric Strip */}
-        <div className="ds-cert-summary-strip">
-          <div className="ds-cert-summary-box">
-            <span className="ds-summary-k">SECTIONS INSPECTED</span>
-            <span className="ds-summary-v">3 / 5</span>
-          </div>
-          <div className="ds-cert-summary-box">
-            <span className="ds-summary-k">LEAKS DETECTED</span>
-            <span className="ds-summary-v ds-val-amber">1</span>
-          </div>
-          <div className="ds-cert-summary-box">
-            <span className="ds-summary-k">CORRECTIVE REPAIRS</span>
-            <span className="ds-summary-v">1</span>
-          </div>
-          <div className="ds-cert-summary-box ds-box-verified">
-            <span className="ds-summary-k">REPAIRS VERIFIED (PASS)</span>
-            <span className="ds-summary-v ds-val-green">100%</span>
-          </div>
-        </div>
-
-        {/* Detailed Defect & Remediation Log Table */}
-        <div className="ds-cert-defects-block">
-          <div className="ds-cert-block-title">CONFIRMED DEFECT & REMEDIATION RECORD</div>
-
-          <div className="ds-card ds-defect-report-item">
-            <div className="ds-defect-head">
-              <div>
-                <span className="ds-sec-badge">SECTION D-03</span>
-                <span className="ds-defect-title">Server Room Supply Duct (Controlled Test Port)</span>
-              </div>
-              <span className="ds-badge-green"><CheckCircle2 size={13} /> VERIFIED & SEALED (PASS)</span>
+          {report.sensorEvidence.acoustic && (
+            <div className="ds-report-section">
+              <h3 className="ds-report-h3">6. SENSOR EVIDENCE — ACOUSTIC</h3>
+              <table className="ds-report-table">
+                <tbody>
+                  <tr><td><strong>Acoustic Status</strong></td><td>{report.sensorEvidence.acoustic.status}</td></tr>
+                  <tr><td><strong>Signal Level</strong></td><td>{report.sensorEvidence.acoustic.signalLevel}</td></tr>
+                  <tr><td><strong>Relevant Feature</strong></td><td>{report.sensorEvidence.acoustic.feature}</td></tr>
+                  <tr><td><strong>Timestamp</strong></td><td>{report.sensorEvidence.acoustic.timestamp}</td></tr>
+                  <tr><td><strong>Finding Association</strong></td><td>{report.sensorEvidence.acoustic.association}</td></tr>
+                </tbody>
+              </table>
             </div>
+          )}
 
-            <div className="ds-defect-details-grid">
-              {/* Initial Signature */}
-              <div>
-                <div className="ds-defect-subhead">1. Initial Defect Signature</div>
-                <div className="ds-defect-kv">
-                  <span>Plan Location:</span> <strong>0.50 m from inlet flange</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Field Photo:</span> <strong>Attached (Visual Seam Gap)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Pressure Differential:</span> <strong>+205.8 Pa (BMP280 Tap Drop)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Thermal Hotspot (ΔT):</span> <strong>+9.3 °C (Score 0.86 · FLIR)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Acoustic Turbulence:</span> <strong>0.74 (Audible Range · INMP441)</strong>
-                </div>
-              </div>
-
-              {/* Remediation & Verification */}
-              <div>
-                <div className="ds-defect-subhead">2. Corrective Remediation & Rescan</div>
-                <div className="ds-defect-kv">
-                  <span>Remediation Action:</span> <strong>{activeAnomaly?.repair?.action || 'Joint flange resealed with mastic'}</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Repair Photo:</span> <strong>Attached (Post-Seal Inspection)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Post-Repair Pressure:</span> <strong>+254.2 Pa (Baseline Restored)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Post-Repair Thermal:</span> <strong>0.18 (Gradient Neutralized)</strong>
-                </div>
-                <div className="ds-defect-kv">
-                  <span>Final Verification:</span> <strong className="ds-val-green">PASS · Certified Nominal</strong>
-                </div>
-              </div>
+          {report.sensorEvidence.thermal && (
+            <div className="ds-report-section">
+              <h3 className="ds-report-h3">7. SENSOR EVIDENCE — THERMAL</h3>
+              <table className="ds-report-table">
+                <tbody>
+                  <tr><td><strong>Status</strong></td><td>{report.sensorEvidence.thermal.status}</td></tr>
+                  <tr><td><strong>Max Temperature</strong></td><td>{report.sensorEvidence.thermal.tempMax} °C</td></tr>
+                  <tr><td><strong>Reference Temperature</strong></td><td>{report.sensorEvidence.thermal.tempRef} °C</td></tr>
+                  <tr><td><strong>ΔT</strong></td><td>{report.sensorEvidence.thermal.deltaT} °C</td></tr>
+                  <tr><td><strong>Anomaly Score</strong></td><td>{report.sensorEvidence.thermal.score}</td></tr>
+                </tbody>
+              </table>
             </div>
+          )}
+
+          <div className="ds-report-footer">
+            <span>Inspection ID: {report.documentControl.inspectionId} | Report Revision: {report.documentControl.revision} | Page 2 of 4</span>
           </div>
         </div>
 
-        {/* Engineering Sign-off Block */}
-        <div className="ds-cert-signoff-block">
-          <div className="ds-signoff-item">
-            <span className="ds-sign-line">
-              Certified by Lead Commissioning Technician: <strong>{session.technician}</strong>
-            </span>
+        {/* --- PAGE 3: REPAIR & VERIFICATION / TIMELINE --- */}
+        <div className="ds-print-page">
+          <div className="ds-report-header-print">
+            <strong>DUCTSENSE</strong> - HVAC DUCT INSPECTION & COMMISSIONING REPORT
           </div>
-          <div className="ds-signoff-item">
-            <span className="ds-sign-line">
-              Commissioning Outcome: <strong className="ds-val-green">PASS · ALL REMEDIATED JOINTS NOMINAL</strong>
-            </span>
+
+          {report.detectionResult && (
+            <div className="ds-report-section">
+              <h3 className="ds-report-h3">8. DETECTION RESULT</h3>
+              <table className="ds-report-table">
+                <tbody>
+                  <tr><td><strong>Overall Status</strong></td><td>{report.detectionResult.overallStatus}</td></tr>
+                  <tr><td><strong>Pressure Evidence</strong></td><td>{report.detectionResult.pressureEvidence}</td></tr>
+                  <tr><td><strong>Acoustic Evidence</strong></td><td>{report.detectionResult.acousticEvidence}</td></tr>
+                  <tr><td><strong>Thermal Evidence</strong></td><td>{report.detectionResult.thermalEvidence}</td></tr>
+                  <tr><td><strong>Fusion Result</strong></td><td>{report.detectionResult.fusionResult}</td></tr>
+                  <tr><td><strong>Confidence</strong></td><td>{report.detectionResult.confidence}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">9. REPAIR & VERIFICATION</h3>
+            {report.repair ? (
+              <div className="ds-report-repair-block">
+                <table className="ds-report-table">
+                  <tbody>
+                    <tr><td><strong>Finding ID</strong></td><td>{report.repair.findingId}</td></tr>
+                    <tr><td><strong>Repair Action</strong></td><td>{report.repair.action}</td></tr>
+                    <tr><td><strong>Repair Date/Time</strong></td><td>{report.repair.dateTime}</td></tr>
+                    <tr><td><strong>Technician</strong></td><td>{report.repair.technician}</td></tr>
+                    <tr><td><strong>Verification Result</strong></td><td>{report.repair.verified}</td></tr>
+                  </tbody>
+                </table>
+                <br/>
+                <table className="ds-report-table ds-table-full">
+                  <thead>
+                    <tr>
+                      <th>State</th>
+                      <th>Pressure (ΔP)</th>
+                      <th>Thermal Score</th>
+                      <th>Acoustic Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>BEFORE REPAIR</strong></td>
+                      <td>{report.repair.before.pressure}</td>
+                      <td>{report.repair.before.thermal}</td>
+                      <td>{report.repair.before.acoustic}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>AFTER REPAIR</strong></td>
+                      <td>{report.repair.after.pressure}</td>
+                      <td>{report.repair.after.thermal}</td>
+                      <td>{report.repair.after.acoustic}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No repair actions recorded.</p>
+            )}
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">10. INSPECTION TIMELINE</h3>
+            {report.timeline.length === 0 ? (
+              <p>No events recorded.</p>
+            ) : (
+              <table className="ds-report-table ds-table-full">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>Finding</th>
+                    <th>User</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.timeline.map((t, idx) => (
+                    <tr key={idx}>
+                      <td>{t.time}</td>
+                      <td>{t.event}</td>
+                      <td>{t.finding}</td>
+                      <td>{t.user}</td>
+                      <td>{t.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          <div className="ds-report-footer">
+            <span>Inspection ID: {report.documentControl.inspectionId} | Report Revision: {report.documentControl.revision} | Page 3 of 4</span>
           </div>
         </div>
+
+        {/* --- PAGE 4: EVIDENCE GALLERY & FINAL STATUS --- */}
+        <div className="ds-print-page">
+          <div className="ds-report-header-print">
+            <strong>DUCTSENSE</strong> - HVAC DUCT INSPECTION & COMMISSIONING REPORT
+          </div>
+
+          <div className="ds-report-section">
+            <h3 className="ds-report-h3">11. EVIDENCE GALLERY</h3>
+            {report.images.length === 0 ? (
+              <p>No images attached.</p>
+            ) : (
+              <div className="ds-report-gallery">
+                {report.images.map((img, idx) => (
+                  <div key={idx} className="ds-report-img-box">
+                    {img.url ? (
+                      <img src={img.url} alt={img.description} />
+                    ) : (
+                      <div className="ds-report-img-placeholder">Image Not Available</div>
+                    )}
+                    <div className="ds-report-img-caption">
+                      <strong>{img.category}</strong> - {img.description} <br/>
+                      <small>ID: {img.id} | Finding: {img.findingId} | {img.timestamp}</small>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="ds-report-section" style={{ marginTop: '40px' }}>
+            <h3 className="ds-report-h3">12. FINAL STATUS</h3>
+            <table className="ds-report-table">
+              <tbody>
+                <tr><td><strong>Inspection</strong></td><td>{report.executiveSummary.inspectionStatus}</td></tr>
+                <tr><td><strong>Findings</strong></td><td>{report.executiveSummary.findingsRecorded}</td></tr>
+                <tr><td><strong>Confirmed Leaks</strong></td><td>{report.executiveSummary.findingsRecorded}</td></tr>
+                <tr><td><strong>Repairs</strong></td><td>{report.executiveSummary.repairsRecorded}</td></tr>
+                <tr><td><strong>Verified</strong></td><td>{report.executiveSummary.repairsRecorded}</td></tr>
+                <tr><td><strong>Pending</strong></td><td>{report.executiveSummary.findingsRecorded - report.executiveSummary.repairsRecorded}</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ds-report-footer">
+            <span>Inspection ID: {report.documentControl.inspectionId} | Report Revision: {report.documentControl.revision} | Page 4 of 4</span>
+          </div>
+        </div>
+
       </div>
     </div>
   );
