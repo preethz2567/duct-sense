@@ -18,7 +18,7 @@ import type { Finding, SyncStatus } from '../types';
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 // Set to the DuctSense FastAPI base URL when the /findings endpoint is ready.
-const BACKEND_BASE_URL = `https://weak-news-follow.loca.lt`;
+const BACKEND_BASE_URL = `http://${window.location.hostname}:8000`;
 const FINDINGS_ENDPOINT = `${BACKEND_BASE_URL}/findings`;
 
 // ── Online detection ──────────────────────────────────────────────────────────
@@ -55,7 +55,6 @@ export async function attemptSync(): Promise<{ synced: number; failed: number; m
   try {
     const probe = await fetch(`${BACKEND_BASE_URL}/walkthroughs`, {
       method: 'GET',
-      headers: { 'Bypass-Tunnel-Reminder': 'true' },
       signal: AbortSignal.timeout(3000),
     });
     backendReachable = probe.ok;
@@ -79,8 +78,7 @@ export async function attemptSync(): Promise<{ synced: number; failed: number; m
       const resp = await fetch(FINDINGS_ENDPOINT, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Bypass-Tunnel-Reminder': 'true'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(finding),
       });
@@ -99,9 +97,7 @@ export async function attemptSync(): Promise<{ synced: number; failed: number; m
 
   // Also pull findings from server
   try {
-    const pullResp = await fetch(FINDINGS_ENDPOINT, {
-      headers: { 'Bypass-Tunnel-Reminder': 'true' }
-    });
+    const pullResp = await fetch(FINDINGS_ENDPOINT);
     if (pullResp.ok) {
       const serverFindings: Finding[] = await pullResp.json();
       for (const sf of serverFindings) {
