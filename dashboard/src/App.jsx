@@ -83,7 +83,7 @@ export default function App() {
       } catch {
         setSession((s) => ({ ...s, syncStatus: 'OFFLINE_PENDING' }));
       }
-    }, 3000);
+    }, 600000); // Changed from 3000 to prevent backend memory exhaustion
 
     return () => clearInterval(intervalId);
   }, [loading]);
