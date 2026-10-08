@@ -41,7 +41,7 @@ I2C_BUS          = 1       # Raspberry Pi GPIO I2C bus
 ADDR_BMP280_P1   = 0x76   # upstream sensor
 ADDR_BMP280_P2   = 0x77   # downstream sensor
 
-BASELINE_OFFSET_PA = 50.80  # Pa — static baseline correction from teammate calibration
+BASELINE_OFFSET_PA = 50.80  # Pa — prototype baseline correction carried over from the reported teammate implementation (not independently validated)
 
 # Mode identifiers (pass one of these to read_pressure_data())
 MODE_HARDWARE = "hardware"
@@ -75,8 +75,10 @@ MOCK_FIXTURE_LEAK: dict = {
 }
 
 MOCK_FIXTURE_POST_REPAIR: dict = {
-    # Post-repair condition — differential returned close to zero.
-    # Expected corrected_delta_p_pa = (1004.05 - 1004.00) * 100 - 50.80 = -45.80 Pa
+    # Post-repair condition — raw differential (P1-P2) is small,
+    # but after applying the 50.80 Pa baseline correction the result is -45.80 Pa.
+    # Expected: raw_delta_p_pa = (1004.05 - 1004.00) * 100 = 5.0 Pa
+    #           corrected_delta_p_pa = 5.0 - 50.80 = -45.80 Pa
     "label":    "POST_REPAIR_CONDITION",
     "p1_hpa":   1004.05,
     "p2_hpa":   1004.00,
