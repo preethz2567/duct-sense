@@ -5,3 +5,5 @@ uvicorn
 smbus2
 scikit-learn
 joblib
+Pillow
+flyr
