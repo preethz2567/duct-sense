@@ -15,6 +15,7 @@ import EngineeringPage from './pages/EngineeringPage';
 import SpatialViewer from './components/spatial-viewer';
 import ThermalMLTest from './pages/ThermalMLTest';
 import PressureTest from './pages/PressureTest';
+import MultimodalEvidenceTest from './pages/MultimodalEvidenceTest';
 
 import { initialInspectionSession } from './services/inspectionService';
 import { fetchFindings, fetchInspections } from './services/apiService';
@@ -288,6 +289,8 @@ export default function App() {
         return <ThermalMLTest />;
       case 'pressure-test':
         return <PressureTest />;
+      case 'multimodal-evidence':
+        return <MultimodalEvidenceTest />;
       default:
         return (
           <InspectionsPage
